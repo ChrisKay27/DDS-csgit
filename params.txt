@@ -1,0 +1,9 @@
+LOGGING:False
+SEED:1
+Topology:HyperCube
+NumPages:600
+ArrivalRate:250,300
+DDP:AgentDeadlockDetectionProtocol
+DRP:AgentDeadlockResolutionProtocol,RandomDeadlockResolution
+PP:EarliestDeadlineFirst
+DetectionInterval:2000

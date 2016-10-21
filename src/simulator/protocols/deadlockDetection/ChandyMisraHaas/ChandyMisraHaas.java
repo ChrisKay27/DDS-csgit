@@ -8,7 +8,6 @@ import java.awt.Color;
 
 /**
  * This file was copied from https://github.com/va-ftb/teachnet and modified to work with this simulator project
- * This was done by Chris Kaebe.
  *
  * Implementieren Sie mit Hilfe des Simulations-Frameworks den Algorithmus von
  * Chandy, Misra und Haas zur verteilten Deadlockerkennung. Loesen Sie erkannte

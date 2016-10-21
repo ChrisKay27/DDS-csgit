@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Chris on 6/16/2016.
+ * Created by Mani
  */
 public class Statistics {
 

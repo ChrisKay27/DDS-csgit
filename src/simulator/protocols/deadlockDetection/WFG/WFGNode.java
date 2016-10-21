@@ -1,8 +1,7 @@
 package simulator.protocols.deadlockDetection.WFG;
 
 /**
- * Created by Chris Kaebe on 3/10/2016.
- * Email: kaebe@unbc.ca
+ * Created by Mani
  */
 public interface WFGNode extends Comparable {
 

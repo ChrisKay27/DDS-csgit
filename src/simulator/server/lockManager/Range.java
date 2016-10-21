@@ -1,7 +1,7 @@
 package simulator.server.lockManager;
 
 /**
- * Created by Chris on 6/10/2016.
+ * Created by Mani
  */
 public class Range {
     private final int min, max;

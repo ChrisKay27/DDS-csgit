@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.Random;
 
 /**
- * Created by Chris on 6/8/2016.
+ * Created by Mani
  */
 public class Simulation {
 

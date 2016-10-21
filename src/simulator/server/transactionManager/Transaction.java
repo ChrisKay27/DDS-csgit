@@ -5,7 +5,7 @@ import exceptions.WTFException;
 import java.util.*;
 
 /**
- * Created by Chris on 6/7/2016.
+ * Created by Mani
  */
 public class Transaction {
 

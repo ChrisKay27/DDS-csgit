@@ -17,7 +17,7 @@ import simulator.server.transactionManager.TransactionManager;
 import ui.Log;
 
 /**
- * Created by Chris on 6/7/2016.
+ * Created by Mani
  */
 public class Server {
 

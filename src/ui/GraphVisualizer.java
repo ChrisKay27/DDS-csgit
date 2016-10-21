@@ -19,7 +19,7 @@ import simulator.protocols.deadlockDetection.WFG.WFGNode;
 
 
 /**
- * Created by Chris on 6/20/2016.
+ * Created by Mani
  */
 public class GraphVisualizer extends JPanel {
 

@@ -14,7 +14,7 @@ import java.util.*;
 import java.util.function.Consumer;
 
 /**
- * Created by Chris on 6/11/2016.
+ * Created by Mani
  */
 public class Output extends JPanel{
 

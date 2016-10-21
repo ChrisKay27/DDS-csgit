@@ -1,7 +1,7 @@
 package simulator.server.transactionManager;
 
 /**
- * Created by Chris on 6/10/2016.
+ * Created by Mani
  */
 public class CohortTransaction extends Transaction{
 

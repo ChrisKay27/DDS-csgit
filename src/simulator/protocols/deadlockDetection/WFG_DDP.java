@@ -20,7 +20,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 /**
- * Created by Chris on 6/16/2016.
+ * Created by Mani
  *
  * t=0 Simulation starts
  * t=300 WFG get sent to all nodes

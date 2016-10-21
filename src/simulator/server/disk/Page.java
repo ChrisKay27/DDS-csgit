@@ -1,7 +1,7 @@
 package simulator.server.disk;
 
 /**
- * Created by Chris on 6/7/2016.
+ * Created by Mani
  */
 public class Page {
     private final int pageNumber;

@@ -1,7 +1,7 @@
 package simulator.server.twoPhaseCommit;
 
 /**
- * Created by Chris on 6/11/2016.
+ * Created by Mani
  */
 public class TwoPhaseCommitProtocol {
 }

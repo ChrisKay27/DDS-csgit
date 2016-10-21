@@ -10,7 +10,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
- * Created by Chris on 6/12/2016.
+ * Created by Mani
  */
 public class Log {
 

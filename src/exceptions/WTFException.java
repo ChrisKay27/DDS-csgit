@@ -1,7 +1,7 @@
 package exceptions;
 
 /**
- * Created by Chris on 6/11/2016.
+ * Created by Mani
  */
 public class WTFException extends RuntimeException {
     public WTFException(String s) {

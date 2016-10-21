@@ -7,7 +7,7 @@ import simulator.server.transactionManager.Transaction;
 import java.util.List;
 
 /**
- * Created by Chris on 7/1/2016.
+ * Created by Mani
  */
 public interface PriorityProtocol {
 

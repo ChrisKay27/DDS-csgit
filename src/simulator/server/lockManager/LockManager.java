@@ -13,7 +13,7 @@ import ui.Log;
 import java.util.*;
 
 /**
- * Created by ckaebe on 6/9/2016.
+ * Created by Mani
  */
 public class LockManager {
 

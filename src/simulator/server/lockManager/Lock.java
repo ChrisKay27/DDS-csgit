@@ -3,7 +3,7 @@ package simulator.server.lockManager;
 import simulator.protocols.deadlockDetection.WFG.WFGNode;
 
 /**
- * Created by Chris on 6/10/2016.
+ * Created by Mani
  */
 public class Lock implements WFGNode{
 

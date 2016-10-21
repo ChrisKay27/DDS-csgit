@@ -2,7 +2,7 @@ package results;
 import java.sql.*;
 
 /**
- * Created by Chris on 6/16/2016.
+ * Created by Mani
  */
 public class DBConnection {
 

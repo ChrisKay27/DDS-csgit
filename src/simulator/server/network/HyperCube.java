@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created by Chris on 6/8/2016.
+ * Created by Mani
  */
 public class HyperCube {
 

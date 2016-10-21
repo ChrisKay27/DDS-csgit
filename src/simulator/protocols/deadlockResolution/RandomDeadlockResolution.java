@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Chris on 8/2/2016.
+ * Created by Mani
  */
 public class RandomDeadlockResolution implements DeadlockResolutionProtocol {
 

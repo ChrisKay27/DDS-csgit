@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Created by Chris on 6/21/2016.
+ * Created by Mani
  */
 public class GUI extends JFrame{
     private final JTabbedPane tPane;

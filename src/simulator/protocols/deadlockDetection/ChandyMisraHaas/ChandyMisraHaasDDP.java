@@ -16,7 +16,7 @@ import java.util.*;
 import java.util.function.Consumer;
 
 /**
- * Created by Chris on 7/9/2016.
+ * Created by Mani
  */
 public class ChandyMisraHaasDDP extends DeadlockDetectionProtocol {
 

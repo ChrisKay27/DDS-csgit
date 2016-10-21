@@ -1,7 +1,7 @@
 package simulator.enums;
 
 /**
- * Created by Chris on 6/8/2016.
+ * Created by Mani
  */
 public enum Topology {
     HyperCube, FullyConnected;

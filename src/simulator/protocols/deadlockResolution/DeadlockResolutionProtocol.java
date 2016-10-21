@@ -9,7 +9,7 @@ import simulator.server.transactionManager.TransInfo;
 import java.util.List;
 
 /**
- * Created by Chris on 6/17/2016.
+ * Created by Mani
  */
 public interface DeadlockResolutionProtocol {
     void resolveDeadlocks(Deadlock deadlock);

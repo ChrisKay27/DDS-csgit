@@ -1,9 +1,6 @@
 package results;
 import java.sql.*;
 
-/**
- * Created by Mani
- */
 public class DBConnection {
 
     public static void insertResults(ExperimentResults results) {

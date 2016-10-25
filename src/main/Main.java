@@ -22,10 +22,6 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-
-/**
- * Created by Mani
- */
 public class Main {
 
     private static int simsRanSoFar = 0;

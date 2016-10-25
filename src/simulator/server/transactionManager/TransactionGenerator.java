@@ -10,9 +10,6 @@ import java.util.function.Supplier;
 
 import static simulator.SimParams.*;
 
-/**
- * Created by Mani
- */
 public class TransactionGenerator {
     private int remainingTransactions;
 

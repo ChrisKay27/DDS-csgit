@@ -9,9 +9,6 @@ import simulator.server.transactionManager.TransInfo;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Mani
- */
 public class RandomDeadlockResolution implements DeadlockResolutionProtocol {
 
     private final Server server;

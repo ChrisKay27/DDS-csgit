@@ -3,9 +3,6 @@ package stats;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Mani
- */
 public class Statistics {
 
     private int timeouts;

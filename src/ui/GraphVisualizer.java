@@ -18,9 +18,6 @@ import simulator.protocols.deadlockDetection.WFG.Task;
 import simulator.protocols.deadlockDetection.WFG.WFGNode;
 
 
-/**
- * Created by Mani
- */
 public class GraphVisualizer extends JPanel {
 
     public static final String TIME_GRAPH_WAS_COMPLETED = "Time graph was completed: ";

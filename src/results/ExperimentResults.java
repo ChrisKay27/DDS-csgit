@@ -1,8 +1,5 @@
 package results;
 
-/**
- * Created by Mani
- */
 public class ExperimentResults {
 
     private final long expNum;

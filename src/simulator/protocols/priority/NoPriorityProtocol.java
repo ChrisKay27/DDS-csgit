@@ -5,9 +5,6 @@ import simulator.server.transactionManager.Transaction;
 
 import java.util.List;
 
-/**
- * Created by Mani
- */
 public class NoPriorityProtocol implements PriorityProtocol {
     @Override
     public Transaction getHighestPriorityTrans(List<Transaction> transactions) {

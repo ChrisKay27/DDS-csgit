@@ -9,9 +9,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-/**
- * Created by Mani
- */
+
 public class Log {
 
     private static boolean LOGGING_ENABLED = false;

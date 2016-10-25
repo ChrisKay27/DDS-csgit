@@ -1,8 +1,5 @@
 package simulator.protocols.deadlockDetection.WFG;
 
-/**
- * Created by Mani
- */
 public interface WFGNode extends Comparable {
 
     int getID();

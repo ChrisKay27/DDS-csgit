@@ -2,9 +2,6 @@ package simulator.server.network;
 import simulator.SimParams;
 import simulator.enums.ServerProcess;
 
-/**
- * Created by Mani
- */
 public class Message implements Comparable<Message> {
 
     public static final String OBJECT = "OBJECT";

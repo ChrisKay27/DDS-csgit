@@ -3,9 +3,6 @@ package simulator.protocols.deadlockDetection.mobileAgentEnabledApproach;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Created by Mani
- */
 public class MobileAgent {
 
     /**

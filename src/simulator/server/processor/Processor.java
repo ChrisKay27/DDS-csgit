@@ -10,9 +10,6 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
-/**
- * Created by Mani
- */
 public class Processor {
 
     private final int serverID;

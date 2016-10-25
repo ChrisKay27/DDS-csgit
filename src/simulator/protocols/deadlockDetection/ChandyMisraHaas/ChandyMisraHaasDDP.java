@@ -15,9 +15,6 @@ import ui.Log;
 import java.util.*;
 import java.util.function.Consumer;
 
-/**
- * Created by Mani
- */
 public class ChandyMisraHaasDDP extends DeadlockDetectionProtocol {
 
     private static final double percStart = .1;

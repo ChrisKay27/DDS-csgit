@@ -17,9 +17,6 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-/**
- * Created by Mani
- */
 public class TransactionManager {
     public static final String COLON = ":";
     public static final String OBJECT = "OBJECT";

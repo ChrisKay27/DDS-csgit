@@ -12,9 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-/**
- * Created by Mani
- */
 public class Simulation {
 
     private final Random rand;

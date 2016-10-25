@@ -5,9 +5,6 @@ import simulator.server.disk.DiskJob;
 
 import java.util.function.Consumer;
 
-/**
- * Created by Mani
- */
 public class ProcessorJob implements Comparable<ProcessorJob>{
     private final int transID , deadline, pageNum;
 

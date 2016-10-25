@@ -18,9 +18,6 @@ import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-/**
- * Created by Mani
- */
 public class DeadlockDetectionProtocol {
 
     private final Log log;

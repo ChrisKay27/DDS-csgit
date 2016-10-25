@@ -14,9 +14,7 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-/**
- * Created by Mani
- */
+
 public class DeadlockPanel extends JPanel {
 
     private final JLabel deadlocksCounter;

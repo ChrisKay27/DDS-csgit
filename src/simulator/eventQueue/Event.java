@@ -1,8 +1,5 @@
 package simulator.eventQueue;
 
-/**
- * Created by Mani
- */
 public class Event {
 
     private int time;

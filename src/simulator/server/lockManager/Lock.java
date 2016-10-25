@@ -2,9 +2,6 @@ package simulator.server.lockManager;
 
 import simulator.protocols.deadlockDetection.WFG.WFGNode;
 
-/**
- * Created by Mani
- */
 public class Lock implements WFGNode{
 
     private static int nextID;

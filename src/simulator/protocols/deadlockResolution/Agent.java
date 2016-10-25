@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
  * Create agents to handle deadlock situation. Each agent calculate dropability number based on priority, extra time, and workload.
  * The calculated number will be shared with other agents for further decision making
  *
- * Created by Mani
  */
 public class Agent {
     private static final String deadlockResolutionReceiveDropability = "deadlockResolutionReceiveDropability";

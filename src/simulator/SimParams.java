@@ -12,9 +12,6 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-/**
- * Created by Mani
- */
 public class SimParams {
     public static final int diskReadWriteTime = 30;
     public static final int processTime = 15;

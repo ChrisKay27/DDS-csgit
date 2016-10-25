@@ -14,9 +14,6 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.function.Consumer;
 
-/**
- * Created by Mani
- */
 public class Disk {
     private static final int accessTime = 30;
 

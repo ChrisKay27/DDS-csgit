@@ -16,9 +16,6 @@ import simulator.server.Server;
 import simulator.server.transactionManager.TransInfo;
 import ui.Log;
 
-/**
- * Created by Mani
- */
 public class AgentDeadlockDetectionProtocol extends WFG_DDP {
 
     private final Log log ;

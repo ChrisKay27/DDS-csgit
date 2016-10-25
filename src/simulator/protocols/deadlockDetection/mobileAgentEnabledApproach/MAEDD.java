@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.function.Consumer;
 
 /**
- * Created by Mani
  *
  * Builds a WFG of locks not transInfos!
  *

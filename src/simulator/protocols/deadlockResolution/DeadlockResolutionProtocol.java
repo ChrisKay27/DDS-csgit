@@ -8,9 +8,6 @@ import simulator.server.transactionManager.TransInfo;
 
 import java.util.List;
 
-/**
- * Created by Mani
- */
 public interface DeadlockResolutionProtocol {
     void resolveDeadlocks(Deadlock deadlock);
     void resolveMultiple(List<Deadlock> l);

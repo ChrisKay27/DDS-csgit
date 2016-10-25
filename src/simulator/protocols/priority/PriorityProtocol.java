@@ -6,9 +6,6 @@ import simulator.server.transactionManager.Transaction;
 
 import java.util.List;
 
-/**
- * Created by Mani
- */
 public interface PriorityProtocol {
 
     Transaction getHighestPriorityTrans(List<Transaction> transactions);

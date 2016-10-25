@@ -3,9 +3,7 @@ package ui;
 import javax.swing.*;
 import java.awt.*;
 
-/**
- * Created by Mani
- */
+
 public class GUI extends JFrame{
     private final JTabbedPane tPane;
     private long sleepTime = 0;

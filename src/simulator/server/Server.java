@@ -16,9 +16,6 @@ import simulator.server.transactionManager.Transaction;
 import simulator.server.transactionManager.TransactionManager;
 import ui.Log;
 
-/**
- * Created by Mani
- */
 public class Server {
 
 

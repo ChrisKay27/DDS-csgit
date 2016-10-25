@@ -12,9 +12,6 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.function.Consumer;
 
-/**
- * Created by Mani
- */
 public class NetworkConnection {
     private static final int bandwidth = SimParams.Bandwidth;
     private static final int latency = 10;

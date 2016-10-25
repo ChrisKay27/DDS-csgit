@@ -6,9 +6,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-/**
- * Created by Mani
- */
 public class Deadlock{
 
     private static int nextDeadlockID;

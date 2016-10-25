@@ -4,9 +4,6 @@ import exceptions.WTFException;
 
 import java.util.*;
 
-/**
- * Created by Mani
- */
 public class Transaction {
 
     private final int ID;

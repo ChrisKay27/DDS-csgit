@@ -13,9 +13,6 @@ import java.io.PrintStream;
 import java.util.*;
 import java.util.function.Consumer;
 
-/**
- * Created by Mani
- */
 public class Output extends JPanel{
 
     public static final String COLON = ":";

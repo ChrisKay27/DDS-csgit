@@ -6,9 +6,6 @@ import simulator.protocols.deadlockDetection.WFG.WFGNode;
 
 import java.util.List;
 
-/**
- * Created by Mani
- */
 public class TransInfo implements WFGNode {
     public final int serverID;
     public final int transID;

@@ -12,9 +12,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by Mani
- */
 public class NetworkInterface {
     private final Log log;
 

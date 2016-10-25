@@ -12,9 +12,6 @@ import ui.Log;
 
 import java.util.*;
 
-/**
- * Created by Mani
- */
 public class LockManager {
 
     private static final String E = "E";

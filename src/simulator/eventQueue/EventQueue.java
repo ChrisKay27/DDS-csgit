@@ -7,9 +7,6 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-/**
- * Created by Mani
- */
 public class EventQueue {
 
     private List<Event> queue = new LinkedList<>();

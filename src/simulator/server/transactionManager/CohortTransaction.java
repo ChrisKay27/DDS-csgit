@@ -1,8 +1,5 @@
 package simulator.server.transactionManager;
 
-/**
- * Created by Mani
- */
 public class CohortTransaction extends Transaction{
 
     private final int masterServerID;

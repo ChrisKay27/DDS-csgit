@@ -14,8 +14,10 @@ public interface PriorityProtocol {
 
     static PriorityProtocol getPp(String pp) {
         switch(pp){
-            case "NoPriorityProtocol": return new NoPriorityProtocol();
+            case "FirstComeFirstServe": return new FirstComeFirstServe();
             case "EarliestDeadlineFirst": return new EarliestDeadlineFirst();
+            case "LeastSlackFirst": return new LeastSlackFirst();
+            case "RandomPriority": return new RandomPriority();
         }
         throw new WTFException("Priority Protocol not registered! add them in the PriorityProtocol class!");
     }

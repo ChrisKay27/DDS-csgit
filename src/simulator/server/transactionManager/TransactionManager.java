@@ -12,7 +12,6 @@ import simulator.server.network.Message;
 import simulator.server.network.NetworkInterface;
 import simulator.server.processor.ProcessorJob;
 import ui.Log;
-
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -57,7 +56,7 @@ public class TransactionManager {
 
 
         //This stuff is essential for deadlock detection
-        TransInfo tInfo = new TransInfo(serverID, t.getID(), t.getDeadline(), t.getWorkload(), t.getExecutionTime(), t.getAllReadPageNums(), t.getAllWritePageNums());
+        TransInfo tInfo = new TransInfo(serverID, t.getID(), t.getDeadline(), t.getWorkload(), t.getExecutionTime(), t.getSlackTime(), t.getAllReadPageNums(), t.getAllWritePageNums());
         simParams.transInfos.put(tInfo.transID,tInfo);
 
 
@@ -96,15 +95,21 @@ public class TransactionManager {
         }
     }
 
+
     private void startTransaction(Transaction t){
         if(Log.isLoggingEnabled()) log.log(t,"Starting " + t.fullToString());
 
         queuedTransactions.remove(t);
         activeTransactions.add(t);
 
-        //Set up timeout event
+
+        //Set up a timeout event, only for master transactions
         if(!(t instanceof CohortTransaction))
+
+            //In 50000 ticks the timeout will occur
             eventQueue.accept(new Event(simParams.timeProvider.get()+50000, serverID, ()->{
+
+                //timeout will only occur if the trans hasn't committed, completed, or aborted
                 if( !t.isCommitted() && !t.isCompleted() && !t.isAborted() ) {
                     if(Log.isLoggingEnabled()) {
                         log.log(t.getID(),"<b>Timeout!</b>");
@@ -127,6 +132,9 @@ public class TransactionManager {
     }
 
 
+    /**
+     * Abort a transaction based on its ID
+     */
     public void abort(int transID) {
         Transaction t = getAbortedTransaction(transID);
         if( t == null ){
@@ -143,7 +151,9 @@ public class TransactionManager {
         }
     }
 
-
+    /**
+     * Abort this transactiont
+     */
     private void abort(Transaction t) {
         if(Log.isLoggingEnabled()) log.log(t,"Aborting");
 
@@ -312,11 +322,19 @@ public class TransactionManager {
         }
     }
 
+
+
+
+
+    /*
+     * Used when the LM on this server has acquired a lock
+     */
+
     public void lockAcquired(int transID, int pageNum) {
         if( !hasBeenAborted(transID))
             lockAcquired(getActiveTransaction(transID),pageNum,server.getID());
-
     }
+
     public void lockAcquired(Transaction t, int pageNum) {
         lockAcquired(t,pageNum,server.getID());
     }
@@ -324,11 +342,17 @@ public class TransactionManager {
     public void lockAcquired(Transaction t, int pageNum, int serverID) {
         if(Log.isLoggingEnabled()) log.log(t,"lockAcquired pageNum = [" + pageNum + "], server = " + serverID);
 
+        //If the lock has been acquired on this server, start reading the page from memory
         if( serverID == server.getID() )
             server.getDisk().addJob(new DiskJob(t.getID(),t.getDeadline(),pageNum, (pNum)->{
+
                 if(Log.isLoggingEnabled()) log.log(t,"Read job completed for page " + pageNum);
+
+                //When the read is completed, start processing the page
                 server.getCPU().addJob(new ProcessorJob(t.getID(),t.getDeadline(),pageNum, (pNum2)->{
+
                     if(Log.isLoggingEnabled()) log.log(t,"Process job completed for page " + pageNum);
+
                     t.pageProcessed(pageNum);
                     tryToCommit(t);
                 }));
@@ -336,7 +360,6 @@ public class TransactionManager {
 
         t.lockAcquired(pageNum,serverID);
     }
-
 
     public void lockAcquired(int transID, int pageNum, int serverID) {
         if(Log.isLoggingEnabled()) log.log(transID,"Lock acquired for page " + pageNum + " on server " + serverID );
@@ -348,6 +371,12 @@ public class TransactionManager {
             tryToCommit(t);
         }
     }
+
+
+
+
+
+
 
     private boolean hasBeenAborted(int transID) {
         for(Transaction t : abortedTransactions)

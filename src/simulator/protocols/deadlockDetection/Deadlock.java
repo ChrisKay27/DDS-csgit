@@ -1,9 +1,7 @@
 package simulator.protocols.deadlockDetection;
 
 import simulator.server.transactionManager.TransInfo;
-
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class Deadlock{
@@ -14,6 +12,7 @@ public class Deadlock{
     private final List<TransInfo> transactionsInvolved = new ArrayList<>();
     private final int serverID;
     private final int detectionTime;
+
 
     public Deadlock(List<TransInfo> transactionsInvolved, int serverID, int detectionTime) {
         this.serverID = serverID;

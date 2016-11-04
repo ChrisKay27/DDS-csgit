@@ -12,6 +12,7 @@ public class Transaction {
 
     private int workload;
     private int executionTime;
+    private int slackTime;
 
     private final List<Integer> allReadPageNums = new ArrayList<>();
     private final List<Integer> allWritePageNums = new ArrayList<>();
@@ -298,5 +299,13 @@ public class Transaction {
 
     public Map<Integer, List<Integer>> getPageNumsToServerIDLocksAcquired() {
         return pageNumsToServerIDLocksAcquired;
+    }
+
+    public int getSlackTime() {
+        return slackTime;
+    }
+
+    public void setSlackTime(int slackTime) {
+        this.slackTime = slackTime;
     }
 }

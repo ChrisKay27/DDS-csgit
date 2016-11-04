@@ -75,7 +75,7 @@ public class ChandyMisraHaasDDP extends DeadlockDetectionProtocol {
             heldLocksForThisPage.forEach( heldLock -> {
                 if(Log.isLoggingEnabled()) log.log(l.getTransID(),"On behalf of trans "+l.getTransID()+" sending probe to trans " + heldLock.getTransID());
 
-                server.getNIC().sendMessage(
+                sendMsg(
                         new Message(heldLock.getServerID(), ServerProcess.DDP, "20",
                                 new ProbeMessage(l.getTransID(),l.getTransID(),heldLock.getTransID()),simParams.timeProvider.get()));
             });
@@ -106,7 +106,7 @@ public class ChandyMisraHaasDDP extends DeadlockDetectionProtocol {
 
                 if(Log.isLoggingEnabled()) log.log(probeMessage.getInitiator(),"Probe has reached initiator! Trans "+probeMessage.getInitiator());
 
-                server.getNIC().sendMessage(
+                sendMsg(
                         new Message(aborted.serverID,ServerProcess.TransactionManager,"A:"+aborted.transID,msg.getDeadline()));
 
             }
@@ -142,7 +142,7 @@ public class ChandyMisraHaasDDP extends DeadlockDetectionProtocol {
                         if(Log.isLoggingEnabled()) log.log(probeMessage.getInitiator(),"Sending probe to " + lock1.getTransID());
 
                         //Send the probe to those transactions
-                        server.getNIC().sendMessage(
+                        sendMsg(
                                 new Message(lock1.getServerID(), ServerProcess.DDP, ""+remainingHops,
                                         new ProbeMessage(probeMessage.getInitiator(),lock.getTransID(),lock1.getTransID()),simParams.timeProvider.get()));
                     });
@@ -155,7 +155,7 @@ public class ChandyMisraHaasDDP extends DeadlockDetectionProtocol {
                     if(Log.isLoggingEnabled()) log.log(probeMessage.getInitiator(),"Sending probe to cohort on server " + serverID);
 
                     //Send the probe to all cohort transactions
-                    server.getNIC().sendMessage(
+                    sendMsg(
                             new Message(serverID, ServerProcess.DDP, ""+remainingHops,
                                     new ProbeMessage(probeMessage.getInitiator(),probeMessage.getSender(),recipient.getID()),simParams.timeProvider.get()));
                 });
@@ -164,7 +164,11 @@ public class ChandyMisraHaasDDP extends DeadlockDetectionProtocol {
 
     }
 
+    private void sendMsg(Message message){
+        server.getNIC().sendMessage(message);
+        simParams.messageOverhead++;
 
+    }
 
 
 

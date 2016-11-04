@@ -1,15 +1,16 @@
 package simulator;
 
 import simulator.protocols.deadlockDetection.Deadlock;
-
 import simulator.protocols.deadlockDetection.WFG.Graph;
 import simulator.protocols.deadlockDetection.WFG.WFGNode;
 import stats.Statistics;
-
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+/**
+ * This class is used to pass parameters from the Main class to the Simulation class
+ */
 public class SimSetupParams {
 
     private final long SEED;

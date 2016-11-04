@@ -2,10 +2,9 @@ package simulator.protocols.priority;
 
 import simulator.server.lockManager.Lock;
 import simulator.server.transactionManager.Transaction;
-
 import java.util.List;
 
-public class NoPriorityProtocol implements PriorityProtocol {
+public class FirstComeFirstServe implements PriorityProtocol {
     @Override
     public Transaction getHighestPriorityTrans(List<Transaction> transactions) {
         int lowestID = Integer.MAX_VALUE;

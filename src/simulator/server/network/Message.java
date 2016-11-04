@@ -15,6 +15,7 @@ public class Message implements Comparable<Message> {
 
     private int size = 1;
 
+
     public Message(int destServerID, ServerProcess process, String contents, int deadline) {
         this.destServerID = destServerID;
         this.process = process;
@@ -36,6 +37,7 @@ public class Message implements Comparable<Message> {
         this.deadline = deadline;
         this.object = contents;
     }
+
 
     public int getDestServerID() {
         return destServerID;

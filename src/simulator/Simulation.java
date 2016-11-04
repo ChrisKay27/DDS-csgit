@@ -6,7 +6,6 @@ import simulator.server.Server;
 import simulator.server.lockManager.Lock;
 import simulator.server.lockManager.Range;
 import stats.Statistics;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +28,8 @@ public class Simulation {
 
         eventQueue = new EventQueue(simSetupParams.sleepTime, simSetupParams.timeUpdater);
 
-        //Create simParam object to give to each server
+
+        //Create simParam object to give to each server, which is given to every component in the simulation
         simParams = new SimParams(eventQueue::addEvent,rand::nextDouble,eventQueue::getTime,this::getNextTransID,
                 this::getRandPageNum, simSetupParams.getMaxActiveTrans(), simSetupParams.getArrivalRate(), simSetupParams.getLog(), simSetupParams.getStats(), eventQueue::incurOverhead);
 
@@ -39,6 +39,9 @@ public class Simulation {
         simParams.setDeadlockListener(simSetupParams.getDeadlockListener());
         simParams.setDeadlockResolutionListener(simSetupParams.getDeadlockResolutionListener());
         simParams.setDeadlockDetectInterval(simSetupParams.getDetectInterval());
+
+
+
 
         //Calculate which servers get what pages.
 
@@ -62,6 +65,7 @@ public class Simulation {
             }
 
 
+            // Set the deadlock detection protocol's 'Graph Listener'. It is used to display the WFGs in the GUI.
             final int serverID = i;
             s.getDDP().setGraphListener((wfGraph , time)-> {
                 wfGraph.setServerID(serverID);
@@ -87,7 +91,7 @@ public class Simulation {
         return servers;
     }
 
-    public double start() {
+    public double[] start() {
         servers.forEach(Server::start);
 
         //Run through all events
@@ -110,6 +114,7 @@ public class Simulation {
                 System.out.println("Server " + server.getID() + " has " + remainingTrans + " remaining transactions.");
 
 
+
             //Check to see if locks are still being held
             Map<Integer, List<Lock>> heldLocks = server.getLM().getHeldLocks();
             Range pageRange = simParams.serverToPageRange.get(server.getID());
@@ -130,9 +135,8 @@ public class Simulation {
 
         Statistics stats = simParams.stats;
 
-
-
-        return ((double)stats.getCompletedOnTime())/(servers.size()*simParams.getNumTransPerServer());
+        double PCOT = ((double)stats.getCompletedOnTime())/(servers.size()*simParams.getNumTransPerServer());
+        return new double[]{PCOT,simParams.getDDOverhead(),simParams.messageOverhead};
     }
 
     public SimParams getSimParams() {

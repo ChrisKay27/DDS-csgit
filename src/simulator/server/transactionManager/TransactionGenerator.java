@@ -39,10 +39,14 @@ public class TransactionGenerator {
         int numReadPages = (int) (rand.get() * 4) + 1;
         int numWritePages = (int) (rand.get() * 5);
 
-        int deadline = timeProvider.get() + (numReadPages * 200) + (numWritePages * 300);
+        int execTime = (numReadPages * 200) + (numWritePages * 300);
+        int slackTime = 0;
+        int deadline = timeProvider.get() + execTime + slackTime;
 
 
         Transaction t = new Transaction(IDProvider.get(), server.getID(), deadline);
+        t.setSlackTime(slackTime);
+        t.setExecutionTime(execTime);
 
         List<Integer> allReadPageNums = t.getAllReadPageNums();
         List<Integer> readPageNums = t.getReadPageNums();
@@ -71,7 +75,6 @@ public class TransactionGenerator {
         }
 
         t.setWorkload(allReadPageNums.size()+allWritePageNums.size());
-        t.setExecutionTime((numReadPages * 200) + (numWritePages * 300));
 
         transConsumer.accept(t);
 

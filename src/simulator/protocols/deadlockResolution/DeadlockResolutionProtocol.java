@@ -4,7 +4,6 @@ import exceptions.WTFException;
 import simulator.protocols.deadlockDetection.Deadlock;
 import simulator.server.Server;
 import simulator.server.network.Message;
-import simulator.server.transactionManager.TransInfo;
 
 import java.util.List;
 

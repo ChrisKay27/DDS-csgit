@@ -12,7 +12,6 @@ import simulator.protocols.deadlockDetection.WFG.WFGNode;
 import simulator.server.Server;
 import simulator.server.network.Message;
 import ui.Log;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -20,19 +19,38 @@ import java.util.function.Consumer;
 
 public class DeadlockDetectionProtocol {
 
+    /** For logging purposes */
     private final Log log;
+
+    /** When a deadlock is detected, the deadlock is passed through this interface to the GUI */
     protected Consumer<Deadlock> deadlockListener;
+
     protected final int serverID;
-    protected final SimParams simParams;
-    protected final Consumer<Event> eventQueue;
-    protected final Consumer<List<Deadlock>> resolver;
-    protected final Consumer<Integer> overheadIncurer;
     protected final Server server;
+    protected final SimParams simParams;
+
+    /** Used to post events to the eventQueue */
+    protected final Consumer<Event> eventQueue;
+
+    /** Interface to the DRP */
+    protected final Consumer<List<Deadlock>> resolver;
+
+    /**     * this is used to make the server incur the overhead of searching for deadlocks     */
+    protected final Consumer<Integer> overheadIncurer;
 
 
 
 
+    /**
+     *
+     * @param server Obviously the server this protocol is at
+     * @param simParams A parameter object used to pass parameters and provide other utilities to the various components
+     * @param resolver This will pass the detected deadlock to the deadlock resolution protocol
+     * @param overheadIncurer This is used to tell the simulation how much overhead to incur because, this is dependent on how hard it was to detect the deadlock
+     * @param deadlockListener This is used to pass the deadlocks to the GUI
+     */
     public DeadlockDetectionProtocol(Server server, SimParams simParams, Consumer<List<Deadlock>> resolver, Consumer<Integer> overheadIncurer, Consumer<Deadlock> deadlockListener) {
+
         this.server = server;
         this.serverID = server.getID();
         this.simParams = simParams;
@@ -45,6 +63,10 @@ public class DeadlockDetectionProtocol {
     }
 
 
+
+    /**
+     * this is called once when the simulation starts
+     */
     public void start(){
         if(Log.isLoggingEnabled()) log.log("Start");
     }
@@ -58,12 +80,19 @@ public class DeadlockDetectionProtocol {
 
     }
 
-
+    /**
+     * When the deadlock detection protocol creates a wait for graph, this interface is used to pass it to the GUI so the user can inspect it.
+     */
     public void setGraphListener(BiConsumer<Graph<WFGNode>,Integer> consumer){
 
     }
 
 
+    /**
+     * Just used to get an instance of the protocol from a string (from the parameter file specifically)
+     * @param ddp The string that is found in the params.txt file
+     * @param deadlockListener This is the interface to the GUI
+     */
     public static DeadlockDetectionProtocol get(Server server, String ddp, Consumer<Deadlock> deadlockListener) {
         switch (ddp){
             case "AgentDeadlockDetectionProtocol": return new AgentDeadlockDetectionProtocol(server,server.getSimParams(),server.getDRP()::resolveMultiple,server::incurOverhead, deadlockListener);

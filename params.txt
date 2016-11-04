@@ -1,9 +1,10 @@
 LOGGING:False
-SEED:1
+SEED:1,65
 Topology:HyperCube
 NumPages:600
-ArrivalRate:250,300
-DDP:AgentDeadlockDetectionProtocol
-DRP:AgentDeadlockResolutionProtocol,RandomDeadlockResolution
-PP:EarliestDeadlineFirst
+ArrivalRate:300
+DDP:ChandyMisraHaasDDP
+DRP:AgentDeadlockResolutionProtocol
+PP:FirstComeFirstServe
 DetectionInterval:2000
+MaxActiveTransactions:10

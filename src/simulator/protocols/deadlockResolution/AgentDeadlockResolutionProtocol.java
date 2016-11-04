@@ -5,8 +5,6 @@
  */
 package simulator.protocols.deadlockResolution;
 
-
-
 import exceptions.WTFException;
 import javafx.util.Pair;
 import simulator.SimParams;
@@ -78,12 +76,16 @@ public class AgentDeadlockResolutionProtocol implements DeadlockResolutionProtoc
     public List<TransInfo> resolve(Deadlock deadlock, boolean fromMsg) {
         List<TransInfo> transactionsInDeadlock = deadlock.getTransactionsInvolved();
         if( beingResolvedDeadlocks.contains(transactionsInDeadlock)){
+
             if(Log.isLoggingEnabled()) log.log("Already resolving deadlock: " + transactionsInDeadlock);
+
             return null;
         }
 
         beingResolvedDeadlocks.add(transactionsInDeadlock);
+
         if(Log.isLoggingEnabled()) log.log("Resolving deadlock involving:" + transactionsInDeadlock);
+
 
         //List of servers we have informed about the deadlock already
         List<Integer> sentToAlready = new ArrayList<>();

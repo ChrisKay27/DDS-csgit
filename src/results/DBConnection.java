@@ -1,6 +1,9 @@
 package results;
 import java.sql.*;
 
+/**
+ * This class is used to insert database results into the database
+ */
 public class DBConnection {
 
     public static void insertResults(ExperimentResults results) {
@@ -13,7 +16,7 @@ public class DBConnection {
 
 
             PreparedStatement statement = conn.prepareStatement("INSERT INTO results(experimentNumber,pcot,deadlockDetectionProtocol,deadlockResolutionProtocol," +
-                    "topology,arrivalRate,priorityProtocol,numPages,detectionInterval) VALUES (?,?,?,?,?,?,?,?,?)");
+                    "topology,arrivalRate,priorityProtocol,numPages,detectionInterval,maxActiveTrans,overhead,messageOverhead) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
             statement.setLong(1,results.getExpNum());
             statement.setDouble(2,results.getPCOT());
             statement.setString(3,results.getDDP());
@@ -23,6 +26,10 @@ public class DBConnection {
             statement.setString(7,results.getPP());
             statement.setInt(8,results.getNumPages());
             statement.setInt(9,results.getDetectInterval());
+            statement.setInt(10,results.getMaxActiveTrans());
+            statement.setDouble(11,results.getOverhead());
+            statement.setDouble(12,results.getMessageOverhead());
+
             statement.execute();
 
 

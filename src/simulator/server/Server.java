@@ -4,7 +4,6 @@ import exceptions.WTFException;
 import simulator.SimParams;
 import simulator.enums.ServerProcess;
 import simulator.protocols.deadlockDetection.DeadlockDetectionProtocol;
-import simulator.protocols.deadlockDetection.WFG_DDP;
 import simulator.protocols.deadlockResolution.DeadlockResolutionProtocol;
 import simulator.server.disk.Disk;
 import simulator.server.lockManager.LockManager;
@@ -34,6 +33,12 @@ public class Server {
     private final DeadlockDetectionProtocol DDP;
     private final DeadlockResolutionProtocol DRP;
 
+    /**
+     *
+     * @param simParams Used to pass parameters and provide utilities to the components
+     * @param serverID
+     * @param pageRange The range of pages on this server
+     */
     public Server(SimParams simParams, int serverID, Range pageRange) {
         this.simParams = simParams;
         this.serverID = serverID;
@@ -48,12 +53,6 @@ public class Server {
 
         DRP = DeadlockResolutionProtocol.get(this, simParams.DRP);
         DDP = DeadlockDetectionProtocol.get(this, simParams.DDP, simParams.getDeadlockListener());
-
-
-    }
-
-    public NetworkInterface getNIC() {
-        return NIC;
     }
 
 
@@ -62,12 +61,12 @@ public class Server {
         DDP.start();
     }
 
+
+    /**
+     * Called by the TM to get the LM to get the locks for this transaction
+     */
     public void acquireLocks(Transaction t) {
         LM.acquireLocks(t);
-    }
-
-    public int getID() {
-        return serverID;
     }
 
 
@@ -79,10 +78,10 @@ public class Server {
 //        NIC.abort(transNum);
     }
 
-    public TransactionManager getTM() {
-        return TM;
-    }
 
+    /**
+     * Receives messages from the network and delegates it to the correct component
+     */
     public void receiveMessage(Message msg) {
         switch(msg.getProcess()){
             case TransactionManager:
@@ -105,12 +104,29 @@ public class Server {
         }
     }
 
+
+
+
+    /*
+        Getters and Setters
+    */
+
+
+
+    public int getID() {
+        return serverID;
+    }
+
     public SimParams getSimParams() {
         return simParams;
     }
 
     public Processor getCPU() {
         return CPU;
+    }
+
+    public TransactionManager getTM() {
+        return TM;
     }
 
     public Disk getDisk() {
@@ -127,7 +143,10 @@ public class Server {
 
     public DeadlockResolutionProtocol getDRP() {
         return DRP;
+    }
 
+    public NetworkInterface getNIC() {
+        return NIC;
     }
 
     public DeadlockDetectionProtocol getDDP() {

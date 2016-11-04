@@ -2,7 +2,6 @@ package simulator.protocols.priority;
 
 import simulator.server.lockManager.Lock;
 import simulator.server.transactionManager.Transaction;
-
 import java.util.List;
 
 public class EarliestDeadlineFirst implements PriorityProtocol {

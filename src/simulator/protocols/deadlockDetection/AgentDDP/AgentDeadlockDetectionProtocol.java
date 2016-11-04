@@ -2,11 +2,9 @@ package simulator.protocols.deadlockDetection.AgentDDP;
 
 import java.util.*;
 import java.util.function.Consumer;
-
 import simulator.SimParams;
 import simulator.enums.ServerProcess;
 import simulator.eventQueue.Event;
-
 import simulator.protocols.deadlockDetection.Deadlock;
 import simulator.protocols.deadlockDetection.WFG.Graph;
 import simulator.protocols.deadlockDetection.WFG.Task;
@@ -21,11 +19,7 @@ public class AgentDeadlockDetectionProtocol extends WFG_DDP {
     private final Log log ;
     private List<Integer> allServers = Arrays.asList(0,1,2,3,4,5,6,7);
 
-
     private List<List<WFGNode>> deadlocks = new LinkedList<>();
-    private final List<Integer> receivedFromServers = new ArrayList<>();
-
-
 
     public AgentDeadlockDetectionProtocol(Server server, SimParams simParams, Consumer<List<Deadlock>> resolver, Consumer<Integer> overheadIncurer, Consumer<Deadlock> deadlockListener) {
         super(server, simParams, resolver, overheadIncurer, deadlockListener);
@@ -38,35 +32,18 @@ public class AgentDeadlockDetectionProtocol extends WFG_DDP {
         eventQueue.accept(new Event(simParams.timeProvider.get()+simParams.getDeadlockDetectInterval(),serverID,this::sendDeadlockInfo));
     }
 
-
-
-//    public void received(int n) {
-//        receivedFromServers.add(n);
-//        if (receivedFromServers.containsAll(allServers)) {
-//
-//            if(wfg.getNodesInvolved().contains(serverID))
-//                searchGraph();
-//
-//            receivedFromServers.clear();
-//        }
-//    }
-
-
     protected void searchGraph(Graph<WFGNode> build) {
         if(Log.isLoggingEnabled()) if(Log.isLoggingEnabled()) log.log("AgentDDP: Searching graph");
 
         calculateAndIncurOverhead(build);
         deadlocks.clear();
 
-
         List<Integer> serversInvolved = allServers;
 
         int thisNodesIndex = serversInvolved.indexOf(serverID);
 
-
         List<Task<WFGNode>> allTransactions = new ArrayList<>(build.getTasks());
         List<TransInfo> transThisAgentCaresAbout = new ArrayList<>();
-
 
         //collect all transactions this agent cares about
         for (int i = 0; i < allTransactions.size(); i++) {
@@ -92,7 +69,6 @@ public class AgentDeadlockDetectionProtocol extends WFG_DDP {
             followCycle(getWFGraph(), t, edgesFrom ,new LinkedList<>());
         }
 
-
         //Convert the list of lists of WFGNodes to a list of lists of Deadlocks
         List<List<TransInfo>> deadlocksTransInfo = new ArrayList<>();
         List<Deadlock> deadlocksList = new ArrayList<>();
@@ -115,15 +91,11 @@ public class AgentDeadlockDetectionProtocol extends WFG_DDP {
             return;
         }
 
-
         deadlocksList.forEach(deadlockListener);
         if(Log.isLoggingEnabled()) log.log("Found deadlocks: " + deadlocksTransInfo);
 
-
         //Resolve the deadlocks
         resolver.accept(deadlocksList);
-
-
     }
 
     private void calculateAndIncurOverhead(Graph<WFGNode> WFG) {
@@ -140,7 +112,7 @@ public class AgentDeadlockDetectionProtocol extends WFG_DDP {
             //add one for each edge
             overhead += rt.getWaitsForTasks().size();
         }
-        overhead /= 100;
+        overhead /= 1;
         if(Log.isLoggingEnabled()) log.log("Incurring overhead: " + overhead);
         overheadIncurer.accept(overhead);
     }
@@ -188,11 +160,6 @@ public class AgentDeadlockDetectionProtocol extends WFG_DDP {
             }
         }
     }
-
-
-
-
-
 
     private Graph<WFGNode> getWFGraph(){
 //        Graph<WFGNode> newWFG = new Graph<>();

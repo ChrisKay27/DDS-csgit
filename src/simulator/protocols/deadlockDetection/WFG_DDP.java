@@ -33,7 +33,6 @@ public class WFG_DDP extends DeadlockDetectionProtocol{
 
     protected GraphBuilder<WFGNode> wfgBuilder = new GraphBuilder<>();
 
-
     private final List<Integer> receivedFromServers = new ArrayList<>();
     private final List<Integer> globalDetectors = Arrays.asList(0,3,5);
     private BiConsumer<Graph<WFGNode>, Integer> wfGraphConsumer;
@@ -53,9 +52,6 @@ public class WFG_DDP extends DeadlockDetectionProtocol{
         simParams.eventQueue.accept(new Event(simParams.timeProvider.get()+300,serverID,this::sendDeadlockInfo));
     }
 
-
-
-
     /**
      * Only receives one type of message, that is the wait for graph from another node.
      * The message's contents is just the serverID of the other server.
@@ -68,16 +64,12 @@ public class WFG_DDP extends DeadlockDetectionProtocol{
         updateWFGraph((Graph<WFGNode>) msg.getObject(),remoteServerID);
     }
 
-
-
-
     /**
      * Sends WFG to all other nodes
      */
     protected void sendDeadlockInfo() {
         if(Log.isLoggingEnabled()) log.log("Sending deadlock info");
         Graph<WFGNode> localWFG = createLocalGraphOfWaits();
-
 
         int size = 0;
         for (Task<WFGNode> rt : localWFG.getTasks()) {
@@ -114,7 +106,6 @@ public class WFG_DDP extends DeadlockDetectionProtocol{
         updateWFGraph(localWFG, serverID);
     }
 
-
     /**
      * Creates the WFG for this server
      * @return a new WFG instance
@@ -144,25 +135,19 @@ public class WFG_DDP extends DeadlockDetectionProtocol{
         return wfgBuilder.build();
     }
 
-
-
     public void addWait(Lock waitingLock, Lock heldLock) {
         addWait(getTransInfo(waitingLock.getTransID()),getTransInfo(heldLock.getTransID()));
     }
-
 
     public void removeAllWaitsOn(Lock heldLock) {
         wfgBuilder.removeTask(getTransInfo(heldLock.getTransID()));
     }
 
-
     private TransInfo getTransInfo(int transID) {
         return simParams.transInfos.get(transID);
     }
 
-
     public final void addWait(TransInfo rfrom, TransInfo rto) {
-
         wfgBuilder.addTask(rfrom);
         wfgBuilder.addTask(rto);
 
@@ -177,7 +162,6 @@ public class WFG_DDP extends DeadlockDetectionProtocol{
 //
 //        received(server);
 //    }
-
 
     private List<Graph<WFGNode>> receivedWFGs = new ArrayList<>();
 
@@ -197,8 +181,6 @@ public class WFG_DDP extends DeadlockDetectionProtocol{
             wfgBuilder.addTask(trans);
             wfgNodeTask.getWaitsForTasks().forEach(waitingFor -> wfgBuilder.addTaskWaitsFor(trans,waitingFor.getId()));
         });
-
-
 
         receivedFromServers.add(server);
         if (receivedFromServers.containsAll(simParams.allServersList)) {
@@ -220,20 +202,14 @@ public class WFG_DDP extends DeadlockDetectionProtocol{
         }
     }
 
-
     protected void searchGraph(Graph<WFGNode> wfg) {
         if(Log.isLoggingEnabled()) log.log("Search Graph (Nothing in default implementation)" );
 
     }
 
-
-
-
-
     public void setGraphListener(BiConsumer<Graph<WFGNode>, Integer> wfGraphConsumer){
         this.wfGraphConsumer = wfGraphConsumer;
     }
-
 
 
     public static List<Task<WFGNode>> convertToList(Set<Task<WFGNode>> waits){

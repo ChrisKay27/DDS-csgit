@@ -35,6 +35,9 @@ CREATE TABLE `results` (
   `priorityProtocol` varchar(45) NOT NULL,
   `numPages` int(11) NOT NULL,
   `detectionInterval` int(11) NOT NULL,
+  `maxActiveTrans` int(11) NOT NULL,
+  `overhead` double NOT NULL,
+  `messageOverhead` double NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -47,5 +50,3 @@ CREATE TABLE `results` (
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2016-06-20 17:55:22

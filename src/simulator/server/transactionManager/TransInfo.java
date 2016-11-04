@@ -12,15 +12,17 @@ public class TransInfo implements WFGNode {
     public final int deadline;
     public final int workload;
     public final int executionTime;
+    public final int slackTime;
     public final List<Integer> readPages, writePages;
 
 
-    public TransInfo(int serverID, int transID, int deadline, int workload, int executionTime, List<Integer> readPages, List<Integer> writePages) {
+    public TransInfo(int serverID, int transID, int deadline, int workload, int executionTime, int slackTime, List<Integer> readPages, List<Integer> writePages) {
         this.serverID = serverID;
         this.transID = transID;
         this.deadline = deadline;
         this.workload = workload;
         this.executionTime = executionTime;
+        this.slackTime = slackTime;
         this.readPages = readPages;
         this.writePages = writePages;
     }

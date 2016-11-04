@@ -2,7 +2,6 @@ package simulator.server.lockManager;
 
 import exceptions.WTFException;
 import simulator.SimParams;
-
 import simulator.enums.ServerProcess;
 import simulator.eventQueue.Event;
 import simulator.server.Server;
@@ -23,6 +22,10 @@ public class LockManager {
     private Map<Integer,List<Lock>> heldLocks = new HashMap<>(); //Page to list of locks
     private Map<Integer,List<Lock>> waitingLocks = new HashMap<>(); //Page to list of locks
 
+    /*
+        These hashmaps are in the form
+        {Page Number -> {List of Locks}
+    */
 
     public LockManager(Server server, SimParams simParams, Range pageRange) {
         this.server = server;
@@ -39,7 +42,9 @@ public class LockManager {
     }
 
 
-
+    /**
+     * Called when a lock is released, checks to see if any waiting locks can move into the held locks list
+     */
     private void checkForObtainableLocks() {
         waitingLocks.keySet().forEach(pageNum -> {
             List<Lock> wLocks = waitingLocks.get(pageNum);

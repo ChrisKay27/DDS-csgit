@@ -25,8 +25,7 @@ public class SimParams {
     public static final int diskReadWriteTime = 30;
     public static final int processTime = 15;
     public static int Bandwidth = 10000;
-    public final int arrivalRateMin;
-    public final int arrivalRateMax;
+    public final int arrivalRateMean;
     public final int maxActiveTrans;
     private int numTransPerServer = 500;
     public String DRP;
@@ -84,8 +83,7 @@ public class SimParams {
         this.stats = stats;
         overheadIncurer = incurOverhead;
 
-        arrivalRateMin = arrivalRate - 25;
-        arrivalRateMax = arrivalRate + 25;Add distribution here
+        arrivalRateMean = arrivalRate;
 
         List<Integer> allServersList = new ArrayList<>();
         for (int i = 0; i < numberOfServers; i++)

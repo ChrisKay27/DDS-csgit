@@ -1,4 +1,4 @@
-//Hello World 
+//Hello World
 package main;
 
 import results.DBConnection;

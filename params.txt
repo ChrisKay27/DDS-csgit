@@ -3,7 +3,7 @@ SEED:1,65
 Topology:HyperCube
 NumPages:600
 ArrivalRate:300
-DDP:ChandyMisraHaasDDP
+DDP:AgentDeadlockDetectionProtocol
 DRP:AgentDeadlockResolutionProtocol
 PP:FirstComeFirstServe
 DetectionInterval:2000

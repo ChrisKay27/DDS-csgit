@@ -33,7 +33,7 @@ public class TransactionGenerator {
         if (remainingTransactions-- == 0)
             return;
 
-        int nextTransArriveTime = timeProvider.get() + (int) (simParams.arrivalRateMin + (rand.get() * (simParams.arrivalRateMax- simParams.arrivalRateMin)));
+        int nextTransArriveTime = timeProvider.get() + getPoisson(simParams.arrivalRateMean);
 
 
         int numReadPages = (int) (rand.get() * 4) + 1;
@@ -101,5 +101,17 @@ public class TransactionGenerator {
         serverID = server.getID();
     }
 
+    public static int getPoisson(double lambda) {
+        double L = Math.exp(-lambda);
+        System.out.println(L);
+        double p = 1.0;
+        int k = 0;
 
+        do {
+            k++;
+            p *= Math.random();
+        } while (p > L);
+
+        return k - 1;
+    }
 }

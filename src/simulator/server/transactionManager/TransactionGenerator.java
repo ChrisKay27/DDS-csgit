@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import static simulator.SimParams.*;
-
 public class TransactionGenerator {
     private int remainingTransactions;
 
@@ -40,13 +38,11 @@ public class TransactionGenerator {
         int numWritePages = (int) (rand.get() * 5);
 
         int execTime = (numReadPages * 200) + (numWritePages * 300);
-        int slackTime = 0;
-        int deadline = timeProvider.get() + execTime + slackTime;
+        int slackTime = 1;
+        int deadline = timeProvider.get() + execTime * slackTime;
 
 
         Transaction t = new Transaction(IDProvider.get(), server.getID(), deadline);
-        t.setSlackTime(slackTime);
-        t.setExecutionTime(execTime);
 
         List<Integer> allReadPageNums = t.getAllReadPageNums();
         List<Integer> readPageNums = t.getReadPageNums();
@@ -75,6 +71,7 @@ public class TransactionGenerator {
         }
 
         t.setWorkload(allReadPageNums.size()+allWritePageNums.size());
+        t.setExecutionTime((numReadPages * 200) + (numWritePages * 300));
 
         transConsumer.accept(t);
 
@@ -103,7 +100,6 @@ public class TransactionGenerator {
 
     public static int getPoisson(double lambda) {
         double L = Math.exp(-lambda);
-        System.out.println(L);
         double p = 1.0;
         int k = 0;
 

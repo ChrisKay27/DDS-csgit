@@ -3,9 +3,13 @@ package simulator;
 import simulator.eventQueue.Event;
 import simulator.protocols.deadlockDetection.Deadlock;
 import simulator.protocols.priority.PriorityProtocol;
+import simulator.server.Server;
 import simulator.server.lockManager.Range;
+import simulator.server.transactionManager.CohortTransaction;
 import simulator.server.transactionManager.TransInfo;
+import simulator.server.transactionManager.Transaction;
 import stats.Statistics;
+
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -21,6 +25,7 @@ public class SimParams {
 
     public final Consumer<String> log;
     public final Statistics stats;
+    public final List<Server> allServers = new ArrayList<>();
 
     public static final int diskReadWriteTime = 30;
     public static final int processTime = 15;
@@ -28,6 +33,7 @@ public class SimParams {
     public final int arrivalRateMean;
     public final int maxActiveTrans;
     private int numTransPerServer = 500;
+    private final double updateRate;
     public String DRP;
     public String DDP;
     public final int numberOfServers = 8;
@@ -50,17 +56,19 @@ public class SimParams {
     public boolean usesWFG = false;
 
     public final List<Integer> allServersList;
-    private int overHeadIncurred;
+    private int overIncurred;
     private Consumer<Deadlock> deadlockListener;
     private BiConsumer<Deadlock,Integer> deadlockResolutionListener;
     public final Map<Integer,TransInfo> transInfos = new HashMap<>();
     private PriorityProtocol pp;
     private int searchInterval;
+    public final int agentsHistoryLength;
+
+    public int globalDetectors = 1;
 
 
     /**
-     *
-     * @param eventQueue Interface to EventQueue. This is a reference to the method addEvent(Event e) in the class EventQueue. This allows any component in the simulation to add events.
+     *  @param eventQueue Interface to EventQueue. This is a reference to the method addEvent(Event e) in the class EventQueue. This allows any component in the simulation to add events.
      * @param rand Interface to the Random object created in the Simulation class.
      * @param timeProvider Interface to EventQueue. This is a reference to the method int getTime() in the class EventQueue.
      * @param IDProvider Used by the Transaction Generator to ensure no transactions have the same ID
@@ -70,9 +78,11 @@ public class SimParams {
      * @param log
      * @param stats
      * @param incurOverhead
+     * @param agentsHistoryLength
      */
     public SimParams(Consumer<Event> eventQueue, Supplier<Double> rand, Supplier<Integer> timeProvider, Supplier<Integer> IDProvider,
-                     Supplier<Integer> pageNumProvider, int maxActiveTrans, int arrivalRate, Consumer<String> log, Statistics stats, BiConsumer<Integer,Integer> incurOverhead) {
+                     Supplier<Integer> pageNumProvider, int maxActiveTrans, int arrivalRate, Consumer<String> log, Statistics stats,
+                     BiConsumer<Integer, Integer> incurOverhead, int agentsHistoryLength, double updateRate) {
         this.eventQueue = eventQueue;
         this.rand = rand;
         this.timeProvider = timeProvider;
@@ -84,6 +94,8 @@ public class SimParams {
         overheadIncurer = incurOverhead;
 
         arrivalRateMean = arrivalRate;
+        this.agentsHistoryLength = agentsHistoryLength;
+        this.updateRate = updateRate;
 
         List<Integer> allServersList = new ArrayList<>();
         for (int i = 0; i < numberOfServers; i++)
@@ -110,11 +122,11 @@ public class SimParams {
     }
 
     public void incurOverhead(int serverID, int overhead){
-        overHeadIncurred += overhead;
+        overIncurred += overhead;
         //overheadIncurer.accept(serverID,overhead);
     }
 
-    public void setDeadlockListener(Consumer<Deadlock> deadlockListener) {
+    void setDeadlockListener(Consumer<Deadlock> deadlockListener) {
         this.deadlockListener = deadlockListener;
     }
 
@@ -146,7 +158,86 @@ public class SimParams {
         this.deadlockResolutionListener = deadlockResolutionListener;
     }
 
-    public double getDDOverhead() {
-        return overHeadIncurred;
+    public int getTime(){
+        return timeProvider.get();
+    }
+
+
+    /**
+     * Used for integrity checking
+     */
+    public boolean add(Server server) {
+        return allServers.add(server);
+    }
+
+    /**
+     * Used for integrity checking
+     */
+    public List<Transaction> getAllActiveTransactions() {
+        List<Transaction> allTrans = new ArrayList<>();
+        for (Server s : allServers) {
+
+            allTrans.addAll(s.getTM().getActiveTransactions());
+        }
+        return allTrans;
+    }
+    /**
+     * Used for integrity checking
+     * Only gets master transactions, does not get cohorts
+     */
+    public Map<Integer,Transaction> getActiveTransactionsMap() {
+        Map<Integer,Transaction> allTrans = new HashMap<>();
+
+        for (Server s : allServers) {
+
+            List<Transaction> transactions = s.getTM().getActiveTransactions();
+
+            for(Transaction t : transactions)
+                if(!(t instanceof CohortTransaction))
+                    allTrans.put(t.getID(),t);
+        }
+
+        return allTrans;
+    }
+
+
+    /**
+     * Used for integrity checking
+     * Only gets master transactions, does not get cohorts
+     */
+    public Map<Integer,Transaction> getAllTransactionsMap() {
+        Map<Integer,Transaction> allTrans = new HashMap<>();
+
+        for (Server s : allServers) {
+
+            List<Transaction> transactions = s.getTM().getAllTransactions();
+
+            for(Transaction t : transactions)
+                if(!(t instanceof CohortTransaction))
+                    allTrans.put(t.getID(),t);
+        }
+
+        return allTrans;
+    }
+
+    /**
+     * Used for integrity checking
+     */
+    public List<Integer> getAllActiveTransactionIDs() {
+        List<Transaction> allTrans = getAllActiveTransactions();
+        List<Integer> allTransIDs = new ArrayList<>();
+
+        for (Transaction t : allTrans)
+            allTransIDs.add(t.getID());
+
+        return allTransIDs;
+    }
+
+    public int getOverIncurred() {
+        return overIncurred;
+    }
+
+    public double getUpdateRate() {
+        return updateRate;
     }
 }

@@ -12,6 +12,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Created by Chris on 6/8/2016.
+ */
 public class NetworkInterface {
     private final Log log;
 
@@ -41,7 +44,7 @@ public class NetworkInterface {
     public void sendMessage(Message message) {
         //If the message is destined for a process on the same server
         if( message.getDestServerID() == server.getID() ) {
-            simParams.eventQueue.accept(new Event(simParams.timeProvider.get() + 1, serverID, () -> receiveMessage(message), message.isReoccuring()));
+            simParams.eventQueue.accept(new Event(simParams.getTime() + 1, serverID, () -> receiveMessage(message), message.isReoccuring()));
         }else
             route(message).sendMessage(message);
     }
@@ -76,7 +79,7 @@ public class NetworkInterface {
             sendMessage(msg);
         }
         else{
-            if(Log.isLoggingEnabled()) log.log("Message Arrives: " + msg);
+            if(Log.isLoggingEnabled()) log.log("Message Arrives- " + msg);
             server.receiveMessage(msg);
         }
     }

@@ -4,6 +4,7 @@ import exceptions.WTFException;
 import simulator.SimParams;
 import simulator.enums.ServerProcess;
 import simulator.protocols.deadlockDetection.DeadlockDetectionProtocol;
+import simulator.protocols.deadlockDetection.WFG_DDP;
 import simulator.protocols.deadlockResolution.DeadlockResolutionProtocol;
 import simulator.server.disk.Disk;
 import simulator.server.lockManager.LockManager;
@@ -53,6 +54,8 @@ public class Server {
 
         DRP = DeadlockResolutionProtocol.get(this, simParams.DRP);
         DDP = DeadlockDetectionProtocol.get(this, simParams.DDP, simParams.getDeadlockListener());
+
+        simParams.add(this);
     }
 
 

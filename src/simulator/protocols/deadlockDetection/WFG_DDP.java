@@ -13,6 +13,7 @@ import simulator.server.lockManager.Lock;
 import simulator.server.network.Message;
 import simulator.server.network.NetworkInterface;
 import simulator.server.transactionManager.TransInfo;
+import simulator.server.transactionManager.Transaction;
 import ui.Log;
 
 import java.util.*;
@@ -28,14 +29,17 @@ import java.util.function.Consumer;
  */
 public class WFG_DDP extends DeadlockDetectionProtocol{
 
+
+
     private final Log log;
     protected Consumer<Deadlock> deadlockListener;
 
     protected GraphBuilder<WFGNode> wfgBuilder = new GraphBuilder<>();
+    protected GraphBuilder<WFGNode> globalWfgBuilder = new GraphBuilder<>();
 
     private final List<Integer> receivedFromServers = new ArrayList<>();
-    private final List<Integer> globalDetectors = Arrays.asList(0,3,5);
     private BiConsumer<Graph<WFGNode>, Integer> wfGraphConsumer;
+
 
 
     public WFG_DDP(Server server, SimParams simParams, Consumer<List<Deadlock>> resolver, Consumer<Integer> overheadIncurer, Consumer<Deadlock> deadlockListener) {
@@ -46,11 +50,16 @@ public class WFG_DDP extends DeadlockDetectionProtocol{
         this.deadlockListener = deadlockListener;
     }
 
+
     @Override
     public void start() {
         super.start();
-        simParams.eventQueue.accept(new Event(simParams.timeProvider.get()+300,serverID,this::sendDeadlockInfo));
+
+        simParams.eventQueue.accept(new Event(simParams.getTime()+300,serverID,this::startDetectionIteration));
     }
+
+
+
 
     /**
      * Only receives one type of message, that is the wait for graph from another node.
@@ -58,53 +67,75 @@ public class WFG_DDP extends DeadlockDetectionProtocol{
      * The message's object is the Wait for Graph
      */
     public void receiveMessage(Message msg) {
-        if(Log.isLoggingEnabled()) log.log("Received message: " + msg);
+        if(Log.isLoggingEnabled()) log.log("Received message- " + msg);
         int remoteServerID = Integer.parseInt(msg.getContents());
 
         updateWFGraph((Graph<WFGNode>) msg.getObject(),remoteServerID);
     }
 
+
+
+
     /**
      * Sends WFG to all other nodes
      */
-    protected void sendDeadlockInfo() {
-        if(Log.isLoggingEnabled()) log.log("Sending deadlock info");
+    public void startDetectionIteration() {
+        if(Log.isLoggingEnabled()) log.log("Starting Detection Iteration");
+
+        //Create the local WFG
         Graph<WFGNode> localWFG = createLocalGraphOfWaits();
 
-        int size = 0;
-        for (Task<WFGNode> rt : localWFG.getTasks()) {
-            size++;
-            size += rt.getWaitsForTasks().size();
-        }
-        int delay = size / 100;
-        simParams.incurOverhead(serverID, delay);
+        //Calculate the amount of overhead to incur
+        int size = localWFG.getNumberOfWaits();
+
+        if(Log.isLoggingEnabled()) log.log("Local WFG has " + size + " nodes.");
 
         //Search the local graph
         searchGraph(localWFG);
 
 
+        //post an event to send the local WFG to the global detectors. We wait for this so the local deadlocks can resolve before going global
+        eventQueue.accept(new Event(simParams.getTime()+100,serverID,this::sendLocalWFGToGlobals, true));
+    }
+
+
+
+    private void sendLocalWFGToGlobals(){
+//        System.out.println("sendLocalWFGToGlobals() simParams.globalDetectors=" + simParams.globalDetectors);
+
+        //Create the local WFG
+        Graph<WFGNode> localWFG = createLocalGraphOfWaits();
+
+        //clear the wfgBuilder now that we have the local WFG
+        wfgBuilder = new GraphBuilder<>();
+
+
         NetworkInterface NIC = server.getNIC();
 
+        //Calculate the amount of overhead to incur
+        int size = localWFG.getNumberOfWaits();
+
+
         //Send our graph to the detector nodes
-        for (int i : globalDetectors) {
+        for (int i  = 0 ; i < simParams.globalDetectors ; i++) {
             if( i != serverID ) {
-                Message message = new Message(i, ServerProcess.DDP, serverID+"" ,localWFG, simParams.timeProvider.get());
+                Message message = new Message(i, ServerProcess.DDP, serverID+"" ,localWFG, simParams.getTime());
                 message.setSize(size);
                 message.setReoccuring(true);
                 NIC.sendMessage(message);
             }
         }
 
-        boolean isAGlobalDetector = globalDetectors.contains(serverID);
+        boolean isAGlobalDetector = serverID < simParams.globalDetectors;
         if(!isAGlobalDetector) {
             //If this isn't a global detector it posts an event to check for deadlocks in the future and clears its WFGBuilder
-            eventQueue.accept(new Event(simParams.timeProvider.get()+simParams.getDeadlockDetectInterval()+30,serverID,this::sendDeadlockInfo, true));
-            wfgBuilder = new GraphBuilder<>();
+            eventQueue.accept(new Event(simParams.getTime()+simParams.getDeadlockDetectInterval()+100,serverID,this::startDetectionIteration, true));
             return;
         }
 
         updateWFGraph(localWFG, serverID);
     }
+
 
     /**
      * Creates the WFG for this server
@@ -113,7 +144,10 @@ public class WFG_DDP extends DeadlockDetectionProtocol{
     protected Graph<WFGNode> createLocalGraphOfWaits() {
         if(Log.isLoggingEnabled()) log.log("Creating local graph");
 
-        //wfgBuilder = new GraphBuilder<>();
+        //For integrity checking
+        Map<Integer,Transaction> allTrans = simParams.getAllTransactionsMap();
+        Map<Integer,Transaction> activeTrans = simParams.getActiveTransactionsMap();
+
 
         Map<Integer, List<Lock>> heldLocksMap = server.getLM().getHeldLocks();
         Map<Integer, List<Lock>> waitingLocksMap = server.getLM().getWaitingLocks();
@@ -124,30 +158,68 @@ public class WFG_DDP extends DeadlockDetectionProtocol{
 
             for (Lock waitingLock : waitingLocks) {
 
+
+                //Assert check to make sure all the locks belong to active transactions
+                if( !activeTrans.containsKey(waitingLock.getTransID()) ) {
+
+                    Transaction t = allTrans.get(waitingLock.getTransID());
+                    //Sometimes a transaction that has just finished, so don't throw an error if it just finished
+                    if(t.getCompletedTime() < simParams.getTime()-200)
+                        throw new WTFException(serverID + ": This waiting lock " + waitingLock + " doesn't belong to an active transaction!");
+                    else{
+                        System.out.println(simParams.getTime()+" - Adding lock of "+t+" that has recently completed at " + t.getCompletedTime());
+                    }
+                }
+
+
                 List<Lock> heldLocks = heldLocksMap.get(waitingLock.getPageNum());
 
                 heldLocks.forEach(heldLock -> {
+
+
+                    //Assert check to make sure all the locks belong to active transactions
+                    if( !activeTrans.containsKey(heldLock.getTransID()) ) {
+
+                        Transaction t = allTrans.get(heldLock.getTransID());
+                        //Sometimes a transaction that has just finished, so don't throw an error if it just finished
+                        if(t.getCompletedTime() < simParams.getTime()-200)
+                            throw new WTFException(serverID + ": This held lock " + heldLock + " doesn't belong to an active transaction!");
+                        else{
+                            System.out.println(simParams.getTime()+" - Adding lock of "+t+" that has recently completed at " + t.getCompletedTime());
+                        }
+                    }
+
+                    log.log(waitingLock.getTransID(),"Transaction "+ waitingLock.getTransID() + " is waiting on " + heldLock.getTransID() + " for page " + heldLock.getPageNum());
+
                     addWait(waitingLock, heldLock);
                 });
             }
         }
-
-        return wfgBuilder.build();
+        Graph<WFGNode> graph = wfgBuilder.build();
+        graph.setCreationTime(simParams.getTime());
+        graph.setGlobal(false);
+        return graph;
     }
+
+
 
     public void addWait(Lock waitingLock, Lock heldLock) {
         addWait(getTransInfo(waitingLock.getTransID()),getTransInfo(heldLock.getTransID()));
     }
 
+
     public void removeAllWaitsOn(Lock heldLock) {
         wfgBuilder.removeTask(getTransInfo(heldLock.getTransID()));
     }
+
 
     private TransInfo getTransInfo(int transID) {
         return simParams.transInfos.get(transID);
     }
 
+
     public final void addWait(TransInfo rfrom, TransInfo rto) {
+
         wfgBuilder.addTask(rfrom);
         wfgBuilder.addTask(rto);
 
@@ -162,6 +234,7 @@ public class WFG_DDP extends DeadlockDetectionProtocol{
 //
 //        received(server);
 //    }
+
 
     private List<Graph<WFGNode>> receivedWFGs = new ArrayList<>();
 
@@ -178,38 +251,46 @@ public class WFG_DDP extends DeadlockDetectionProtocol{
 
         graph.getTasks().forEach(wfgNodeTask -> {
             WFGNode trans = wfgNodeTask.getId();
-            wfgBuilder.addTask(trans);
-            wfgNodeTask.getWaitsForTasks().forEach(waitingFor -> wfgBuilder.addTaskWaitsFor(trans,waitingFor.getId()));
+            globalWfgBuilder.addTask(trans);
+            wfgNodeTask.getWaitsForTasks().forEach(waitingFor -> globalWfgBuilder.addTaskWaitsFor(trans,waitingFor.getId()));
         });
+
+
 
         receivedFromServers.add(server);
         if (receivedFromServers.containsAll(simParams.allServersList)) {
 
             if( wfGraphConsumer != null ){
-                //System.out.println("Graph has " + wfgBuilder.size() + " nodes at time " + simParams.timeProvider.get());
+                //System.out.println("Graph has " + wfgBuilder.size() + " nodes at time " + simParams.getTime());
 
-                Graph<WFGNode> copy = wfgBuilder.build();
-                wfGraphConsumer.accept(copy, simParams.timeProvider.get());
+                Graph<WFGNode> copy = globalWfgBuilder.build();
+                copy.setGlobal(true);
+                wfGraphConsumer.accept(copy, simParams.getTime());
             }
 
-            searchGraph(wfgBuilder.build());
-            eventQueue.accept(new Event(simParams.timeProvider.get()+simParams.getDeadlockDetectInterval(),serverID,this::sendDeadlockInfo));
-            wfgBuilder = new GraphBuilder<>();
 
+            searchGraph(globalWfgBuilder.build());
 
+            //After searching for deadlocks, post event to search again, and clear the state
+            eventQueue.accept(new Event(simParams.getTime()+simParams.getDeadlockDetectInterval(),serverID,this::startDetectionIteration));
+            globalWfgBuilder = new GraphBuilder<>();
             receivedFromServers.clear();
-
         }
     }
 
+
     protected void searchGraph(Graph<WFGNode> wfg) {
         if(Log.isLoggingEnabled()) log.log("Search Graph (Nothing in default implementation)" );
-
     }
+
+
+
+
 
     public void setGraphListener(BiConsumer<Graph<WFGNode>, Integer> wfGraphConsumer){
         this.wfGraphConsumer = wfGraphConsumer;
     }
+
 
 
     public static List<Task<WFGNode>> convertToList(Set<Task<WFGNode>> waits){
@@ -217,4 +298,40 @@ public class WFG_DDP extends DeadlockDetectionProtocol{
         waits.forEach(edges::add);
         return edges;
     }
+
+    public BiConsumer<Graph<WFGNode>, Integer> getWfGraphConsumer() {
+        return wfGraphConsumer;
+    }
+
+    public GraphBuilder<WFGNode> getWfgBuilder() {
+        return wfgBuilder;
+    }
+
+    public List<Integer> getReceivedFromServers() {
+        return receivedFromServers;
+    }
+
+    public List<Graph<WFGNode>> getReceivedWFGs() {
+        return receivedWFGs;
+    }
+
+    public void setWfgBuilder(GraphBuilder<WFGNode> wfgBuilder) {
+        this.wfgBuilder = wfgBuilder;
+    }
+
+    public void increaseNumberOfGlobalDetectors() {
+        simParams.globalDetectors++;
+        if( simParams.globalDetectors > simParams.numberOfServers )
+            simParams.globalDetectors = simParams.numberOfServers;
+        if(Log.isLoggingEnabled()) log.log("Increasing number of global detectors to " + simParams.globalDetectors );
+    }
+
+    public void decreaseNumberOfGlobalDetectors() {
+        simParams.globalDetectors--;
+        if( simParams.globalDetectors < 1 )
+            simParams.globalDetectors = 1;
+        if(Log.isLoggingEnabled()) log.log("Decreasing number of global detectors to " + simParams.globalDetectors );
+    }
+
+    public int getNumberGlobalDetectors(){ return simParams.globalDetectors; }
 }

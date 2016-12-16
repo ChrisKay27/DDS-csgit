@@ -33,6 +33,7 @@ public class RandomDeadlockResolution implements DeadlockResolutionProtocol {
             return;
 
         TransInfo tInfo = transAtThisServer.get((int) (simParams.rand.get()*transAtThisServer.size()));
+        deadlock.setResolutionTime(simParams.getTime());
         simParams.getDeadlockResolutionListener().accept(deadlock,tInfo.transID);
         server.getTM().abort(tInfo.getID());
     }

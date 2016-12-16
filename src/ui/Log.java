@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-
 public class Log {
 
     private static boolean LOGGING_ENABLED = false;
@@ -40,7 +39,7 @@ public class Log {
     }
 
     public void log(int transID, String message){
-        log.accept(timeProvider.get()+serverProcess+transID+": "+message);
+        log.accept(timeProvider.get()+serverProcess+transID+": "+message.replace(":","-"));
     }
 
 

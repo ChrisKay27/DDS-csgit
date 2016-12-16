@@ -46,7 +46,7 @@ public class NetworkConnection {
         if(Log.isLoggingEnabled()) log.log(src.getID() + ": Send message: " + msg);
 
         queue.add(msg);
-        eventQueue.accept(new Event(simParams.timeProvider.get()+1, src.getID(), this::checkForRoomForMessage, true));
+        eventQueue.accept(new Event(simParams.getTime()+1, src.getID(), this::checkForRoomForMessage, true));
     }
 
 
@@ -58,7 +58,7 @@ public class NetworkConnection {
 
         msgConsumer.accept(msg);
 
-        eventQueue.accept(new Event(simParams.timeProvider.get()+1, dest.getID(), this::checkForRoomForMessage, true));
+        eventQueue.accept(new Event(simParams.getTime()+1, dest.getID(), this::checkForRoomForMessage, true));
     }
 
     private void checkForRoomForMessage(){
@@ -67,7 +67,7 @@ public class NetworkConnection {
             Message msg = queue.remove();
             onTheWire.add(msg);
             sizeOnTheWire += msg.getSize();
-            eventQueue.accept(new Event(simParams.timeProvider.get()+latency, src.getID(), ()-> messageArrives(msg), msg.isReoccuring()));
+            eventQueue.accept(new Event(simParams.getTime()+latency, src.getID(), ()-> messageArrives(msg), msg.isReoccuring()));
         }
         else{
             if( queue.isEmpty() ) {

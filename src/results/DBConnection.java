@@ -2,6 +2,7 @@ package results;
 import java.sql.*;
 
 /**
+ *
  * This class is used to insert database results into the database
  */
 public class DBConnection {
@@ -10,13 +11,11 @@ public class DBConnection {
         Connection conn = null;
 
         try {
-            conn =
-                    DriverManager.getConnection("jdbc:mysql://localhost/ddb_results?" +
-                            "user=Mani&password=thesis");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost/ddb_results?" +"user=Mani&password=thesis");
 
 
             PreparedStatement statement = conn.prepareStatement("INSERT INTO results(experimentNumber,pcot,deadlockDetectionProtocol,deadlockResolutionProtocol," +
-                    "topology,arrivalRate,priorityProtocol,numPages,detectionInterval,maxActiveTrans,overhead,messageOverhead) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
+                    "topology,arrivalRate,priorityProtocol,numPages,detectionInterval,maxActiveTrans,overHeadIncurred,messageOverHeadIncurred,updateRate) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
             statement.setLong(1,results.getExpNum());
             statement.setDouble(2,results.getPCOT());
             statement.setString(3,results.getDDP());
@@ -27,8 +26,9 @@ public class DBConnection {
             statement.setInt(8,results.getNumPages());
             statement.setInt(9,results.getDetectInterval());
             statement.setInt(10,results.getMaxActiveTrans());
-            statement.setDouble(11,results.getOverhead());
-            statement.setDouble(12,results.getMessageOverhead());
+            statement.setInt(11,results.getOverheadIncurred());
+            statement.setInt(12,results.getMessageOverheadIncurred());
+            statement.setDouble(13,results.getUpdateRate());
 
             statement.execute();
 

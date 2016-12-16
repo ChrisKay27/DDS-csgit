@@ -2,6 +2,7 @@ package simulator.server.lockManager;
 
 import exceptions.WTFException;
 import simulator.SimParams;
+
 import simulator.enums.ServerProcess;
 import simulator.eventQueue.Event;
 import simulator.server.Server;
@@ -113,6 +114,7 @@ public class LockManager {
         switch(components[0]) {
             case "L":{
                 if(Log.isLoggingEnabled()) log.log(transID,"Remote lock request for page " + pageNum);
+
                 int serverID = Integer.parseInt(components[3]);
                 boolean exclusive = components[4].equals(E);
 
@@ -142,13 +144,13 @@ public class LockManager {
             }
             case "R":{
 
-
+                if(Log.isLoggingEnabled()) log.log(transID,"Received message to release lock on page " + pageNum);
                 List<Lock> locks = heldLocks.get(pageNum);
                 for (int i = 0; i < locks.size(); i++) {
                     if( locks.get(i).getTransID() == transID ){
                         locks.remove(i);
                         i--;
-                        if(Log.isLoggingEnabled()) log.log(transID,"Releasing held lock for page " + pageNum + " on server " + server.getID());
+                        if(Log.isLoggingEnabled()) log.log(transID,"Released held lock for page " + pageNum + " on server " + server.getID());
                     }
                 }
                 locks = waitingLocks.get(pageNum);
@@ -156,10 +158,10 @@ public class LockManager {
                     if( locks.get(i).getTransID() == transID ){
                         locks.remove(i);
                         i--;
-                        if(Log.isLoggingEnabled()) log.log(transID,"Releasing waiting lock for page " + pageNum + " on server " + server.getID());
+                        if(Log.isLoggingEnabled()) log.log(transID,"Released waiting lock for page " + pageNum + " on server " + server.getID());
                     }
                 }
-                simParams.eventQueue.accept(new Event(simParams.timeProvider.get()+1, serverID, this::checkForObtainableLocks));
+                simParams.eventQueue.accept(new Event(simParams.getTime()+1, serverID, this::checkForObtainableLocks));
                 break;
             }
 
@@ -265,7 +267,7 @@ public class LockManager {
 //            }
         }
 
-        simParams.eventQueue.accept(new Event(simParams.timeProvider.get()+1, serverID, this::checkForObtainableLocks));
+        simParams.eventQueue.accept(new Event(simParams.getTime()+1, serverID, this::checkForObtainableLocks));
     }
 
     /**
@@ -273,6 +275,9 @@ public class LockManager {
      */
     public void releaseLock(int transID, int pageNum ) {
 
+        if (Log.isLoggingEnabled()) log.log(transID, "Trying to release lock on page " + pageNum);
+
+        //Check for waiting locks
         Lock releasedLock = null;
         for (Lock lock : waitingLocks.get(pageNum)) {
             if (transID == lock.getTransID())
@@ -280,13 +285,17 @@ public class LockManager {
         }
 
         if(releasedLock != null ) {
-            if (Log.isLoggingEnabled()) log.log(transID, "Releasing waiting lock: " + releasedLock);
+            if (Log.isLoggingEnabled()) log.log(transID, "Releasing waiting lock - " + releasedLock);
 
             waitingLocks.get(pageNum).remove(releasedLock);
 
-            simParams.eventQueue.accept(new Event(simParams.timeProvider.get()+1, serverID, this::checkForObtainableLocks));
+            simParams.eventQueue.accept(new Event(simParams.getTime()+1, serverID, this::checkForObtainableLocks));
             return;
         }
+
+        if (Log.isLoggingEnabled()) log.log(transID, "Lock not found in waiting locks for page " + pageNum);
+
+        //Now check for held locks because there were no waiting locks
 
         boolean found = false;
         releasedLock = null;
@@ -299,11 +308,20 @@ public class LockManager {
             }
         }
 
-        if(Log.isLoggingEnabled()) log.log(transID,"Releasing held lock: " + releasedLock);
+        if( releasedLock == null ) {
+            if (Log.isLoggingEnabled()) log.log(transID, "Did not find held lock on page " + pageNum);
 
-        heldLocks.get(pageNum).remove(releasedLock);
+        }
+        else {
+            if (Log.isLoggingEnabled()) log.log(transID, "Releasing held lock " + releasedLock + " on page " + pageNum);
 
-        simParams.eventQueue.accept(new Event(simParams.timeProvider.get()+1, serverID, this::checkForObtainableLocks));
+            boolean successfullyRemoved = heldLocks.get(pageNum).remove(releasedLock);
+
+            if (!successfullyRemoved)
+                throw new WTFException(serverID + ": Lock " + releasedLock + " not successfully removed on page " + pageNum + " for trans " + transID);
+
+            simParams.eventQueue.accept(new Event(simParams.getTime() + 1, serverID, this::checkForObtainableLocks));
+        }
     }
 
 
@@ -313,13 +331,21 @@ public class LockManager {
     public void releaseLocks(int transID, int pageNum, int deadline) {
         if(Log.isLoggingEnabled()) log.log(transID,"Releasing all locks on page " + pageNum);
 
-        if(pageRange.contains(pageNum))
-            releaseLock(transID,pageNum);
+        if(pageRange.contains(pageNum)) {
+            releaseLock(transID, pageNum);
+        }
+        else{
+            if(Log.isLoggingEnabled()) log.log(transID,"Page num outside range of this server " + pageRange);
+        }
 
         List<Integer> serversWithPage = simParams.getServersWithPage(pageNum);
+        if(Log.isLoggingEnabled()) log.log(transID,"Servers " + serversWithPage + " have page " + pageNum);
         serversWithPage.stream()
                 .filter(serverID -> serverID != server.getID())
-                .forEach(serverID -> server.getNIC().sendMessage(new Message(serverID,ServerProcess.LockManager,"R:"+transID+":"+pageNum,deadline)));
+                .forEach(serverID -> {
+                    if(Log.isLoggingEnabled()) log.log(transID,"Sending message to server " + serverID + " to release lock on page " + pageNum);
+                    server.getNIC().sendMessage(new Message(serverID,ServerProcess.LockManager,"R:"+transID+":"+pageNum,deadline));
+                });
     }
 
     public Map<Integer, List<Lock>> getHeldLocks() {

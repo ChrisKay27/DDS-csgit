@@ -6,6 +6,7 @@ import simulator.server.Server;
 import simulator.server.lockManager.Lock;
 import simulator.server.lockManager.Range;
 import stats.Statistics;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,7 @@ public class Simulation {
     private final SimParams simParams;
 
 
+
     public Simulation(SimSetupParams simSetupParams) {
         //Get parameters from setup param object
         this.rand = new Random(simSetupParams.getSEED());
@@ -31,7 +33,8 @@ public class Simulation {
 
         //Create simParam object to give to each server, which is given to every component in the simulation
         simParams = new SimParams(eventQueue::addEvent,rand::nextDouble,eventQueue::getTime,this::getNextTransID,
-                this::getRandPageNum, simSetupParams.getMaxActiveTrans(), simSetupParams.getArrivalRate(), simSetupParams.getLog(), simSetupParams.getStats(), eventQueue::incurOverhead);
+                this::getRandPageNum, simSetupParams.getMaxActiveTrans(), simSetupParams.getArrivalRate(), simSetupParams.getLog(),
+                simSetupParams.getStats(), eventQueue::incurOverhead, simSetupParams.getAgentsHistoryLength(),simSetupParams.getUpdateRate());
 
         simParams.DDP = simSetupParams.getDDP();
         simParams.DRP = simSetupParams.getDRP();
@@ -91,7 +94,7 @@ public class Simulation {
         return servers;
     }
 
-    public double[] start() {
+    public Object[] start() {
         servers.forEach(Server::start);
 
         //Run through all events
@@ -135,8 +138,9 @@ public class Simulation {
 
         Statistics stats = simParams.stats;
 
-        double PCOT = ((double)stats.getCompletedOnTime())/(servers.size()*simParams.getNumTransPerServer());
-        return new double[]{PCOT,simParams.getDDOverhead(),simParams.messageOverhead};
+        double PCOT = ((double) stats.getCompletedOnTime()) / (servers.size() * simParams.getNumTransPerServer());
+
+        return new Object[]{PCOT, simParams.getOverIncurred(), simParams.messageOverhead};
     }
 
     public SimParams getSimParams() {

@@ -36,12 +36,12 @@ public class Processor {
             activeProcessorJob = processingJobs.remove();
 
             if(Log.isLoggingEnabled()) log.log(activeProcessorJob.getTransID(),"Processing started for page " + activeProcessorJob.getPageNum());
-            Event activeEvent = new Event(simParams.timeProvider.get()+SimParams.processTime, serverID, ()->{
+            Event activeEvent = new Event(simParams.getTime()+SimParams.processTime, serverID, ()->{
                 if(Log.isLoggingEnabled()) log.log(activeProcessorJob.getTransID(),"Processing completed for page " + activeProcessorJob.getPageNum());
 
                 activeProcessorJob.getCompletedListener().accept(activeProcessorJob.getPageNum());
 
-                simParams.eventQueue.accept(new Event(simParams.timeProvider.get()+1, serverID, this::tryToStartJob));
+                simParams.eventQueue.accept(new Event(simParams.getTime()+1, serverID, this::tryToStartJob));
 
                 activeProcessorJob = null;
             });
@@ -53,7 +53,7 @@ public class Processor {
     public void addJob(ProcessorJob pj){
         if(Log.isLoggingEnabled()) log.log(pj.getTransID(),"Processing job added for page " + pj.getPageNum());
         processingJobs.add(pj);
-        simParams.eventQueue.accept(new Event(simParams.timeProvider.get()+1, serverID, this::tryToStartJob));
+        simParams.eventQueue.accept(new Event(simParams.getTime()+1, serverID, this::tryToStartJob));
     }
 
 
@@ -68,7 +68,7 @@ public class Processor {
         processingJobs.forEach(diskJob -> {if( diskJob.getTransID() == transNum) toBeAbortedDiskJobs.add(diskJob);});
         processingJobs.removeAll(toBeAbortedDiskJobs);
 
-        simParams.eventQueue.accept(new Event(simParams.timeProvider.get()+1, serverID, this::tryToStartJob));
+        simParams.eventQueue.accept(new Event(simParams.getTime()+1, serverID, this::tryToStartJob));
     }
 
 }

@@ -14,13 +14,14 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-
 public class DeadlockPanel extends JPanel {
 
     private final JLabel deadlocksCounter;
     private final JLabel deadlocksID;
     private final JLabel deadlocksTime;
+    private final JLabel resolveTime;
     private final JLabel deadlocksServer;
+    private final JLabel toString;
 
     private List<Deadlock> deadlocks = new ArrayList<>();
     private final JComboBox<Deadlock> deadlockJComboBox;
@@ -49,11 +50,17 @@ public class DeadlockPanel extends JPanel {
         deadlocksID = new JLabel("Deadlock ID: 0");
         top.add(deadlocksID);
 
-        deadlocksTime = new JLabel("Deadlock Found At Time: 0");
+        deadlocksTime = new JLabel("Found At Time: 0");
         top.add(deadlocksTime);
 
-        deadlocksServer = new JLabel("Deadlock Found At Server: 0");
+        resolveTime = new JLabel("Resolved At Time: 0");
+        top.add(resolveTime);
+
+        deadlocksServer = new JLabel("Found At Server: 0");
         top.add(deadlocksServer);
+
+        toString = new JLabel("");
+        top.add(toString);
 
         add(top, BorderLayout.NORTH);
 
@@ -72,9 +79,11 @@ public class DeadlockPanel extends JPanel {
 
     public void showDeadlock(Deadlock deadlock ){
 
-        deadlocksID.setText("Deadlock ID: " + deadlock.getDeadlockID());
-        deadlocksTime.setText("Deadlock Found At Time: " + deadlock.getDetectionTime());
-        deadlocksServer.setText("Deadlock Found At Server: " + deadlock.getServerID());
+        deadlocksID.setText("  Deadlock ID: " + deadlock.getDeadlockID());
+        deadlocksTime.setText("  Found At Time: " + deadlock.getDetectionTime());
+        resolveTime.setText("  Resolved At Time: " + deadlock.getResolutionTime());
+        deadlocksServer.setText("  Found At Server: " + deadlock.getServerID());
+        toString.setText(deadlock.toLongString());
 
 
         Object parent = graph.getDefaultParent();

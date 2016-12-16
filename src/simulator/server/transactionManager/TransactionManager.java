@@ -12,6 +12,7 @@ import simulator.server.network.Message;
 import simulator.server.network.NetworkInterface;
 import simulator.server.processor.ProcessorJob;
 import ui.Log;
+
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -78,7 +79,7 @@ public class TransactionManager {
 
 
     private void checkToStartTrans(){
-        if(Log.isLoggingEnabled()) log.log("checkToStartTrans()");
+        if(Log.isLoggingEnabled()) log.log("checking to start trans. Num Active = " + activeTransactions.size() + "  Num waiting = " + queuedTransactions.size());
 
         if( queuedTransactions.size() == 0 ){
             if(Log.isLoggingEnabled()) log.log("No transactions to start.");
@@ -107,7 +108,7 @@ public class TransactionManager {
         if(!(t instanceof CohortTransaction))
 
             //In 50000 ticks the timeout will occur
-            eventQueue.accept(new Event(simParams.timeProvider.get()+50000, serverID, ()->{
+            eventQueue.accept(new Event(simParams.getTime()+50000, serverID, ()->{
 
                 //timeout will only occur if the trans hasn't committed, completed, or aborted
                 if( !t.isCommitted() && !t.isCompleted() && !t.isAborted() ) {
@@ -454,7 +455,7 @@ public class TransactionManager {
      * @param t
      */
     private void commit(CohortTransaction t) {
-        if(Log.isLoggingEnabled()) log.log("Committing cohort transaction: " + t);
+        if(Log.isLoggingEnabled()) log.log("Committing cohort transaction- " + t);
         t.setCommitted(true);
 
         if(t.getWritePageNums().isEmpty()){
@@ -504,7 +505,7 @@ public class TransactionManager {
         t.getWritePageNums().forEach(pageNum -> lm.releaseLocks(t.getID(),pageNum,t.getDeadline()));
 
 
-        int time = simParams.timeProvider.get();
+        int time = simParams.getTime();
         boolean completedOnTime = t.getDeadline() >= time;
 
         if(Log.isLoggingEnabled()) log.log(t,(t instanceof CohortTransaction ? "Cohort " : "") +"Transaction completed " + (completedOnTime ? "on time! :D": "late! :("));

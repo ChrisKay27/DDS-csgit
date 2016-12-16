@@ -59,7 +59,7 @@ public class AgentDeadlockResolutionProtocol implements DeadlockResolutionProtoc
                 break;
             }
             case "R": {
-                if(Log.isLoggingEnabled()) log.log("Resolve: " + message.getObject());
+                if(Log.isLoggingEnabled()) log.log("Resolve- " + message.getObject());
                 resolve((Deadlock) message.getObject(), true);
                 break;
             }
@@ -77,14 +77,14 @@ public class AgentDeadlockResolutionProtocol implements DeadlockResolutionProtoc
         List<TransInfo> transactionsInDeadlock = deadlock.getTransactionsInvolved();
         if( beingResolvedDeadlocks.contains(transactionsInDeadlock)){
 
-            if(Log.isLoggingEnabled()) log.log("Already resolving deadlock: " + transactionsInDeadlock);
+            if(Log.isLoggingEnabled()) log.log("Already resolving deadlock- " + transactionsInDeadlock);
 
             return null;
         }
 
         beingResolvedDeadlocks.add(transactionsInDeadlock);
 
-        if(Log.isLoggingEnabled()) log.log("Resolving deadlock involving:" + transactionsInDeadlock);
+        if(Log.isLoggingEnabled()) log.log("Resolving deadlock involving-" + transactionsInDeadlock);
 
 
         //List of servers we have informed about the deadlock already

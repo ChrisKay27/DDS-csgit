@@ -1,6 +1,7 @@
 package simulator.protocols.deadlockDetection;
 
 import simulator.server.transactionManager.TransInfo;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,11 +13,14 @@ public class Deadlock{
     private final List<TransInfo> transactionsInvolved = new ArrayList<>();
     private final int serverID;
     private final int detectionTime;
+    private final boolean globallyDetected;
+    private int resolutionTime;
 
 
-    public Deadlock(List<TransInfo> transactionsInvolved, int serverID, int detectionTime) {
+    public Deadlock(List<TransInfo> transactionsInvolved, int serverID, int detectionTime, boolean globallyDetected) {
         this.serverID = serverID;
         this.detectionTime = detectionTime;
+        this.globallyDetected = globallyDetected;
         this.transactionsInvolved.addAll(transactionsInvolved);
     }
 
@@ -51,6 +55,18 @@ public class Deadlock{
         return serverID;
     }
 
+    public void setResolutionTime(int resolutionTime) {
+        this.resolutionTime = resolutionTime;
+    }
+
+    public int getResolutionTime() {
+        return resolutionTime;
+    }
+
+    public boolean isGloballyDetected() {
+        return globallyDetected;
+    }
+
     @Override
     public String toString() {
         return "Deadlock{" +
@@ -67,6 +83,9 @@ public class Deadlock{
                 ", transactionsInvolved=" + transactionsInvolved +
                 ", serverID=" + serverID +
                 ", detectionTime=" + detectionTime +
+                ", resolutionTime=" + resolutionTime +
+                ", globallyDetected=" + globallyDetected +
                 '}';
     }
+
 }

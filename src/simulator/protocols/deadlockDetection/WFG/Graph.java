@@ -36,6 +36,8 @@ public class Graph<T> {
 
 	private static int nextId = 0;
 	private int ID = getNextId();
+	private int creationTime;
+	private boolean global;
 
 	private static int getNextId() {
 		return nextId++;
@@ -96,5 +98,30 @@ public class Graph<T> {
 
 	public int getServerID() {
 		return serverID;
+	}
+
+	public int getNumberOfWaits(){
+		int size = 0;
+		for (Task<T> rt : getTasks()) {
+			size++;
+			size += rt.getWaitsForTasks().size();
+		}
+		return size;
+	}
+
+	public void setCreationTime(int creationTime) {
+		this.creationTime = creationTime;
+	}
+
+	public int getCreationTime() {
+		return creationTime;
+	}
+
+	public void setGlobal(boolean global) {
+		this.global = global;
+	}
+
+	public boolean isGlobal() {
+		return global;
 	}
 }

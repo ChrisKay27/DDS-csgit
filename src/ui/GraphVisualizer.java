@@ -9,6 +9,7 @@ import java.util.List;
 import com.mxgraph.layout.mxFastOrganicLayout;
 import com.mxgraph.layout.mxOrganicLayout;
 import com.mxgraph.swing.mxGraphComponent;
+import com.mxgraph.swing.util.mxGraphActions;
 import com.mxgraph.util.mxConstants;
 import com.mxgraph.view.mxGraph;
 import com.mxgraph.view.mxStylesheet;
@@ -27,6 +28,7 @@ public class GraphVisualizer extends JPanel {
 
     private final HashMap<String, Object> edgeStyle, nodeStyle;
     private final JLabel timeField;
+    private final List<Integer> onlyShowTheseTransIDs = new ArrayList<>();
 
     {
         edgeStyle = new HashMap<>();
@@ -56,12 +58,49 @@ public class GraphVisualizer extends JPanel {
 
         JTextField graphNumField = new JTextField("Enter Graph Number here", 20);
         graphNumField.addActionListener(e->{
-            showGraph(graphs.get(Integer.parseInt(graphNumField.getText())));
+            int graphNum = Integer.parseInt(graphNumField.getText());
+            int graphsSize = graphs.size();
+            if( graphNum >= graphsSize){
+                graphNum = graphsSize-1;
+                graphNumField.setText(""+graphNum);
+            }
+            showGraph(graphs.get(graphNum));
+
         });
         top.add(graphNumField);
 
         timeField = new JLabel(TIME_GRAPH_WAS_COMPLETED);
         top.add(timeField);
+
+
+        JLabel onlyShowTheseTransLabel = new JLabel("Only show these trans:");
+        JTextField onlyShowTheseTrans = new JTextField("All", 20);
+        onlyShowTheseTrans.addActionListener(e->{
+            try {
+                onlyShowTheseTransIDs.clear();
+                String trans = onlyShowTheseTrans.getText();
+                if (trans.equals("All"))
+                    return;
+
+                String[] split = trans.split(",");
+                for (String transNum : split)
+                    onlyShowTheseTransIDs.add(Integer.valueOf(transNum));
+            }
+            catch (Exception ex){
+                onlyShowTheseTrans.setText("Bad format, please do: TransID,TransID,TransID (etc ...)");
+            }
+
+            int graphNum = Integer.parseInt(graphNumField.getText());
+            int graphsSize = graphs.size();
+            if( graphNum >= graphsSize){
+                graphNum = graphsSize-1;
+                graphNumField.setText(""+graphNum);
+            }
+            showGraph(graphs.get(graphNum));
+        });
+        top.add(onlyShowTheseTransLabel);
+        top.add(onlyShowTheseTrans);
+
 
         graph = new mxGraph();
 
@@ -82,10 +121,10 @@ public class GraphVisualizer extends JPanel {
     private void showGraph(Pair<Graph<WFGNode>,Integer> wfGraphPair){
         Graph<WFGNode> wfGraph = wfGraphPair.getKey();
 
-        timeField.setText(TIME_GRAPH_WAS_COMPLETED+wfGraphPair.getValue() + " serverID: " + wfGraph.getServerID());
+        timeField.setText(TIME_GRAPH_WAS_COMPLETED+wfGraphPair.getValue() + "   serverID: " + wfGraph.getServerID() + "  Global: " + wfGraph.isGlobal() + "  ");
 
 
-        System.out.println("Graph nodes.size = " + wfGraph.getTasks().size());
+        // System.out.println("Graph nodes.size = " + wfGraph.getTasks().size());
 
         Object parent = graph.getDefaultParent();
 
@@ -104,11 +143,16 @@ public class GraphVisualizer extends JPanel {
 
             for( Task<WFGNode> t : wfGraph.getTasks() ) {
                 WFGNode wfgNode = t.getId();
-                String name = wfgNode.getID()+ "";
-                Object v1 = graph.insertVertex(parent, null, name, rand.nextDouble()*(width-200) + 100, rand.nextDouble()*(height-200)  + 100, 40,
+
+                if( !onlyShowTheseTransIDs.isEmpty() && !onlyShowTheseTransIDs.contains(wfgNode.getID()))
+                    continue;
+
+                String name = wfgNode.getID() + "";
+                Object v1 = graph.insertVertex(parent, null, name, rand.nextDouble() * (width - 200) + 100, rand.nextDouble() * (height - 200) + 100, 40,
                         40);
                 nodes.add(name);
-                nodesToGraphObj.put(wfgNode,v1);
+                nodesToGraphObj.put(wfgNode, v1);
+
             }
 
             List<WFGNode> cycle = null;//wfGraph.getCycle();
@@ -118,11 +162,16 @@ public class GraphVisualizer extends JPanel {
             for( Task<WFGNode> t : wfGraph.getTasks() ) {
                 WFGNode wfgNode = t.getId();
 
+                if( !onlyShowTheseTransIDs.isEmpty() && !onlyShowTheseTransIDs.contains(wfgNode.getID()))
+                    continue;
+
                 Set<Task<WFGNode>> edgesFrom = t.getWaitsForTasks();
                 edgesFrom.forEach(dest -> {
                     String name = "";
                     if( cycle != null && cycle.contains(wfgNode) && cycle.indexOf(wfgNode) == (cycle.indexOf(dest)-1))
                         deadlockEdges.add(name);
+
+
 
                     graph.insertEdge(parent, null, name, nodesToGraphObj.get(wfgNode), nodesToGraphObj.get(dest.getId()));
                 });
@@ -159,8 +208,5 @@ public class GraphVisualizer extends JPanel {
 
     public void drawGraph(Graph<WFGNode> wfGraph, int time){
         graphs.add(new Pair<>(wfGraph,time));
-
-
-
     }
 }

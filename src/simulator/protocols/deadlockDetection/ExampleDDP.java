@@ -6,9 +6,13 @@ import simulator.eventQueue.Event;
 import simulator.server.Server;
 import simulator.server.network.Message;
 import ui.Log;
+
 import java.util.List;
 import java.util.function.Consumer;
 
+/**
+ * Created by Chris on 10/30/2016.
+ */
 public class ExampleDDP extends DeadlockDetectionProtocol {
 
     private final Log log ;
@@ -29,7 +33,7 @@ public class ExampleDDP extends DeadlockDetectionProtocol {
 
     @Override
     public void start() {
-        eventQueue.accept(new Event(simParams.timeProvider.get()+simParams.getDeadlockDetectInterval(),serverID,this::runThisMethodEverySoOften));
+        eventQueue.accept(new Event(simParams.getTime()+simParams.getDeadlockDetectInterval(),serverID,this::runThisMethodEverySoOften));
     }
 
 
@@ -43,7 +47,7 @@ public class ExampleDDP extends DeadlockDetectionProtocol {
 
             if(destServer != server.getID()){
 
-                server.getNIC().sendMessage(new Message(destServer, ServerProcess.DDP, "The message to send to the other server" , simParams.timeProvider.get() ));
+                server.getNIC().sendMessage(new Message(destServer, ServerProcess.DDP, "The message to send to the other server" , simParams.getTime() ));
             }
 
         }

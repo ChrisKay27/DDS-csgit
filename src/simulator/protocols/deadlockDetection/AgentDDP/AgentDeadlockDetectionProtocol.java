@@ -2,11 +2,15 @@ package simulator.protocols.deadlockDetection.AgentDDP;
 
 import java.util.*;
 import java.util.function.Consumer;
+
+import exceptions.WTFException;
 import simulator.SimParams;
 import simulator.enums.ServerProcess;
 import simulator.eventQueue.Event;
+
 import simulator.protocols.deadlockDetection.Deadlock;
 import simulator.protocols.deadlockDetection.WFG.Graph;
+import simulator.protocols.deadlockDetection.WFG.GraphBuilder;
 import simulator.protocols.deadlockDetection.WFG.Task;
 import simulator.protocols.deadlockDetection.WFG.WFGNode;
 import simulator.protocols.deadlockDetection.WFG_DDP;
@@ -14,94 +18,58 @@ import simulator.server.Server;
 import simulator.server.transactionManager.TransInfo;
 import ui.Log;
 
+/**
+ * Created by Mani,
+ */
 public class AgentDeadlockDetectionProtocol extends WFG_DDP {
 
-    private final Log log ;
-    private List<Integer> allServers = Arrays.asList(0,1,2,3,4,5,6,7);
+    protected final Log log ;
+    protected List<Integer> allServers = Arrays.asList(0,1,2,3,4,5,6,7);
+
 
     private List<List<WFGNode>> deadlocks = new LinkedList<>();
+    private final List<Integer> receivedFromServers = new ArrayList<>();
+
+    private final LocalAgent localAgent;
+    private GlobalAgent globalAgent;
+
 
     public AgentDeadlockDetectionProtocol(Server server, SimParams simParams, Consumer<List<Deadlock>> resolver, Consumer<Integer> overheadIncurer, Consumer<Deadlock> deadlockListener) {
         super(server, simParams, resolver, overheadIncurer, deadlockListener);
         simParams.usesWFG = true;
         log = new Log(ServerProcess.DDP,server.getID(),simParams.timeProvider, simParams.log);
+
+
+        localAgent = new LocalAgent(this, server);
+
+        globalAgent = new GlobalAgent(this, server);
     }
 
     @Override
     public void start() {
-        eventQueue.accept(new Event(simParams.timeProvider.get()+simParams.getDeadlockDetectInterval(),serverID,this::sendDeadlockInfo));
+        eventQueue.accept(new Event(simParams.getTime()+simParams.getDeadlockDetectInterval(),serverID,this::startDetectionIteration));
     }
+
+
+
+//    public void received(int n) {
+//        receivedFromServers.add(n);
+//        if (receivedFromServers.containsAll(allServers)) {
+//
+//            if(wfg.getNodesInvolved().contains(serverID))
+//                searchGraph();
+//
+//            receivedFromServers.clear();
+//        }
+//    }
+
 
     protected void searchGraph(Graph<WFGNode> build) {
-        if(Log.isLoggingEnabled()) if(Log.isLoggingEnabled()) log.log("AgentDDP: Searching graph");
-
-        calculateAndIncurOverhead(build);
-        deadlocks.clear();
-
-        List<Integer> serversInvolved = allServers;
-
-        int thisNodesIndex = serversInvolved.indexOf(serverID);
-
-        List<Task<WFGNode>> allTransactions = new ArrayList<>(build.getTasks());
-        List<TransInfo> transThisAgentCaresAbout = new ArrayList<>();
-
-        //collect all transactions this agent cares about
-        for (int i = 0; i < allTransactions.size(); i++) {
-            if( i % serversInvolved.size() == thisNodesIndex )
-                transThisAgentCaresAbout.add((TransInfo) allTransactions.get(i).getId());
-        }
-
-        if( transThisAgentCaresAbout.isEmpty() ){
-            if(Log.isLoggingEnabled()) log.log("No transactions for this agent");
-
-            return;
-        }
-
-        if(Log.isLoggingEnabled()) log.log("This agent cares about: " + transThisAgentCaresAbout);
-
-        //Get transInfo and start searching through its children
-        for (TransInfo t: transThisAgentCaresAbout) {
-
-            //Convert the TransInfo list to list of WFGNodes
-
-            List<Task<WFGNode>> edgesFrom = build.getEdgesFrom(t);
-
-            followCycle(getWFGraph(), t, edgesFrom ,new LinkedList<>());
-        }
-
-        //Convert the list of lists of WFGNodes to a list of lists of Deadlocks
-        List<List<TransInfo>> deadlocksTransInfo = new ArrayList<>();
-        List<Deadlock> deadlocksList = new ArrayList<>();
-
-        deadlocks.forEach(deadlock -> {
-            List<TransInfo> deadlockTransInfo = new ArrayList<>();
-            deadlock.forEach(wfgNode -> deadlockTransInfo.add((TransInfo) wfgNode));
-
-            //If the deadlock was detected twice, ignore it the second time.
-            if( !deadlocksTransInfo.contains(deadlockTransInfo)) {
-                deadlocksTransInfo.add(deadlockTransInfo);
-
-                deadlocksList.add(new Deadlock(deadlockTransInfo,server.getID(),simParams.timeProvider.get()));
-            }
-        });
-
-        if(deadlocksList.isEmpty()){
-            if(Log.isLoggingEnabled()) log.log("Found no deadlocks");
-
-            return;
-        }
-
-        deadlocksList.forEach(deadlockListener);
-        if(Log.isLoggingEnabled()) log.log("Found deadlocks: " + deadlocksTransInfo);
-
-        //Resolve the deadlocks
-        resolver.accept(deadlocksList);
+        localAgent.searchGraph(build);
     }
 
-    private void calculateAndIncurOverhead(Graph<WFGNode> WFG) {
-//        if(Math.random()<0.01)System.err.println("Skipping adding overhead!!");
-//        if(true)return;
 
+    protected void calculateAndIncurOverhead(Graph<WFGNode> WFG) {
 
         //calc overhead
         int overhead = 0;
@@ -112,69 +80,20 @@ public class AgentDeadlockDetectionProtocol extends WFG_DDP {
             //add one for each edge
             overhead += rt.getWaitsForTasks().size();
         }
-        overhead /= 1;
-        if(Log.isLoggingEnabled()) log.log("Incurring overhead: " + overhead);
+
+        if(Log.isLoggingEnabled()) log.log("Incurring overhead- " + overhead);
         overheadIncurer.accept(overhead);
     }
 
-//    private List<TransInfo> followEdges(TransInfo lookingFor, List<TransInfo> edges)
-//    {
-//        for(TransInfo edge : edges)
-//        {
-//            if( edge == lookingFor ){
-//                return Arrays.asList(edge);  //return this edge
-//            }
-//            else if( transInfoToIndex.get(edge) > transInfoToIndex.get(lookingFor)){
-//                List<TransInfo> path = followEdges(lookingFor,WFG.getEdgesFrom(edge));
-//
-//                if( path.isEmpty() )
-//                    return path;
-//
-//                path.add(edge);
-//                return path;
-//            }
-//        }
-//        return new LinkedList<>();
-//    }
+    /**
+     * This is called when a WFG is received
+     */
+    public void updateWFGraph(Graph<WFGNode> graph, int server) {
+        if(Log.isLoggingEnabled()) log.log("Updating graph (created at "+graph.getCreationTime()+") with waits from server " + server);
 
-
-    private void followCycle(Graph<WFGNode> WFG, WFGNode lookingFor, List<Task<WFGNode>> edges, List<WFGNode> path) {
-        if(edges.isEmpty())
-            return;
-
-        for(Task<WFGNode> t : edges) {
-            WFGNode edge = t.getId();
-
-            if(edge == lookingFor) {
-                path.add(edge);
-                LinkedList<WFGNode> deadlockPath = new LinkedList<>(path);
-                deadlockPath.addFirst(deadlockPath.removeLast());
-                deadlocks.add(deadlockPath);
-                if(Log.isLoggingEnabled()) log.log("Found deadlock: " + deadlockPath);
-                path.remove(edge);
-            }else if((edge.getID() > lookingFor.getID() && !path.contains(edge))) {
-
-                path.add(edge);
-                followCycle(WFG,lookingFor, convertToList(t.getWaitsForTasks()), path);
-                path.remove(edge);
-            }
-        }
+        globalAgent.updateWFGraph(graph, server);
+        wfgBuilder = new GraphBuilder<>();
     }
-
-    private Graph<WFGNode> getWFGraph(){
-//        Graph<WFGNode> newWFG = new Graph<>();
-//
-//        WFG.getVertices().forEach(newWFG::addVertex);
-//
-//        for(WFGNode ti : WFG.getVertices())
-//            for( WFGNode waitingFor : WFG.getEdgesFrom(ti))
-//                newWFG.addEdge(ti,waitingFor);
-
-        return null;//newWFG;
-    }
-
-
-
 
 
 
@@ -438,21 +357,3 @@ public class AgentDeadlockDetectionProtocol extends WFG_DDP {
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,9 +1,11 @@
 package simulator;
 
 import simulator.protocols.deadlockDetection.Deadlock;
+
 import simulator.protocols.deadlockDetection.WFG.Graph;
 import simulator.protocols.deadlockDetection.WFG.WFGNode;
 import stats.Statistics;
+
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -29,6 +31,8 @@ public class SimSetupParams {
     private BiConsumer<Deadlock, Integer> deadlockResolutionListener;
     private String PP;
     private int detectInterval;
+    private int agentsHistoryLength;
+    private double updateRate;
 
 
     public SimSetupParams(long SEED, int numPages, int maxActiveTrans, int numServers, int arrivalRate, String DDP, String DRP, Consumer<String> log, Statistics stats, Supplier<Long> sleepTime, Consumer<Integer> timeUpdater) {
@@ -119,5 +123,21 @@ public class SimSetupParams {
 
     public void setDeadlockResolutionListener(BiConsumer<Deadlock, Integer> deadlockResolutionListener) {
         this.deadlockResolutionListener = deadlockResolutionListener;
+    }
+
+    public int getAgentsHistoryLength() {
+        return agentsHistoryLength;
+    }
+
+    public void setAgentsHistoryLength(int agentsHistoryLength) {
+        this.agentsHistoryLength = agentsHistoryLength;
+    }
+
+    public double getUpdateRate() {
+        return updateRate;
+    }
+
+    public void setUpdateRate(double updateRate) {
+        this.updateRate = updateRate;
     }
 }

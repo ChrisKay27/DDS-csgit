@@ -12,6 +12,7 @@ import simulator.protocols.deadlockDetection.WFG.WFGNode;
 import simulator.server.Server;
 import simulator.server.network.Message;
 import ui.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -31,6 +32,8 @@ public class DeadlockDetectionProtocol {
 
     /** Used to post events to the eventQueue */
     protected final Consumer<Event> eventQueue;
+
+
 
     /** Interface to the DRP */
     protected final Consumer<List<Deadlock>> resolver;
@@ -72,11 +75,10 @@ public class DeadlockDetectionProtocol {
     }
 
 
-
     /**
      */
     public void receiveMessage(Message msg) {
-        if(Log.isLoggingEnabled()) log.log("Received message: " + msg);
+        if (Log.isLoggingEnabled()) log.log("Received message- " + msg);
 
     }
 
@@ -87,6 +89,17 @@ public class DeadlockDetectionProtocol {
 
     }
 
+    public Consumer<Deadlock> getDeadlockListener () {
+        return deadlockListener;
+    }
+
+    public Consumer<List<Deadlock>> getResolver() {
+        return resolver;
+    }
+
+    public Consumer<Integer> getOverheadIncurer() {
+        return overheadIncurer;
+    }
 
     /**
      * Just used to get an instance of the protocol from a string (from the parameter file specifically)
@@ -102,5 +115,6 @@ public class DeadlockDetectionProtocol {
         }
         throw new WTFException("Deadlock Detection Protocol has not been registered! add it here in the WFG_DDP class!");
     }
+
 
 }

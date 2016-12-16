@@ -15,6 +15,9 @@ import ui.Log;
 import java.util.*;
 import java.util.function.Consumer;
 
+/**
+ * Created by Chris on 7/9/2016.
+ */
 public class ChandyMisraHaasDDP extends DeadlockDetectionProtocol {
 
     private static final double percStart = .1;
@@ -36,7 +39,7 @@ public class ChandyMisraHaasDDP extends DeadlockDetectionProtocol {
      * This method posts an event DETECTION_INTERVAL ticks into the future to start detecting deadlocks
      */
     public void start() {
-        simParams.eventQueue.accept(new Event(simParams.timeProvider.get()+DETECTION_INTERVAL,serverID,this::detectDeadlock));
+        simParams.eventQueue.accept(new Event(simParams.getTime()+DETECTION_INTERVAL,serverID,this::detectDeadlock));
     }
 
     /**
@@ -75,14 +78,14 @@ public class ChandyMisraHaasDDP extends DeadlockDetectionProtocol {
             heldLocksForThisPage.forEach( heldLock -> {
                 if(Log.isLoggingEnabled()) log.log(l.getTransID(),"On behalf of trans "+l.getTransID()+" sending probe to trans " + heldLock.getTransID());
 
-                sendMsg(
+                server.getNIC().sendMessage(
                         new Message(heldLock.getServerID(), ServerProcess.DDP, "20",
-                                new ProbeMessage(l.getTransID(),l.getTransID(),heldLock.getTransID()),simParams.timeProvider.get()));
+                                new ProbeMessage(l.getTransID(),l.getTransID(),heldLock.getTransID()),simParams.getTime()));
             });
         }
 
 
-        simParams.eventQueue.accept(new Event(simParams.timeProvider.get()+DETECTION_INTERVAL,serverID,this::detectDeadlock,true));
+        simParams.eventQueue.accept(new Event(simParams.getTime()+DETECTION_INTERVAL,serverID,this::detectDeadlock,true));
     }
 
 
@@ -92,7 +95,7 @@ public class ChandyMisraHaasDDP extends DeadlockDetectionProtocol {
      *
      */
     public void receiveMessage(Message msg) {
-        if(Log.isLoggingEnabled()) log.log("Receive message: "+msg);
+        if(Log.isLoggingEnabled()) log.log("Receive message- "+msg);
 
         //Make sure we have a probe message (we always should)
         if( msg.getObject() instanceof ProbeMessage ){
@@ -106,7 +109,7 @@ public class ChandyMisraHaasDDP extends DeadlockDetectionProtocol {
 
                 if(Log.isLoggingEnabled()) log.log(probeMessage.getInitiator(),"Probe has reached initiator! Trans "+probeMessage.getInitiator());
 
-                sendMsg(
+                server.getNIC().sendMessage(
                         new Message(aborted.serverID,ServerProcess.TransactionManager,"A:"+aborted.transID,msg.getDeadline()));
 
             }
@@ -142,9 +145,9 @@ public class ChandyMisraHaasDDP extends DeadlockDetectionProtocol {
                         if(Log.isLoggingEnabled()) log.log(probeMessage.getInitiator(),"Sending probe to " + lock1.getTransID());
 
                         //Send the probe to those transactions
-                        sendMsg(
+                        server.getNIC().sendMessage(
                                 new Message(lock1.getServerID(), ServerProcess.DDP, ""+remainingHops,
-                                        new ProbeMessage(probeMessage.getInitiator(),lock.getTransID(),lock1.getTransID()),simParams.timeProvider.get()));
+                                        new ProbeMessage(probeMessage.getInitiator(),lock.getTransID(),lock1.getTransID()),simParams.getTime()));
                     });
                 });
 
@@ -155,24 +158,12 @@ public class ChandyMisraHaasDDP extends DeadlockDetectionProtocol {
                     if(Log.isLoggingEnabled()) log.log(probeMessage.getInitiator(),"Sending probe to cohort on server " + serverID);
 
                     //Send the probe to all cohort transactions
-                    sendMsg(
+                    server.getNIC().sendMessage(
                             new Message(serverID, ServerProcess.DDP, ""+remainingHops,
-                                    new ProbeMessage(probeMessage.getInitiator(),probeMessage.getSender(),recipient.getID()),simParams.timeProvider.get()));
+                                    new ProbeMessage(probeMessage.getInitiator(),probeMessage.getSender(),recipient.getID()),simParams.getTime()));
                 });
             }
         }
 
     }
-
-    private void sendMsg(Message message){
-        server.getNIC().sendMessage(message);
-        simParams.messageOverhead++;
-
-    }
-
-
-
-
-
-
 }

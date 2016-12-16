@@ -14,6 +14,9 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.function.Consumer;
 
+/**
+ * Created by Chris on 6/7/2016.
+ */
 public class Disk {
     private static final int accessTime = 30;
 
@@ -52,12 +55,12 @@ public class Disk {
 
             if(Log.isLoggingEnabled()) log.log(activeDiskJob.getTransID(),"Starting disk job " + activeDiskJob);
 
-            Event e = new Event(simParams.timeProvider.get()+SimParams.diskReadWriteTime, serverID, ()->{
+            Event e = new Event(simParams.getTime()+SimParams.diskReadWriteTime, serverID, ()->{
                 if(Log.isLoggingEnabled()) log.log(activeDiskJob.getTransID(),"Disk job completed " + activeDiskJob);
 
                 activeDiskJob.getCompletedListener().accept(activeDiskJob.getPageNum());
 
-                eventQueue.accept(new Event(simParams.timeProvider.get()+1, serverID, this::tryToStartJob));
+                eventQueue.accept(new Event(simParams.getTime()+1, serverID, this::tryToStartJob));
 
                 activeDiskJob = null;
             });
@@ -73,7 +76,7 @@ public class Disk {
         if(Log.isLoggingEnabled()) log.log(dj.getTransID(),"Queueing disk job " + dj);
 
         diskJobs.add(dj);
-        eventQueue.accept(new Event(simParams.timeProvider.get()+1, serverID, this::tryToStartJob));
+        eventQueue.accept(new Event(simParams.getTime()+1, serverID, this::tryToStartJob));
     }
 
 
@@ -113,7 +116,7 @@ public class Disk {
         diskJobs.forEach(diskJob -> {if( diskJob.getTransID() == transNum) toBeAbortedDiskJobs.add(diskJob);});
         diskJobs.removeAll(toBeAbortedDiskJobs);
 
-        eventQueue.accept(new Event(simParams.timeProvider.get()+1, serverID, this::tryToStartJob));
+        eventQueue.accept(new Event(simParams.getTime()+1, serverID, this::tryToStartJob));
     }
 
 }

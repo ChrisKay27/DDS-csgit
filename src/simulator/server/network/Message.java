@@ -11,8 +11,8 @@ public class Message implements Comparable<Message> {
     private final String contents;
     private final int deadline;
     private final Object object;
-    private boolean reoccuring;
 
+    private boolean reoccuring;
     private int size = 1;
 
 
@@ -63,8 +63,10 @@ public class Message implements Comparable<Message> {
     }
 
     public void setSize(int size) {
-        if( size > SimParams.Bandwidth )
+        if( size > SimParams.Bandwidth ) {
+            System.out.println("Issue! Setting message size("+size+") to be larger than bandwidth("+SimParams.Bandwidth+")");
             size = SimParams.Bandwidth;
+        }
         this.size = size;
 
     }

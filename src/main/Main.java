@@ -1,6 +1,6 @@
-//Hello World
 package main;
 
+import exceptions.WTFException;
 import results.DBConnection;
 import results.ExperimentResults;
 import simulator.SimSetupParams;
@@ -13,6 +13,7 @@ import simulator.server.Server;
 import simulator.server.network.HyperCube;
 import stats.Statistics;
 import ui.*;
+import javax.swing.*;
 import java.io.*;
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -36,7 +37,7 @@ public class Main {
         // This is the simulation number associated with ALL the variations in the parameter file. It is used to compare results of an experiment*
         // *an experiment is a combination of parameters
         long simNumber = System.currentTimeMillis();
-
+        openSimExperimentNumberWindow(simNumber);
 
         // Read the parameters from the param.txt file
 
@@ -51,6 +52,8 @@ public class Main {
         String PPs = "";
         String DetectIntervals = "";
         String maxActiveTransStr = "";
+        String agentsHistoryLengthStr = "";
+        String updateRateStr = "";
 
         try( BufferedReader br = new BufferedReader(new FileReader(paramFile))){
 
@@ -64,6 +67,8 @@ public class Main {
             PPs  = br.readLine().split(":")[1];
             DetectIntervals  = br.readLine().split(":")[1];
             maxActiveTransStr  = br.readLine().split(":")[1];
+            agentsHistoryLengthStr = br.readLine().split(":")[1];
+            updateRateStr = br.readLine().split(":")[1];
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -80,7 +85,6 @@ public class Main {
                 * arrivalRateStr.split(",").length * DDPs.split(",").length * DRPs.split(",").length * PPs.split(",").length * DetectIntervals.split(",").length ;
 
         System.out.println("Running " + numberOfSims + " simulations. This Test Number is " + simNumber);
-
 
 
 
@@ -112,97 +116,108 @@ public class Main {
                                         for(String maxActiveTransStr_ : maxActiveTransStr.split(",") ) {
                                             int maxActiveTrans = Integer.parseInt(maxActiveTransStr_);
 
+                                            for(String agentsHistoryLengthStr_ : agentsHistoryLengthStr.split(",") ) {
+                                                int agentsHistoryLength = Integer.parseInt(agentsHistoryLengthStr_);
 
-                                            Runnable r = () -> {
-                                                Statistics stats = new Statistics();
+                                                for(String updateRateStr_ : updateRateStr.split(",") ) {
+                                                    double updateRate = Double.parseDouble(updateRateStr_);
+
+                                                    if(updateRate >1 || updateRate < 0)
+                                                        throw new WTFException("update rate has to be between 0 and 1, it was " + updateRate);
+
+                                                    Runnable r = () -> {
+                                                        Statistics stats = new Statistics();
 
 
-                                                //We only display a window if logging is enabled
-                                                Supplier<Long> getSleepTime = null;
-                                                Consumer<Integer> updateTime = null;
-                                                Consumer<String> log = null;
-                                                BiConsumer<Graph<WFGNode>, Integer> wfGraphConsumer = null;
-                                                Consumer<Deadlock> deadlockConsumer = null;
-                                                BiConsumer<Deadlock, Integer> deadlockResListener = null;
+                                                        //We only display a window if logging is enabled
+                                                        Supplier<Long> getSleepTime = null;
+                                                        Consumer<Integer> updateTime = null;
+                                                        Consumer<String> log = null;
+                                                        BiConsumer<Graph<WFGNode>, Integer> wfGraphConsumer = null;
+                                                        Consumer<Deadlock> deadlockConsumer = null;
+                                                        BiConsumer<Deadlock, Integer> deadlockResListener = null;
 
 
-                                                if (Log.isLoggingEnabled()) {
-                                                    GUI gui = new GUI();
-                                                    gui.setTitle(SEED + ":" + numPages + ":" + maxActiveTrans + ":" + 8 + ":" + arrivalRate + ":" + DDP + ":" + DRP + ":" + PP);
-                                                    Output output = new Output();
-                                                    GraphVisualizer graphVisualizer = new GraphVisualizer();
-                                                    DeadlockPanel dPanel = new DeadlockPanel();
-                                                    gui.add(output, "Log");
-                                                    gui.add(graphVisualizer, "Wait for Graph");
-                                                    gui.add(dPanel, "Deadlocks");
+                                                        if (Log.isLoggingEnabled()) {
+                                                            GUI gui = new GUI();
+                                                            gui.setTitle(SEED + ":" + numPages + ":" + maxActiveTrans + ":" + 8 + ":" + arrivalRate + ":" + DDP + ":" + DRP + ":" + PP);
+                                                            Output output = new Output();
+                                                            GraphVisualizer graphVisualizer = new GraphVisualizer();
+                                                            DeadlockPanel dPanel = new DeadlockPanel();
+                                                            gui.add(output, "Log");
+                                                            gui.add(graphVisualizer, "Wait for Graph");
+                                                            gui.add(dPanel, "Deadlocks");
 
-                                                    getSleepTime = gui::getSleepTime;
-                                                    updateTime = gui::updateTime;
-                                                    log = output::log;
-                                                    wfGraphConsumer = graphVisualizer::drawGraph;
-                                                    deadlockConsumer = dPanel::addDeadlock;
-                                                    deadlockResListener = dPanel::deadLockResolved;
-                                                } else {
-                                                    getSleepTime = () -> 0L;
-                                                    updateTime = time -> {
+                                                            getSleepTime = gui::getSleepTime;
+                                                            updateTime = gui::updateTime;
+                                                            log = output::log;
+                                                            wfGraphConsumer = graphVisualizer::drawGraph;
+                                                            deadlockConsumer = dPanel::addDeadlock;
+                                                            deadlockResListener = dPanel::deadLockResolved;
+                                                        } else {
+                                                            getSleepTime = () -> 0L;
+                                                            updateTime = time -> {
+                                                            };
+                                                            log = logMsg -> {
+                                                            };
+                                                            wfGraphConsumer = (wfgNodeWFGraph, i) -> {
+                                                            };
+                                                            deadlockConsumer = deadlock -> {
+                                                            };
+                                                            deadlockResListener = (deadlock, f) -> {
+                                                            };
+                                                        }
+
+
+                                                        //Setup params object
+                                                        SimSetupParams params = new SimSetupParams(SEED, numPages, maxActiveTrans, 8, arrivalRate, DDP, DRP, log, stats, getSleepTime, updateTime);
+                                                        params.setWfGraphConsumer(wfGraphConsumer);
+                                                        params.setDeadlockListener(deadlockConsumer);
+                                                        params.setDeadlockResolutionListener(deadlockResListener);
+                                                        params.setPP(PP);
+                                                        params.setDetectInterval(detectInterval);
+                                                        params.setAgentsHistoryLength(agentsHistoryLength);
+                                                        params.setUpdateRate(updateRate);
+
+                                                        Simulation s = new Simulation(params);
+
+                                                        //Setup topology.. should be in the simulation constructor..
+                                                        List<Server> servers = s.getServers();
+                                                        if (topology == Topology.HyperCube)
+                                                            HyperCube.setup(servers);
+
+
+                                                        //Run the simulation
+                                                        Object[] results = s.start();
+                                                        double PCOT = (double) results[0];
+                                                        int overheadIncurred = (int) results[1];
+                                                        int messageOverheadIncurred = (int) results[2];
+
+                                                        //Output results to the database
+                                                        ExperimentResults expResults = new ExperimentResults(simNumber, PCOT, DDP, DRP, topStr, maxActiveTrans,
+                                                                arrivalRate, PP, numPages, detectInterval, overheadIncurred, messageOverheadIncurred, updateRate);
+                                                        DBConnection.insertResults(expResults);
+
+                                                        System.out.println("--------------");
+                                                        System.out.println(SEED + ":" + numPages + ":" + maxActiveTrans + ":" + 8 + ":" + arrivalRate + ":" + DDP + ":" + DRP + ":" + PP + ":" + detectInterval + ":" + updateRate);
+                                                        System.out.println("PCOT: " + PCOT);
+                                                        System.out.println("Completed On Time: " + stats.getCompletedOnTime());
+                                                        System.out.println("Completed Late: " + stats.getCompletedLate());
+                                                        System.out.println("Aborted: " + stats.getNumAborted());
+                                                        if (stats.getCompletedOnTime() + stats.getCompletedLate() + stats.getNumAborted() != servers.size() * s.getSimParams().getNumTransPerServer())
+                                                            System.out.println("ERROR: Completed + Late + Aborted != Total Num of Transactions!");
+                                                        System.out.println("Timeouts: " + stats.getTimeouts());
+
+                                                        simsRanSoFar++;
+                                                        if (simsRanSoFar == numberOfSims) {
+//                                                      System.exit(0);
+                                                        }
                                                     };
-                                                    log = logMsg -> {
-                                                    };
-                                                    wfGraphConsumer = (wfgNodeWFGraph, i) -> {
-                                                    };
-                                                    deadlockConsumer = deadlock -> {
-                                                    };
-                                                    deadlockResListener = (deadlock, f) -> {
-                                                    };
+
+                                                    //Run this simulation in a new thread
+                                                    new Thread(r).start();
                                                 }
-
-
-                                                //Setup params object
-                                                SimSetupParams params = new SimSetupParams(SEED, numPages, maxActiveTrans, 8, arrivalRate, DDP, DRP, log, stats, getSleepTime, updateTime);
-                                                params.setWfGraphConsumer(wfGraphConsumer);
-                                                params.setDeadlockListener(deadlockConsumer);
-                                                params.setDeadlockResolutionListener(deadlockResListener);
-                                                params.setPP(PP);
-                                                params.setDetectInterval(detectInterval);
-
-                                                Simulation s = new Simulation(params);
-
-                                                //Setup topology.. should be in the simulation constructor..
-                                                List<Server> servers = s.getServers();
-                                                if (topology == Topology.HyperCube)
-                                                    HyperCube.setup(servers);
-
-
-                                                //Run the simulation
-                                                double[] results = s.start();
-
-                                                double PCOT = results[0];
-                                                double overhead = results[1];
-                                                double messageOverhead = results[2];
-
-
-                                                //Output results to the database
-                                                ExperimentResults expResults = new ExperimentResults(simNumber, PCOT, DDP, DRP, topStr,maxActiveTrans, arrivalRate, PP, numPages, detectInterval, overhead, messageOverhead);
-                                                DBConnection.insertResults(expResults);
-
-                                                System.out.println("--------------");
-                                                System.out.println(SEED + ":" + numPages + ":" + maxActiveTrans + ":" + 8 + ":" + arrivalRate + ":" + DDP + ":" + DRP + ":" + PP + ":" + detectInterval);
-                                                System.out.println("PCOT: " + PCOT);
-                                                System.out.println("Completed On Time: " + stats.getCompletedOnTime());
-                                                System.out.println("Completed Late: " + stats.getCompletedLate());
-                                                System.out.println("Aborted: " + stats.getNumAborted());
-                                                if (stats.getCompletedOnTime() + stats.getCompletedLate() + stats.getNumAborted() != servers.size() * s.getSimParams().getNumTransPerServer())
-                                                    System.out.println("ERROR: Completed + Late + Aborted != Total Num of Transactions!");
-                                                System.out.println("Timeouts: " + stats.getTimeouts());
-
-                                                simsRanSoFar++;
-                                                if (simsRanSoFar == numberOfSims) {
-//                                            System.exit(0);
-                                                }
-                                            };
-
-                                            //Run this simulation in a new thread
-                                            new Thread(r).start();
+                                            }
 
                                         }
                                     }
@@ -215,5 +230,16 @@ public class Main {
             }
         }
 
+    }
+
+    private static void openSimExperimentNumberWindow(long simNumber) {
+        JFrame frame = new JFrame("Experiment Number");
+
+        frame.setContentPane(new JTextField("Experiment Number is " + simNumber));
+        frame.pack();
+        frame.setSize(400,100);
+
+        frame.setVisible(true);
+        frame.setLocationRelativeTo(null);
     }
 }

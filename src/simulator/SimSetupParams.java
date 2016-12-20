@@ -1,11 +1,9 @@
 package simulator;
 
 import simulator.protocols.deadlockDetection.Deadlock;
-
 import simulator.protocols.deadlockDetection.WFG.Graph;
 import simulator.protocols.deadlockDetection.WFG.WFGNode;
 import stats.Statistics;
-
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -34,15 +32,17 @@ public class SimSetupParams {
     private int agentsHistoryLength;
     private double updateRate;
 
-
-    public SimSetupParams(long SEED, int numPages, int maxActiveTrans, int numServers, int arrivalRate, String DDP, String DRP, Consumer<String> log, Statistics stats, Supplier<Long> sleepTime, Consumer<Integer> timeUpdater) {
+    public SimSetupParams(long SEED, int numPages, int maxActiveTrans, int numServers, int arrivalRate, double updateRate, int detectInterval, String DDP, String DRP, String PP, Consumer<String> log, Statistics stats, Supplier<Long> sleepTime, Consumer<Integer> timeUpdater) {
         this.SEED = SEED;
         this.numPages = numPages;
         this.maxActiveTrans = maxActiveTrans;
         this.numServers = numServers;
         this.arrivalRate = arrivalRate;
+        this.updateRate = updateRate;
+        this.detectInterval = detectInterval;
         this.DDP = DDP;
         this.DRP = DRP;
+        this.PP = PP;
         this.log = log;
         this.stats = stats;
         this.sleepTime = sleepTime;
@@ -105,14 +105,6 @@ public class SimSetupParams {
         return PP;
     }
 
-    public void setPP(String PP) {
-        this.PP = PP;
-    }
-
-    public void setDetectInterval(int detectInterval) {
-        this.detectInterval = detectInterval;
-    }
-
     public int getDetectInterval() {
         return detectInterval;
     }
@@ -135,9 +127,5 @@ public class SimSetupParams {
 
     public double getUpdateRate() {
         return updateRate;
-    }
-
-    public void setUpdateRate(double updateRate) {
-        this.updateRate = updateRate;
     }
 }

@@ -1,17 +1,10 @@
 package ui;
 
 import simulator.enums.ServerProcess;
-
 import javax.swing.*;
 import java.awt.*;
-import java.awt.List;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintStream;
 import java.util.*;
-import java.util.function.Consumer;
 
 public class Output extends JPanel{
 
@@ -23,7 +16,6 @@ public class Output extends JPanel{
     private final Map<String, java.util.List<String>> transIDToMessages = new HashMap<>();
     private final Map<String, java.util.List<String>> serverIDToMessages = new HashMap<>();
     private final Map<String, java.util.List<String>> processToMessages = new HashMap<>();
-
 
     public Output() throws HeadlessException {
         super(new BorderLayout());
@@ -40,7 +32,7 @@ public class Output extends JPanel{
 
         JPanel topPanel = new JPanel();
 
-        JLabel legend = new JLabel("<Time>:<NodeNum>:<Process>:<TransID>: <Message>");
+        JLabel legend = new JLabel("<Time>:<NodeNum>:<Process>:<TransID>:<Message>");
         topPanel.add(legend);
 
 
@@ -165,7 +157,4 @@ public class Output extends JPanel{
 
 //        txtArea.append(s+'\n');
     }
-
-
-
 }

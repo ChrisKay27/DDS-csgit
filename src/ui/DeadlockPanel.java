@@ -3,13 +3,9 @@ package ui;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.view.mxGraph;
 import simulator.protocols.deadlockDetection.Deadlock;
-
 import simulator.protocols.deadlockDetection.WFG.WFGNode;
 import simulator.server.transactionManager.TransInfo;
-
 import javax.swing.*;
-import javax.swing.border.Border;
-
 import java.awt.*;
 import java.util.*;
 import java.util.List;
@@ -72,9 +68,6 @@ public class DeadlockPanel extends JPanel {
         graphComponent.setMaximumSize(new Dimension(1500,800));
         graphComponent.setPreferredSize(new Dimension(1500,800));
         add(graphComponent,BorderLayout.CENTER);
-
-
-
     }
 
     public void showDeadlock(Deadlock deadlock ){

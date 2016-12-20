@@ -6,7 +6,6 @@ import simulator.server.Server;
 import simulator.server.lockManager.Lock;
 import simulator.server.lockManager.Range;
 import stats.Statistics;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -20,8 +19,6 @@ public class Simulation {
     private final List<Server> servers = new ArrayList<>();
     private int nextTransID;
     private final SimParams simParams;
-
-
 
     public Simulation(SimSetupParams simSetupParams) {
         //Get parameters from setup param object

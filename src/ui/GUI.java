@@ -3,7 +3,6 @@ package ui;
 import javax.swing.*;
 import java.awt.*;
 
-
 public class GUI extends JFrame{
     private final JTabbedPane tPane;
     private long sleepTime = 0;

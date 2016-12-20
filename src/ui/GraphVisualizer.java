@@ -4,20 +4,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
-
-
-import com.mxgraph.layout.mxFastOrganicLayout;
-import com.mxgraph.layout.mxOrganicLayout;
 import com.mxgraph.swing.mxGraphComponent;
-import com.mxgraph.swing.util.mxGraphActions;
 import com.mxgraph.util.mxConstants;
 import com.mxgraph.view.mxGraph;
-import com.mxgraph.view.mxStylesheet;
 import javafx.util.Pair;
 import simulator.protocols.deadlockDetection.WFG.Graph;
 import simulator.protocols.deadlockDetection.WFG.Task;
 import simulator.protocols.deadlockDetection.WFG.WFGNode;
-
 
 public class GraphVisualizer extends JPanel {
 

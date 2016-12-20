@@ -44,9 +44,9 @@ public class Main {
         File paramFile = new File("params.txt");
 
         String SEEDs = "";
-        String topologyStr = "HyperCube";
-        String numPagesStr = "1000";
-        String arrivalRateStr = "75";
+        String topologyStr = "";
+        String numPagesStr = "";
+        String arrivalRateStr = "";
         String DDPs = "";
         String DRPs = "";
         String PPs = "";
@@ -74,20 +74,13 @@ public class Main {
             e.printStackTrace();
         }
 
-
-
-
-
-
         //This is just to tell you how many simulations will be run with the parameters chosen
 
         int numberOfSims = SEEDs.split(",").length * topologyStr.split(",").length * numPagesStr.split(",").length
-                * arrivalRateStr.split(",").length * DDPs.split(",").length * DRPs.split(",").length * PPs.split(",").length * DetectIntervals.split(",").length ;
+                * arrivalRateStr.split(",").length * DDPs.split(",").length * DRPs.split(",").length * PPs.split(",").length
+                * DetectIntervals.split(",").length * maxActiveTransStr.split(",").length * updateRateStr.split(",").length;
 
         System.out.println("Running " + numberOfSims + " simulations. This Test Number is " + simNumber);
-
-
-
 
 
         //These nested loops are to loop through all the different parameter combinations
@@ -122,7 +115,7 @@ public class Main {
                                                 for(String updateRateStr_ : updateRateStr.split(",") ) {
                                                     double updateRate = Double.parseDouble(updateRateStr_);
 
-                                                    if(updateRate >1 || updateRate < 0)
+                                                    if(updateRate > 1 || updateRate < 0)
                                                         throw new WTFException("update rate has to be between 0 and 1, it was " + updateRate);
 
                                                     Runnable r = () -> {
@@ -140,7 +133,7 @@ public class Main {
 
                                                         if (Log.isLoggingEnabled()) {
                                                             GUI gui = new GUI();
-                                                            gui.setTitle(SEED + ":" + numPages + ":" + maxActiveTrans + ":" + 8 + ":" + arrivalRate + ":" + DDP + ":" + DRP + ":" + PP);
+                                                            gui.setTitle(SEED + ":" + numPages + ":" + maxActiveTrans + ":" + 8 + ":" + arrivalRate + ":" + DDP + ":" + DRP + ":" + PP + ":" + detectInterval + ":" + updateRate);
                                                             Output output = new Output();
                                                             GraphVisualizer graphVisualizer = new GraphVisualizer();
                                                             DeadlockPanel dPanel = new DeadlockPanel();
@@ -156,28 +149,19 @@ public class Main {
                                                             deadlockResListener = dPanel::deadLockResolved;
                                                         } else {
                                                             getSleepTime = () -> 0L;
-                                                            updateTime = time -> {
-                                                            };
-                                                            log = logMsg -> {
-                                                            };
-                                                            wfGraphConsumer = (wfgNodeWFGraph, i) -> {
-                                                            };
-                                                            deadlockConsumer = deadlock -> {
-                                                            };
-                                                            deadlockResListener = (deadlock, f) -> {
-                                                            };
+                                                            updateTime = time -> {};
+                                                            log = logMsg -> {};
+                                                            wfGraphConsumer = (wfgNodeWFGraph, i) -> {};
+                                                            deadlockConsumer = deadlock -> {};
+                                                            deadlockResListener = (deadlock, f) -> {};
                                                         }
 
-
                                                         //Setup params object
-                                                        SimSetupParams params = new SimSetupParams(SEED, numPages, maxActiveTrans, 8, arrivalRate, DDP, DRP, log, stats, getSleepTime, updateTime);
+                                                        SimSetupParams params = new SimSetupParams(SEED, numPages, maxActiveTrans, 8, arrivalRate, updateRate, detectInterval, DDP, DRP, PP, log, stats, getSleepTime, updateTime);
                                                         params.setWfGraphConsumer(wfGraphConsumer);
                                                         params.setDeadlockListener(deadlockConsumer);
                                                         params.setDeadlockResolutionListener(deadlockResListener);
-                                                        params.setPP(PP);
-                                                        params.setDetectInterval(detectInterval);
                                                         params.setAgentsHistoryLength(agentsHistoryLength);
-                                                        params.setUpdateRate(updateRate);
 
                                                         Simulation s = new Simulation(params);
 

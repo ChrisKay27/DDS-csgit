@@ -9,7 +9,6 @@ import simulator.server.transactionManager.CohortTransaction;
 import simulator.server.transactionManager.TransInfo;
 import simulator.server.transactionManager.Transaction;
 import stats.Statistics;
-
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -30,6 +29,7 @@ public class SimParams {
     public static final int diskReadWriteTime = 30;
     public static final int processTime = 15;
     public static int Bandwidth = 10000;
+    public static int latency = 10;
     public final int arrivalRateMean;
     public final int maxActiveTrans;
     private int numTransPerServer = 500;
@@ -38,7 +38,6 @@ public class SimParams {
     public String DDP;
     public final int numberOfServers = 8;
     public int messageOverhead = 0;
-
 
     public final Map<Integer,Range> serverToPageRange = new HashMap<>();
     public final Consumer<Event> eventQueue;
@@ -50,8 +49,6 @@ public class SimParams {
     public final Supplier<Integer> pageNumProvider;
 
     private BiConsumer<Integer,Integer> overheadIncurer;
-
-
 
     public boolean usesWFG = false;
 
@@ -68,7 +65,7 @@ public class SimParams {
 
 
     /**
-     *  @param eventQueue Interface to EventQueue. This is a reference to the method addEvent(Event e) in the class EventQueue. This allows any component in the simulation to add events.
+     * @param eventQueue Interface to EventQueue. This is a reference to the method addEvent(Event e) in the class EventQueue. This allows any component in the simulation to add events.
      * @param rand Interface to the Random object created in the Simulation class.
      * @param timeProvider Interface to EventQueue. This is a reference to the method int getTime() in the class EventQueue.
      * @param IDProvider Used by the Transaction Generator to ensure no transactions have the same ID

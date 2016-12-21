@@ -14,7 +14,7 @@ import java.util.function.Consumer;
 
 public class NetworkConnection {
     private static final int bandwidth = SimParams.Bandwidth;
-    private static final int latency = 10;
+    private static final int latency = SimParams.latency;
 
     private final Log log;
 
@@ -28,11 +28,9 @@ public class NetworkConnection {
     private List<Message> onTheWire = new ArrayList<>();
     private Queue<Message> queue = new PriorityQueue<>();
 
-
-
     public NetworkConnection(SimParams simParams, Server src, Server dest) {
         this.simParams = simParams;
-        log = new Log(ServerProcess.NetworkConnection, src.getID(), simParams.timeProvider,simParams.log);
+        log = new Log(ServerProcess.NetworkConnection, src.getID(), simParams.timeProvider, simParams.log);
 
         this.src = src;
         this.dest = dest;
@@ -43,42 +41,39 @@ public class NetworkConnection {
 
 
     public void sendMessage(Message msg) {
-        if(Log.isLoggingEnabled()) log.log(src.getID() + ": Send message: " + msg);
+        if (Log.isLoggingEnabled()) log.log(src.getID() + ": Send message: " + msg);
 
         queue.add(msg);
-        eventQueue.accept(new Event(simParams.getTime()+1, src.getID(), this::checkForRoomForMessage, true));
+        eventQueue.accept(new Event(simParams.getTime() + 1, src.getID(), this::checkForRoomForMessage, true));
     }
 
 
-
-    private void messageArrives(Message msg){
-        if(Log.isLoggingEnabled()) log.log(dest.getID() + ": Message arrives at dest: " + msg);
+    private void messageArrives(Message msg) {
+        if (Log.isLoggingEnabled()) log.log(dest.getID() + ": Message arrives at dest: " + msg);
         onTheWire.remove(msg);
         sizeOnTheWire -= msg.getSize();
 
         msgConsumer.accept(msg);
 
-        eventQueue.accept(new Event(simParams.getTime()+1, dest.getID(), this::checkForRoomForMessage, true));
+        eventQueue.accept(new Event(simParams.getTime() + 1, dest.getID(), this::checkForRoomForMessage, true));
     }
 
-    private void checkForRoomForMessage(){
+    private void checkForRoomForMessage() {
 
-        if( !queue.isEmpty() && (bandwidth-sizeOnTheWire) >= queue.peek().getSize()){
+        if (!queue.isEmpty() && (bandwidth - sizeOnTheWire) >= queue.peek().getSize()) {
             Message msg = queue.remove();
             onTheWire.add(msg);
             sizeOnTheWire += msg.getSize();
-            eventQueue.accept(new Event(simParams.getTime()+latency, src.getID(), ()-> messageArrives(msg), msg.isReoccuring()));
-        }
-        else{
-            if( queue.isEmpty() ) {
-                if(Log.isLoggingEnabled()) log.log(src.getID() + ": Queue is empty");
-            }else{
-                if(Log.isLoggingEnabled()) log.log(src.getID() + ": No room on wire");
+            eventQueue.accept(new Event(simParams.getTime() + latency, src.getID(), () -> messageArrives(msg), msg.isReoccuring()));
+        } else {
+            if (queue.isEmpty()) {
+                if (Log.isLoggingEnabled()) log.log(src.getID() + ": Queue is empty");
+            } else {
+                if (Log.isLoggingEnabled()) log.log(src.getID() + ": No room on wire");
             }
         }
 
     }
-
 
 
     public Server getSrc() {

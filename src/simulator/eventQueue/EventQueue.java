@@ -116,6 +116,5 @@ public class EventQueue {
             sleptThisTick = false;
             timeUpdater.accept(time);
         }
-
     }
 }

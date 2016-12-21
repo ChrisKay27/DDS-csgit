@@ -3,9 +3,6 @@ package ui;
 import simulator.enums.ServerProcess;
 import simulator.server.transactionManager.Transaction;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -16,11 +13,7 @@ public class Log {
     private final int serverID;
     private final Supplier<Integer> timeProvider;
     private final Consumer<String> log;
-
     private final String serverProcess;
-
-
-
 
     public Log(ServerProcess process, int serverID, Supplier<Integer> timeProvider, Consumer<String> log) {
         this.process = process;
@@ -30,20 +23,20 @@ public class Log {
         serverProcess = ":" + serverID + ":" + process.toString() + ":";
     }
 
-    public void log(String message){
-        log.accept(timeProvider.get()+serverProcess+": "+message);
+    public void log(String message) {
+        log.accept(timeProvider.get() + serverProcess + ": " + message);
     }
 
-    public void log(Transaction t, String message){
-        log.accept(timeProvider.get()+serverProcess+t.getID()+": "+message);
+    public void log(Transaction t, String message) {
+        log.accept(timeProvider.get() + serverProcess + t.getID() + ": " + message);
     }
 
-    public void log(int transID, String message){
-        log.accept(timeProvider.get()+serverProcess+transID+": "+message.replace(":","-"));
+    public void log(int transID, String message) {
+        log.accept(timeProvider.get() + serverProcess + transID + ": " + message.replace(":", "-"));
     }
 
 
-    public static boolean isLoggingEnabled(){
+    public static boolean isLoggingEnabled() {
         return LOGGING_ENABLED;
     }
 

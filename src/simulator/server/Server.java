@@ -4,7 +4,6 @@ import exceptions.WTFException;
 import simulator.SimParams;
 import simulator.enums.ServerProcess;
 import simulator.protocols.deadlockDetection.DeadlockDetectionProtocol;
-import simulator.protocols.deadlockDetection.WFG_DDP;
 import simulator.protocols.deadlockResolution.DeadlockResolutionProtocol;
 import simulator.server.disk.Disk;
 import simulator.server.lockManager.LockManager;
@@ -17,7 +16,6 @@ import simulator.server.transactionManager.TransactionManager;
 import ui.Log;
 
 public class Server {
-
 
     private final SimParams simParams;
     private final Log log;
@@ -44,7 +42,7 @@ public class Server {
         this.simParams = simParams;
         this.serverID = serverID;
 
-        log = new Log(ServerProcess.Server, serverID, simParams.timeProvider,simParams.log);
+        log = new Log(ServerProcess.Server, serverID, simParams.timeProvider, simParams.log);
 
         TM = new TransactionManager(this, simParams);
         disk = new Disk(serverID, simParams,pageRange);
@@ -63,7 +61,6 @@ public class Server {
         TM.start();
         DDP.start();
     }
-
 
     /**
      * Called by the TM to get the LM to get the locks for this transaction

@@ -41,8 +41,6 @@ public class Simulation {
         simParams.setDeadlockDetectInterval(simSetupParams.getDetectInterval());
 
 
-
-
         //Calculate which servers get what pages.
 
         int numPagesPerServer = simSetupParams.getNumPages() /(simSetupParams.getNumServers() /2);
@@ -54,7 +52,7 @@ public class Simulation {
             Server s = new Server(simParams, i, new Range(minPage, maxPage-1));
             servers.add(s);
 
-            simParams.serverToPageRange.put(i,new Range(minPage,maxPage-1));
+            simParams.serverToPageRange.put(i, new Range(minPage, maxPage-1));
 
             minPage += numPagesPerServer;
             maxPage += numPagesPerServer;
@@ -64,27 +62,22 @@ public class Simulation {
                 maxPage = numPagesPerServer;
             }
 
-
             // Set the deadlock detection protocol's 'Graph Listener'. It is used to display the WFGs in the GUI.
             final int serverID = i;
-            s.getDDP().setGraphListener((wfGraph , time)-> {
+            s.getDDP().setGraphListener((wfGraph, time)-> {
                 wfGraph.setServerID(serverID);
                 simSetupParams.getWfGraphConsumer().accept(wfGraph, time);
 //                    eventQueue.stop();
             });
-
         }
-
     }
-
-
 
     private int getNextTransID(){
         return nextTransID++;
     }
 
     private int getRandPageNum(){
-        return (int) (rand.nextDouble()*numPages);
+        return (int) (rand.nextDouble() * numPages);
     }
 
     public List<Server> getServers() {

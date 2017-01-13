@@ -1,7 +1,11 @@
 package simulator.protocols.priority;
 
+import exceptions.WTFException;
 import simulator.server.lockManager.Lock;
+import simulator.server.transactionManager.TransInfo;
 import simulator.server.transactionManager.Transaction;
+
+import java.util.Arrays;
 import java.util.List;
 
 public class LeastSlackFirst implements PriorityProtocol {
@@ -16,6 +20,18 @@ public class LeastSlackFirst implements PriorityProtocol {
                 lowestSlackTime = lowest.getSlackTime();
             }
         return lowest;
+    }
+
+    @Override
+    public int getTransPriority(List<TransInfo> transactions, int transID) {
+        Object[] sortedArray = transactions.stream().sorted((t1, t2) -> Integer.compare(t1.getSlackTime(), t2.getSlackTime())).toArray();
+        List sortedList = Arrays.asList(sortedArray);
+
+        for (TransInfo ti : transactions)
+            if (ti.getID() == transID)
+                return (sortedList.indexOf(ti) + 1);
+
+        throw new WTFException("Transaction " + transID + " is not in the list of priority.");
     }
 
     @Override

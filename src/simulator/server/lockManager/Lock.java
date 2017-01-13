@@ -2,10 +2,9 @@ package simulator.server.lockManager;
 
 import simulator.protocols.deadlockDetection.WFG.WFGNode;
 
-public class Lock implements WFGNode{
+public class Lock implements WFGNode {
 
     private static int nextID;
-
     private final int ID = nextID++;
     private final int pageNum;
     private final int transID;
@@ -29,15 +28,6 @@ public class Lock implements WFGNode{
         return exclusive;
     }
 
-    @Override
-    public String toString() {
-        return "Lock{" +
-                "pageNum=" + pageNum +
-                ", transID=" + transID +
-                ", exclusive=" + exclusive +
-                '}';
-    }
-
     public int getPageNum() {
         return pageNum;
     }
@@ -50,10 +40,17 @@ public class Lock implements WFGNode{
         return deadline;
     }
 
-
     @Override
     public int getID() {
         return ID;
     }
 
+    @Override
+    public String toString() {
+        return "Lock{" +
+                "pageNum=" + pageNum +
+                ", transID=" + transID +
+                ", exclusive=" + exclusive +
+                '}';
+    }
 }

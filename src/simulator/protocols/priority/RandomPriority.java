@@ -1,6 +1,7 @@
 package simulator.protocols.priority;
 
 import simulator.server.lockManager.Lock;
+import simulator.server.transactionManager.TransInfo;
 import simulator.server.transactionManager.Transaction;
 import java.util.List;
 import java.util.Random;
@@ -11,6 +12,12 @@ public class RandomPriority implements PriorityProtocol {
     public Transaction getHighestPriorityTrans(List<Transaction> transactions) {
         Random rnd = new Random();
         return transactions.get(rnd.nextInt(transactions.size()));
+    }
+
+    @Override
+    public int getTransPriority(List<TransInfo> transactions, int transID) {
+        Random rnd = new Random();
+        return rnd.nextInt(transactions.size());
     }
 
     @Override

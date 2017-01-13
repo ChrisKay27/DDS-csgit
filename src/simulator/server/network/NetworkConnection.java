@@ -39,17 +39,18 @@ public class NetworkConnection {
         this.msgConsumer = msg -> dest.getNIC().receiveMessage(msg);
     }
 
-
     public void sendMessage(Message msg) {
-        if (Log.isLoggingEnabled()) log.log(src.getID() + ": Send message: " + msg);
+        if (Log.isLoggingEnabled())
+            log.log(src.getID() + ": Send message: " + msg);
 
         queue.add(msg);
         eventQueue.accept(new Event(simParams.getTime() + 1, src.getID(), this::checkForRoomForMessage, true));
     }
 
-
     private void messageArrives(Message msg) {
-        if (Log.isLoggingEnabled()) log.log(dest.getID() + ": Message arrives at dest: " + msg);
+        if (Log.isLoggingEnabled())
+            log.log(dest.getID() + ": Message arrives at dest: " + msg);
+
         onTheWire.remove(msg);
         sizeOnTheWire -= msg.getSize();
 
@@ -59,7 +60,6 @@ public class NetworkConnection {
     }
 
     private void checkForRoomForMessage() {
-
         if (!queue.isEmpty() && (bandwidth - sizeOnTheWire) >= queue.peek().getSize()) {
             Message msg = queue.remove();
             onTheWire.add(msg);
@@ -67,14 +67,14 @@ public class NetworkConnection {
             eventQueue.accept(new Event(simParams.getTime() + latency, src.getID(), () -> messageArrives(msg), msg.isReoccuring()));
         } else {
             if (queue.isEmpty()) {
-                if (Log.isLoggingEnabled()) log.log(src.getID() + ": Queue is empty");
+                if (Log.isLoggingEnabled())
+                    log.log(src.getID() + ": Queue is empty");
             } else {
-                if (Log.isLoggingEnabled()) log.log(src.getID() + ": No room on wire");
+                if (Log.isLoggingEnabled())
+                    log.log(src.getID() + ": No room on wire");
             }
         }
-
     }
-
 
     public Server getSrc() {
         return src;
@@ -85,6 +85,5 @@ public class NetworkConnection {
     }
 
     public void abort(int transNum) {
-
     }
 }

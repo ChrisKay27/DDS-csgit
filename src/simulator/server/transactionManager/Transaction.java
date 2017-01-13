@@ -1,6 +1,7 @@
 package simulator.server.transactionManager;
 
 import exceptions.WTFException;
+import simulator.protocols.priority.PriorityProtocol;
 
 import java.util.*;
 
@@ -25,12 +26,12 @@ public class Transaction {
     /**
      * write page num -> a list of servers with that page
      */
-    private final Map<Integer,List<Integer>> writePageNumsToServersWithPage = new HashMap<>();
+    private final Map<Integer, List<Integer>> writePageNumsToServersWithPage = new HashMap<>();
 
     /**
      * write page num -> a list of servers where a lock has been acquired on that page
      */
-    private final Map<Integer,List<Integer>> pageNumsToServerIDLocksAcquired = new HashMap<>();
+    private final Map<Integer, List<Integer>> pageNumsToServerIDLocksAcquired = new HashMap<>();
 
     private final List<Integer> processedPages = new ArrayList<>();
 
@@ -50,26 +51,21 @@ public class Transaction {
 
     private boolean aborted;
 
-
-
     public Transaction(int ID, int serverID, int deadLine) {
         this.ID = ID;
         this.serverID = serverID;
         this.deadline = deadLine;
     }
 
-
     // **  Stage 1  - Acquire Locks ** //
 
     public void lockAcquired(int pageNum, int serverID) {
-        if( writePageNums.contains(pageNum) ){
+        if (writePageNums.contains(pageNum)) {
             pageNumsToServerIDLocksAcquired.get(pageNum).add(serverID);
-        }
-        else if( readPageNums.contains(pageNum) ){
+        } else if (readPageNums.contains(pageNum)) {
             lockedReadPages.add(pageNum);
-        }
-        else
-            throw new WTFException("T" +ID+ ": Acquired a lock for a page I don't have! pageNum:" + pageNum  + " on server " +serverID );
+        } else
+            throw new WTFException("Transaction " + ID + ": Acquired a lock for a page I don't have! pageNum: " + pageNum + " on server: " + serverID);
     }
 
 
@@ -80,9 +76,9 @@ public class Transaction {
     }
 
 
-    // **  Stage 3  - Commit         ** //
+    // **  Stage 3  - Commit ** //
 
-    public boolean isReadyToCommit(){
+    public boolean isReadyToCommit() {
         boolean allProcessingDone = processedPages.containsAll(readPageNums) && processedPages.containsAll(writePageNums);
 
         boolean allLocksAcquired = allLocksAcquired();
@@ -96,11 +92,10 @@ public class Transaction {
         return readyToCommitCohorts.containsAll(cohortServers);
     }
 
-
     private boolean allLocksAcquired() {
         boolean allFound = true;
 
-        for(int writePageNum : writePageNums ){
+        for (int writePageNum : writePageNums) {
             List<Integer> serversWithThisPage = writePageNumsToServersWithPage.get(writePageNum);
             List<Integer> serversWithThisLockAcquired = pageNumsToServerIDLocksAcquired.get(writePageNum);
 
@@ -112,11 +107,9 @@ public class Transaction {
         return allFound;
     }
 
-
     public void cohortReadyToCommit(int serverID) {
         readyToCommitCohorts.add(serverID);
     }
-
 
 
     // **  Stage 4  - Write Pages         ** //
@@ -128,11 +121,9 @@ public class Transaction {
 
 
 
-
-
     /*   Getters and Setters    */
 
-    public void addCohort(int serverID){
+    public void addCohort(int serverID) {
         cohortServers.add(serverID);
     }
 
@@ -152,22 +143,17 @@ public class Transaction {
         return committed;
     }
 
-
     public boolean allWriteJobsCompleted() {
         return pagesWritten.containsAll(allWritePageNums);
     }
-
-
 
     public Map<Integer, List<Integer>> getWritePageNumsToServersWithPage() {
         return writePageNumsToServersWithPage;
     }
 
-
     public int getID() {
         return ID;
     }
-
 
     public List<Integer> getReadPageNums() {
         return readPageNums;
@@ -185,8 +171,8 @@ public class Transaction {
         return allWritePageNums;
     }
 
-    public int getPriority() {
-        return -deadline;
+    public int getPriority(List<TransInfo> transactionsInDeadlock, PriorityProtocol pp) {
+        return pp.getTransPriority(transactionsInDeadlock, this.getID());
     }
 
     public int getDeadline() {
@@ -200,19 +186,17 @@ public class Transaction {
 
     public String fullToString() {
         return "Transaction{" +
-                "ID=" + ID +
-                ", allReadPageNums=" + allReadPageNums +
-                ", allWritePageNums=" + allWritePageNums +
-                ", readPageNums=" + readPageNums +
-                ", writePageNums=" + writePageNums +
-                ", deadline=" + deadline +
+                "ID= " + ID +
+                ", allReadPageNums= " + allReadPageNums +
+                ", allWritePageNums= " + allWritePageNums +
+                ", readPageNums= " + readPageNums +
+                ", writePageNums= " + writePageNums +
+                ", deadline= " + deadline +
                 '}';
     }
 
-
     public void cohortCompleted(int serverID) {
         completedCohorts.add(serverID);
-
     }
 
     public List<Integer> getNotCompletedWriteJobs() {
@@ -229,8 +213,6 @@ public class Transaction {
         this.completed = completed;
     }
 
-
-
     public void prepareToStart() {
         writePageNums.forEach(pageNum -> {
             pageNumsToServerIDLocksAcquired.put(pageNum, new ArrayList<>());
@@ -243,10 +225,6 @@ public class Transaction {
 
     public int getCompletedTime() {
         return completedTime;
-    }
-
-    public int getNumberOfPages() {
-        return allReadPageNums.size() + allWritePageNums.size();
     }
 
     public int getWorkload() {

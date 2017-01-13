@@ -1,8 +1,7 @@
 package simulator.server.transactionManager;
 
-
-
 import simulator.protocols.deadlockDetection.WFG.WFGNode;
+import simulator.protocols.priority.PriorityProtocol;
 
 import java.util.List;
 
@@ -12,9 +11,9 @@ public class TransInfo implements WFGNode {
     public final int deadline;
     public final int workload;
     public final int executionTime;
+
     public final int slackTime;
     public final List<Integer> readPages, writePages;
-
 
     public TransInfo(int serverID, int transID, int deadline, int workload, int executionTime, int slackTime, List<Integer> readPages, List<Integer> writePages) {
         this.serverID = serverID;
@@ -27,9 +26,8 @@ public class TransInfo implements WFGNode {
         this.writePages = writePages;
     }
 
-
-    public int getPriority() {
-        return -deadline;
+    public int getPriority(List<TransInfo> transactionsInDeadlock, PriorityProtocol pp) {
+        return pp.getTransPriority(transactionsInDeadlock, this.getID());
     }
 
     @Override
@@ -37,11 +35,19 @@ public class TransInfo implements WFGNode {
         return transID;
     }
 
+    public int getDeadline() {
+        return deadline;
+    }
+
+    public int getSlackTime() {
+        return slackTime;
+    }
+
     @Override
-    public boolean equals(Object o){
-        if( o == this )
+    public boolean equals(Object o) {
+        if (o == this)
             return true;
-        if(!(o instanceof TransInfo))
+        if (!(o instanceof TransInfo))
             return false;
         TransInfo ti = (TransInfo) o;
 
@@ -50,6 +56,6 @@ public class TransInfo implements WFGNode {
 
     @Override
     public String toString() {
-        return "TransInfo{"+transID+"}";
+        return "TransInfo{Transaction ID= " + transID + "}";
     }
 }

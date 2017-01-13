@@ -1,4 +1,5 @@
 package simulator.server.network;
+
 import simulator.SimParams;
 import simulator.enums.ServerProcess;
 
@@ -15,7 +16,6 @@ public class Message implements Comparable<Message> {
     private boolean reoccuring;
     private int size = 1;
 
-
     public Message(int destServerID, ServerProcess process, String contents, int deadline) {
         this.destServerID = destServerID;
         this.process = process;
@@ -23,21 +23,23 @@ public class Message implements Comparable<Message> {
         this.deadline = deadline;
         object = null;
     }
+
     public Message(int destServerID, ServerProcess process, String msg, Object contents, int deadline) {
         this.destServerID = destServerID;
         this.process = process;
-        this.contents = msg;
-        this.deadline = deadline;
         this.object = contents;
+        this.deadline = deadline;
+        this.contents = msg;
     }
+
     public Message(int destServerID, ServerProcess process, Object contents, int deadline) {
         this.destServerID = destServerID;
         this.process = process;
-        this.contents = OBJECT;
-        this.deadline = deadline;
         this.object = contents;
-    }
+        this.deadline = deadline;
+        this.contents = OBJECT;
 
+    }
 
     public int getDestServerID() {
         return destServerID;
@@ -52,6 +54,7 @@ public class Message implements Comparable<Message> {
 
     /**
      * This is normally used for network communications. Sometimes though, an object is needs to be sent.
+     *
      * @return a string normally in the form A:54:19 where A, 54, and 19 are specific to the ServerProcess this message is going to. See TransactionManagers receive message for clarity.
      */
     public String getContents() {
@@ -63,12 +66,11 @@ public class Message implements Comparable<Message> {
     }
 
     public void setSize(int size) {
-        if( size > SimParams.Bandwidth ) {
-            System.out.println("Issue! Setting message size("+size+") to be larger than bandwidth("+SimParams.Bandwidth+")");
+        if (size > SimParams.Bandwidth) {
+            System.out.println("Issue! Setting message size(" + size + ") to be larger than bandwidth(" + SimParams.Bandwidth + ")");
             size = SimParams.Bandwidth;
         }
         this.size = size;
-
     }
 
     @Override
@@ -83,7 +85,6 @@ public class Message implements Comparable<Message> {
 
     @Override
     public int compareTo(Message o) {
-
         return 0;
     }
 

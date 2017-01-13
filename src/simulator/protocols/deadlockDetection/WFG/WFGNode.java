@@ -19,5 +19,4 @@ public interface WFGNode extends Comparable {
             throw new IllegalStateException("tried to compare " + this + " to " + o);
         }
     }
-
 }

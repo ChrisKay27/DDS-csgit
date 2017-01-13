@@ -1,12 +1,11 @@
 package simulator.server.processor;
 
 import simulator.eventQueue.Event;
-import simulator.server.disk.DiskJob;
 
 import java.util.function.Consumer;
 
-public class ProcessorJob implements Comparable<ProcessorJob>{
-    private final int transID , deadline, pageNum;
+public class ProcessorJob implements Comparable<ProcessorJob> {
+    private final int transID, deadline, pageNum;
 
     private Event activeEvent;
     private Consumer<Integer> completedListener;
@@ -40,9 +39,9 @@ public class ProcessorJob implements Comparable<ProcessorJob>{
 
     @Override
     public int compareTo(ProcessorJob o) {
-        if( deadline < o.deadline )
+        if (deadline < o.deadline)
             return -1;
-        else if( deadline > o.deadline )
+        else if (deadline > o.deadline)
             return 1;
         else
             return 0;

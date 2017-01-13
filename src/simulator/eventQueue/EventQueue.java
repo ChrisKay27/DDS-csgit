@@ -20,8 +20,8 @@ public class EventQueue {
         this.timeUpdater = timeUpdater;
     }
 
-    public void addEvent(Event e){
-        if( queue.isEmpty() )
+    public void addEvent(Event e) {
+        if (queue.isEmpty())
             queue.add(e);
         else {
             for (int i = 0; i < queue.size(); i++) {
@@ -41,18 +41,18 @@ public class EventQueue {
 
     private boolean sleptThisTick = false;
 
-    public void start()   {
+    public void start() {
         System.out.println("** Simulation Starting **");
 
-        while(!queue.isEmpty() && !stop && notOnlyRecurringEventsRemain()){
+        while (!queue.isEmpty() && !stop && notOnlyRecurringEventsRemain()) {
             Event e = queue.remove(0);
-            if( e.isAborted() )
+            if (e.isAborted())
                 continue;
 
             updateTime(e.getTime());
             e.getJob().run();
 
-            if( !sleptThisTick ) {
+            if (!sleptThisTick) {
                 long sleeptime = sleepTime.get();
                 if (sleeptime > 0) {
                     try {
@@ -71,12 +71,11 @@ public class EventQueue {
 //            }
         }
 
-        if( stop )
+        if (stop)
             System.out.println("Stopped Simulation");
         else
-            System.out.println("** Simulation Over at tick "+time+" **");
+            System.out.println("** Simulation Over at tick " + time + " **");
     }
-
 
 
     private boolean notOnlyRecurringEventsRemain() {
@@ -84,8 +83,8 @@ public class EventQueue {
 //            System.out.println("Break!");
 //        }
 
-        for(Event e : queue)
-            if(!e.isReoccurring())
+        for (Event e : queue)
+            if (!e.isReoccurring())
                 return true;
 
         return false;
@@ -94,11 +93,11 @@ public class EventQueue {
     public void incurOverhead(int serverID, int overhead) {
         List<Event> eventsAtThisServer = new ArrayList<>();
         Iterator<Event> it = queue.iterator();
-        while( it.hasNext() ){
+        while (it.hasNext()) {
             Event e = it.next();
 
-            if( e.getServerID() == serverID ){
-                e.setTime(e.getTime()+overhead);
+            if (e.getServerID() == serverID) {
+                e.setTime(e.getTime() + overhead);
                 eventsAtThisServer.add(e);
                 it.remove();
             }
@@ -111,7 +110,7 @@ public class EventQueue {
     }
 
     private void updateTime(int time) {
-        if( time != this.time ) {
+        if (time != this.time) {
             this.time = time;
             sleptThisTick = false;
             timeUpdater.accept(time);

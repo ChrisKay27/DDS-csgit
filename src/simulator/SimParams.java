@@ -9,6 +9,7 @@ import simulator.server.transactionManager.CohortTransaction;
 import simulator.server.transactionManager.TransInfo;
 import simulator.server.transactionManager.Transaction;
 import stats.Statistics;
+
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -18,7 +19,6 @@ import java.util.function.Supplier;
  * This class is used by every component in the simulation.
  * It is used to provide them with parameters and provide utility methods.
  * For instance, since every component holds a reference to this object, they can all add events, get the current time, get random numbers between 0 and 1, add messages to the log, etc.
- *
  */
 public class SimParams {
 
@@ -36,40 +36,52 @@ public class SimParams {
     private final double updateRate;
     public String DRP;
     public String DDP;
+
+    public int getNumberOfServers() {
+        return numberOfServers;
+    }
+
     public final int numberOfServers = 8;
     public int messageOverhead = 0;
 
-    public final Map<Integer,Range> serverToPageRange = new HashMap<>();
+    public final Map<Integer, Range> serverToPageRange = new HashMap<>();
     public final Consumer<Event> eventQueue;
     public final Supplier<Double> rand;
     public final Supplier<Integer> timeProvider;
 
-    /** Used by the Transaction Generator to ensure no transactions have the same ID */
+    /**
+     * Used by the Transaction Generator to ensure no transactions have the same ID
+     */
     public final Supplier<Integer> IDProvider;
+
+    public Supplier<Integer> getPageNumProvider() {
+        return pageNumProvider;
+    }
+
     public final Supplier<Integer> pageNumProvider;
 
-    private BiConsumer<Integer,Integer> overheadIncurer;
+    private BiConsumer<Integer, Integer> overheadIncurer;
 
     public boolean usesWFG = false;
 
     public final List<Integer> allServersList;
     private int overIncurred;
     private Consumer<Deadlock> deadlockListener;
-    private BiConsumer<Deadlock,Integer> deadlockResolutionListener;
-    public final Map<Integer,TransInfo> transInfos = new HashMap<>();
+    private BiConsumer<Deadlock, Integer> deadlockResolutionListener;
+    public final Map<Integer, TransInfo> transInfos = new HashMap<>();
     private PriorityProtocol pp;
     private int searchInterval;
     public final int agentsHistoryLength;
 
-    public int globalDetectors = 1;
+    public int globalDetectors = 2;
 
 
     /**
-     * @param eventQueue Interface to EventQueue. This is a reference to the method addEvent(Event e) in the class EventQueue. This allows any component in the simulation to add events.
-     * @param rand Interface to the Random object created in the Simulation class.
-     * @param timeProvider Interface to EventQueue. This is a reference to the method int getTime() in the class EventQueue.
-     * @param IDProvider Used by the Transaction Generator to ensure no transactions have the same ID
-     * @param pageNumProvider Gets a random page to give to a transaction during transaction generation
+     * @param eventQueue          Interface to EventQueue. This is a reference to the method addEvent(Event e) in the class EventQueue. This allows any component in the simulation to add events.
+     * @param rand                Interface to the Random object created in the Simulation class.
+     * @param timeProvider        Interface to EventQueue. This is a reference to the method int getTime() in the class EventQueue.
+     * @param IDProvider          Used by the Transaction Generator to ensure no transactions have the same ID
+     * @param pageNumProvider     Gets a random page to give to a transaction during transaction generation
      * @param maxActiveTrans
      * @param arrivalRate
      * @param log
@@ -100,11 +112,11 @@ public class SimParams {
         this.allServersList = Collections.unmodifiableList(allServersList);
     }
 
-    public List<Integer> getServersWithPage(int pageNum){
+    public List<Integer> getServersWithPage(int pageNum) {
         List<Integer> serverIDs = new ArrayList<>();
         serverToPageRange.keySet().forEach(serverID -> {
             Range range = serverToPageRange.get(serverID);
-            if(range.contains(pageNum))
+            if (range.contains(pageNum))
                 serverIDs.add(serverID);
         });
         return serverIDs;
@@ -118,7 +130,7 @@ public class SimParams {
         this.numTransPerServer = numTransPerServer;
     }
 
-    public void incurOverhead(int serverID, int overhead){
+    public void incurOverhead(int serverID, int overhead) {
         overIncurred += overhead;
         //overheadIncurer.accept(serverID,overhead);
     }
@@ -155,7 +167,7 @@ public class SimParams {
         this.deadlockResolutionListener = deadlockResolutionListener;
     }
 
-    public int getTime(){
+    public int getTime() {
         return timeProvider.get();
     }
 
@@ -178,20 +190,21 @@ public class SimParams {
         }
         return allTrans;
     }
+
     /**
      * Used for integrity checking
      * Only gets master transactions, does not get cohorts
      */
-    public Map<Integer,Transaction> getActiveTransactionsMap() {
-        Map<Integer,Transaction> allTrans = new HashMap<>();
+    public Map<Integer, Transaction> getActiveTransactionsMap() {
+        Map<Integer, Transaction> allTrans = new HashMap<>();
 
         for (Server s : allServers) {
 
             List<Transaction> transactions = s.getTM().getActiveTransactions();
 
-            for(Transaction t : transactions)
-                if(!(t instanceof CohortTransaction))
-                    allTrans.put(t.getID(),t);
+            for (Transaction t : transactions)
+                if (!(t instanceof CohortTransaction))
+                    allTrans.put(t.getID(), t);
         }
 
         return allTrans;
@@ -202,16 +215,16 @@ public class SimParams {
      * Used for integrity checking
      * Only gets master transactions, does not get cohorts
      */
-    public Map<Integer,Transaction> getAllTransactionsMap() {
-        Map<Integer,Transaction> allTrans = new HashMap<>();
+    public Map<Integer, Transaction> getAllTransactionsMap() {
+        Map<Integer, Transaction> allTrans = new HashMap<>();
 
         for (Server s : allServers) {
 
             List<Transaction> transactions = s.getTM().getAllTransactions();
 
-            for(Transaction t : transactions)
-                if(!(t instanceof CohortTransaction))
-                    allTrans.put(t.getID(),t);
+            for (Transaction t : transactions)
+                if (!(t instanceof CohortTransaction))
+                    allTrans.put(t.getID(), t);
         }
 
         return allTrans;

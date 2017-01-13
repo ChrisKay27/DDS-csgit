@@ -36,11 +36,10 @@ public class TransactionManager {
     private final List<Transaction> abortedTransactions = new ArrayList<>();
     private final List<Transaction> allTransactions = new ArrayList<>();
 
-
     public TransactionManager(Server server, SimParams simParams) {
         this.server = server;
         serverID = server.getID();
-        log = new Log(ServerProcess.TransactionManager, server.getID(), simParams.timeProvider,simParams.log);
+        log = new Log(ServerProcess.TransactionManager, server.getID(), simParams.timeProvider, simParams.log);
 
         maxActiveTrans = simParams.maxActiveTrans;
         eventQueue = simParams.eventQueue;
@@ -49,106 +48,104 @@ public class TransactionManager {
         this.simParams = simParams;
     }
 
-    private void acceptTrans(Transaction t){
+    private void acceptTrans(Transaction t) {
         allTransactions.add(t);
         queuedTransactions.add(t);
 
-        eventQueue.accept(new Event(timeProvider.get()+1, serverID, this::checkToStartTrans));
-
+        eventQueue.accept(new Event(timeProvider.get() + 1, serverID, this::checkToStartTrans));
 
         //This stuff is essential for deadlock detection
         TransInfo tInfo = new TransInfo(serverID, t.getID(), t.getDeadline(), t.getWorkload(), t.getExecutionTime(), t.getSlackTime(), t.getAllReadPageNums(), t.getAllWritePageNums());
-        simParams.transInfos.put(tInfo.transID,tInfo);
-
+        simParams.transInfos.put(tInfo.transID, tInfo);
 
         //So if we are not using a deadlock DP that requires a wait-for graph we do not need to do this
-        if( simParams.usesWFG ) {
-
+        if (simParams.usesWFG) {
             //Alert the other nodes of this transactions presence
             for (int i = 0; i < simParams.numberOfServers; i++) {
                 if (i != serverID) {
                     Message message = new Message(i, ServerProcess.TransactionManager, tInfo, t.getDeadline());
-                    message.setSize(0);
+                    message.setSize(1);
                     server.getNIC().sendMessage(message);
                     simParams.messageOverhead++;
                 }
             }
         }
-
     }
 
+    private void checkToStartTrans() {
+        if (Log.isLoggingEnabled())
+            log.log("checking to start trans. Num Active = " + activeTransactions.size() + ",  Num waiting = " + queuedTransactions.size());
 
-    private void checkToStartTrans(){
-        if(Log.isLoggingEnabled()) log.log("checking to start trans. Num Active = " + activeTransactions.size() + "  Num waiting = " + queuedTransactions.size());
+        if (queuedTransactions.size() == 0) {
+            if (Log.isLoggingEnabled())
+                log.log("No transactions to start.");
 
-        if( queuedTransactions.size() == 0 ){
-            if(Log.isLoggingEnabled()) log.log("No transactions to start.");
             return;
         }
 
-        if( activeTransactions.size() < maxActiveTrans ){
-            if(Log.isLoggingEnabled()) log.log("Starting new transactions (Active = "+activeTransactions.size()+")");
+        if (activeTransactions.size() < maxActiveTrans) {
+            if (Log.isLoggingEnabled())
+                log.log("Starting new transactions (Num Active = " + activeTransactions.size() + ")");
+
             Transaction t = simParams.getPp().getHighestPriorityTrans(queuedTransactions);
             startTransaction(t);
-        }
-        else{
-            if(Log.isLoggingEnabled()) log.log("Too many active transactions to start another.");
+        } else {
+            if (Log.isLoggingEnabled())
+                log.log("Too many active transactions to start another.");
         }
     }
 
-
-    private void startTransaction(Transaction t){
-        if(Log.isLoggingEnabled()) log.log(t,"Starting " + t.fullToString());
+    private void startTransaction(Transaction t) {
+        if (Log.isLoggingEnabled())
+            log.log(t, "Starting " + t.fullToString());
 
         queuedTransactions.remove(t);
         activeTransactions.add(t);
 
-
         //Set up a timeout event, only for master transactions
-        if(!(t instanceof CohortTransaction))
+        if (!(t instanceof CohortTransaction))
 
             //In 50000 ticks the timeout will occur
-            eventQueue.accept(new Event(simParams.getTime()+50000, serverID, ()->{
+            eventQueue.accept(new Event(simParams.getTime() + 50000, serverID, () -> {
 
                 //timeout will only occur if the trans hasn't committed, completed, or aborted
-                if( !t.isCommitted() && !t.isCompleted() && !t.isAborted() ) {
-                    if(Log.isLoggingEnabled()) {
-                        log.log(t.getID(),"<b>Timeout!</b>");
-                        log.log(t.getID(),"Locked read pages: "+t.getLockedReadPages());
-                        log.log(t.getID(),"Locked write pages: "+t.getPageNumsToServerIDLocksAcquired());
-                        log.log(t.getID(),"Processed pages: "+t.getProcessedPages());
-                        log.log(t.getID(),"Ready to commit cohorts: "+t.getReadyToCommitCohorts());
-                        log.log(t.getID(),"Committed cohorts: "+t.getCommittedCohorts());
-                        log.log(t.getID(),"Complete cohorts: "+t.getCompletedCohorts());
+                if (!t.isCommitted() && !t.isCompleted() && !t.isAborted()) {
+                    if (Log.isLoggingEnabled()) {
+                        log.log(t.getID(), "<b>Timeout!</b>");
+                        log.log(t.getID(), "Locked read pages: " + t.getLockedReadPages());
+                        log.log(t.getID(), "Locked write pages: " + t.getPageNumsToServerIDLocksAcquired());
+                        log.log(t.getID(), "Processed pages: " + t.getProcessedPages());
+                        log.log(t.getID(), "Ready to commit cohorts: " + t.getReadyToCommitCohorts());
+                        log.log(t.getID(), "Committed cohorts: " + t.getCommittedCohorts());
+                        log.log(t.getID(), "Complete cohorts: " + t.getCompletedCohorts());
                     }
                     abort(t);
                     simParams.stats.addTimeout();
                 }
             }));
 
-        if( !(t instanceof CohortTransaction))
+        if (!(t instanceof CohortTransaction))
             spawnChildren(t);
 
         server.acquireLocks(t);
     }
-
 
     /**
      * Abort a transaction based on its ID
      */
     public void abort(int transID) {
         Transaction t = getAbortedTransaction(transID);
-        if( t == null ){
+        if (t == null) {
             t = getCompletedTransaction(transID);
-            if( t == null ) {
+            if (t == null) {
                 t = getActiveTransaction(transID);
 
-                if( !t.isCommitted() )
+                if (!t.isCommitted())
                     abort(t);
             }
-        }
-        else {
-            if(Log.isLoggingEnabled()) log.log(transID,"Told to abort transaction but it has already been aborted.");
+        } else {
+            if (Log.isLoggingEnabled())
+                log.log(transID, "Told to abort transaction but it has already been aborted.");
         }
     }
 
@@ -156,13 +153,16 @@ public class TransactionManager {
      * Abort this transactiont
      */
     private void abort(Transaction t) {
-        if(Log.isLoggingEnabled()) log.log(t,"Aborting");
+        if (Log.isLoggingEnabled())
+            log.log(t, "Aborting");
 
-        if( !(t instanceof CohortTransaction )) {
+        if (!(t instanceof CohortTransaction)) {
             NetworkInterface NIC = server.getNIC();
             String abortMsg = "A:" + t.getID();
             t.getCohortServerIDS().forEach(serverID -> {
-                if(Log.isLoggingEnabled()) log.log(t,"Sending abort message to server " + serverID);
+                if (Log.isLoggingEnabled())
+                    log.log(t, "Sending abort message to server " + serverID);
+
                 NIC.sendMessage(new Message(serverID, ServerProcess.TransactionManager, abortMsg, t.getDeadline()));
             });
 
@@ -179,7 +179,7 @@ public class TransactionManager {
 
     /**
      * Protocol Message:
-     *
+     * <p>
      * Create Trans    - C:<TransNum>:<deadline>:<ServerID>:<ReadPages>:<WritePages>
      * Abort Trans     - A:<TransNum>
      * Lock Acquired   - L:<TransNum>:<PageNum>:<ServerID>
@@ -187,20 +187,20 @@ public class TransactionManager {
      * Ready To Commit - RTC:<TransNum>:<ServerID>
      * Write Completed - WC:<TransNum>:<ServerID>:<PageNum>
      * Cohort Completed- CC:<TransNum>:<ServerID>
-     *
+     * <p>
      * Object Message:
      * Message will be "OBJECT", we then look at the object field and act appropriately
-     *
+     * <p>
      * ex
-     *  A:5:42:E Acquire page 5 for trans 42 exclusive
-     *  C:5:462:1,2,3,4:5,6,7,8 Create cohort trans with id=5, deadline=462, read pages:1,2,3,4, and write pages 5,6,7,8
+     * A:5:42:E Acquire page 5 for trans 42 exclusive
+     * C:5:462:1,2,3,4:5,6,7,8 Create cohort trans with id=5, deadline=462, read pages:1,2,3,4, and write pages 5,6,7,8
+     *
      * @param message
      */
-    public void receiveMessage(Message message){
+    public void receiveMessage(Message message) {
         String msg = message.getContents();
 
-        if( msg.equals(OBJECT) ){
-
+        if (msg.equals(OBJECT)) {
             TransInfo tInfo = (TransInfo) message.getObject();
             //transInfos.put(tInfo.transID,tInfo);
 
@@ -212,32 +212,35 @@ public class TransactionManager {
 
         int transID = Integer.parseInt(components[1]);
 
-        switch(components[0]){
+        switch (components[0]) {
             case "A":
-                if(Log.isLoggingEnabled()) log.log(transID,"Abort message received");
+                if (Log.isLoggingEnabled())
+                    log.log(transID, "Abort message received");
 
-                if( isOnThisServer(transID))
+                if (isOnThisServer(transID))
                     abort(getActiveTransaction(transID));
 
                 break;
             case "C": {
-                if(Log.isLoggingEnabled()) log.log(transID,"Received message to create a cohort transaction: " + msg);
+                if (Log.isLoggingEnabled())
+                    log.log(transID, "Received message to create a cohort transaction: " + msg);
 
                 int deadline = Integer.parseInt(components[2]);
                 int masterServerID = Integer.parseInt(components[3]);
                 String[] readPagesStr = components[4].split(",");
 
-
-                CohortTransaction ct = new CohortTransaction(transID,server.getID(),deadline,masterServerID);
+                CohortTransaction ct = new CohortTransaction(transID, server.getID(), deadline, masterServerID);
 
                 //Might be no read pages, this is for safety
-                if(!components[4].isEmpty()) {
+                if (!components[4].isEmpty()) {
                     List<Integer> readPageNums = ct.getReadPageNums();
+
                     for (String readPageStr : readPagesStr)
                         readPageNums.add(Integer.parseInt(readPageStr));
                 }
 
-                if( components.length == 6 ) {
+                //If it contains write pages
+                if (components.length == 6) {
                     String[] writePagesStr = components[5].split(",");
                     List<Integer> writePageNums = ct.getWritePageNums();
 
@@ -252,8 +255,8 @@ public class TransactionManager {
                 break;
             }
             case "L": {
-
-                if(Log.isLoggingEnabled()) log.log(transID, "Received message that a lock was acquired: " + msg);
+                if (Log.isLoggingEnabled())
+                    log.log(transID, "Received message that a lock was acquired: " + msg);
 
                 int pageNum = Integer.parseInt(components[2]);
                 int serverID = Integer.parseInt(components[3]);
@@ -261,11 +264,12 @@ public class TransactionManager {
                 activeTransactions.stream().filter(t -> t.getID() == transID).forEachOrdered(t -> {
                     t.lockAcquired(pageNum, serverID);
                 });
+
                 break;
             }
             case "CT": {
-
-                if(Log.isLoggingEnabled()) log.log(transID, "Received message to commit: " + msg);
+                if (Log.isLoggingEnabled())
+                    log.log(transID, "Received message to commit: " + msg);
 
                 Transaction t = getActiveTransaction(transID);
 
@@ -274,11 +278,13 @@ public class TransactionManager {
                 break;
             }
             case "RTC": {
+                if (Log.isLoggingEnabled())
+                    log.log(transID, "Received ready to commit message: " + msg);
 
-                if(Log.isLoggingEnabled()) log.log(transID, "Received ready to commit message: " + msg);
+                if (hasBeenAborted(transID)) {
+                    if (Log.isLoggingEnabled())
+                        log.log(transID, "Have already aborted though.");
 
-                if( hasBeenAborted(transID)){
-                    if(Log.isLoggingEnabled()) log.log(transID, "Have already aborted though.");
                     break;
                 }
 
@@ -293,8 +299,8 @@ public class TransactionManager {
             case "WC": {
                 int serverID = Integer.parseInt(components[2]);
                 int pageNum = Integer.parseInt(components[3]);
-                if(Log.isLoggingEnabled()) log.log(transID, "Write job completed on page: " + pageNum + " at server: " + serverID);
-
+                if (Log.isLoggingEnabled())
+                    log.log(transID, "Write job completed on page: " + pageNum + " at server: " + serverID);
 
                 activeTransactions.stream().filter(t -> t.getID() == transID).forEachOrdered(t -> {
                     t.writeCompleted(pageNum);
@@ -305,14 +311,15 @@ public class TransactionManager {
                 break;
             }
             case "CC": {
+                if (Log.isLoggingEnabled())
+                    log.log(transID, "Cohort completed: " + msg);
 
-                if(Log.isLoggingEnabled()) log.log(transID, "Cohort completed: " + msg);
                 int serverID = Integer.parseInt(components[2]);
 
                 Transaction t = getTransaction(transID);
 
                 t.cohortCompleted(serverID);
-                if( !t.isCompleted() )
+                if (!t.isCompleted())
                     tryToComplete(transID);
 
                 break;
@@ -323,196 +330,199 @@ public class TransactionManager {
         }
     }
 
-
-
-
-
     /*
      * Used when the LM on this server has acquired a lock
      */
-
     public void lockAcquired(int transID, int pageNum) {
-        if( !hasBeenAborted(transID))
-            lockAcquired(getActiveTransaction(transID),pageNum,server.getID());
+        if (!hasBeenAborted(transID))
+            lockAcquired(getActiveTransaction(transID), pageNum, server.getID());
     }
 
     public void lockAcquired(Transaction t, int pageNum) {
-        lockAcquired(t,pageNum,server.getID());
+        lockAcquired(t, pageNum, server.getID());
     }
 
     public void lockAcquired(Transaction t, int pageNum, int serverID) {
-        if(Log.isLoggingEnabled()) log.log(t,"lockAcquired pageNum = [" + pageNum + "], server = " + serverID);
+        if (Log.isLoggingEnabled())
+            log.log(t, "lockAcquired pageNum = [" + pageNum + "], server = " + serverID);
 
         //If the lock has been acquired on this server, start reading the page from memory
-        if( serverID == server.getID() )
-            server.getDisk().addJob(new DiskJob(t.getID(),t.getDeadline(),pageNum, (pNum)->{
+        if (serverID == server.getID())
+            server.getDisk().addJob(new DiskJob(t.getID(), t.getDeadline(), pageNum, (pNum) -> {
 
-                if(Log.isLoggingEnabled()) log.log(t,"Read job completed for page " + pageNum);
+                if (Log.isLoggingEnabled())
+                    log.log(t, "Read job completed for page " + pageNum);
 
                 //When the read is completed, start processing the page
-                server.getCPU().addJob(new ProcessorJob(t.getID(),t.getDeadline(),pageNum, (pNum2)->{
+                server.getCPU().addJob(new ProcessorJob(t.getID(), t.getDeadline(), pageNum, (pNum2) -> {
 
-                    if(Log.isLoggingEnabled()) log.log(t,"Process job completed for page " + pageNum);
+                    if (Log.isLoggingEnabled())
+                        log.log(t, "Process job completed for page " + pageNum);
 
                     t.pageProcessed(pageNum);
                     tryToCommit(t);
                 }));
             }));
 
-        t.lockAcquired(pageNum,serverID);
+        t.lockAcquired(pageNum, serverID);
     }
 
     public void lockAcquired(int transID, int pageNum, int serverID) {
-        if(Log.isLoggingEnabled()) log.log(transID,"Lock acquired for page " + pageNum + " on server " + serverID );
+        if (Log.isLoggingEnabled())
+            log.log(transID, "Lock acquired for page " + pageNum + " on server " + serverID);
 
-        if( !hasBeenAborted(transID)){
-
+        if (!hasBeenAborted(transID)) {
             Transaction t = getActiveTransaction(transID);
             t.lockAcquired(pageNum, serverID);
             tryToCommit(t);
         }
     }
 
-
-
-
-
-
-
     private boolean hasBeenAborted(int transID) {
-        for(Transaction t : abortedTransactions)
-            if( t.getID() == transID )
+        for (Transaction t : abortedTransactions)
+            if (t.getID() == transID)
                 return true;
 
         return false;
     }
 
-
     /**
      * This method is called to attempt to commit the transaction
      * It will not commit if not all cohorts are ready to commit or not locks have been acquired on all write pages or not all processing has been done
+     *
      * @param t
      */
-    public void tryToCommit(Transaction t){
+    public void tryToCommit(Transaction t) {
+        if (t.isReadyToCommit()) {
+            if (t instanceof CohortTransaction) {
+                if (Log.isLoggingEnabled())
+                    log.log(t, "Informing master I am ready to commit");
 
-        if( t.isReadyToCommit() ){
+                server.getNIC().sendMessage(new Message(((CohortTransaction) t).getMasterServerID(), ServerProcess.TransactionManager, "RTC:" + t.getID() + COLON + server.getID(), t.getDeadline()));
+            } else {
+                if (Log.isLoggingEnabled())
+                    log.log(t, "Ready to commit, telling cohorts to commit");
 
-            if( t instanceof CohortTransaction ){
-                if(Log.isLoggingEnabled()) log.log(t, "Informing master I am ready to commit");
-                server.getNIC().sendMessage(new Message(((CohortTransaction)t).getMasterServerID(), ServerProcess.TransactionManager, "RTC:" + t.getID()+ COLON +server.getID(), t.getDeadline()));
-            }
-            else {
-                if(Log.isLoggingEnabled()) log.log(t, "Ready to commit, telling cohorts to commit");
                 //Tell all cohorts to commit
                 t.getCohortServerIDS().forEach(serverID -> {
-                    if(Log.isLoggingEnabled()) log.log(t, "Sending message to cohort on server " + serverID + " to commit");
+                    if (Log.isLoggingEnabled())
+                        log.log(t, "Sending message to cohort on server " + serverID + " to commit");
+
                     server.getNIC().sendMessage(new Message(serverID, ServerProcess.TransactionManager, "CT:" + t.getID(), t.getDeadline()));
                 });
 
+                if (Log.isLoggingEnabled())
+                    log.log(t, "Committed");
 
-                if(Log.isLoggingEnabled()) log.log(t, "Committed");
                 t.setCommitted(true);
 
-                if( t.getAllWritePageNums().isEmpty() ){
-                    if(Log.isLoggingEnabled()) log.log(t, "No write jobs to complete");
+                if (t.getAllWritePageNums().isEmpty()) {
+                    if (Log.isLoggingEnabled())
+                        log.log(t, "No write jobs to complete");
+
                     complete(t);
-                }
-                else
+                } else
                     t.getWritePageNums().forEach(pageNum -> {
-                        if(Log.isLoggingEnabled()) log.log(t, "Starting write job for page " + pageNum);
+                        if (Log.isLoggingEnabled())
+                            log.log(t, "Starting write job for page " + pageNum);
+
                         server.getDisk().addJob(new DiskJob(t.getID(), t.getDeadline(), pageNum, pNum -> {
-                            if(Log.isLoggingEnabled()) log.log(t, "Write job completed for page " + pageNum);
+                            if (Log.isLoggingEnabled())
+                                log.log(t, "Write job completed for page " + pageNum);
+
                             t.writeCompleted(pNum);
 
                             if (t.allWriteJobsCompleted()) {
-                                if(Log.isLoggingEnabled()) log.log(t, "All write jobs completed");
+                                if (Log.isLoggingEnabled())
+                                    log.log(t, "All write jobs completed");
+
                                 complete(t);
-                            }
-                            else{
+                            } else {
                                 List<Integer> notCompletedWriteJobs = t.getNotCompletedWriteJobs();
-                                if(Log.isLoggingEnabled()) log.log(t, "Not all write jobs completed yet though, still missing: " + notCompletedWriteJobs);
+                                if (Log.isLoggingEnabled())
+                                    log.log(t, "Not all write jobs completed yet though, still missing: " + notCompletedWriteJobs);
                             }
                         }));
 
                         //Do write jobs on the other servers with this page
                         Map<Integer, List<Integer>> writePageNumsToServersWithPage = t.getWritePageNumsToServersWithPage();
                         writePageNumsToServersWithPage.get(pageNum).forEach(remoteServID -> {
-                            if( remoteServID != server.getID() ){
-                                server.getNIC().sendMessage(new Message(remoteServID,ServerProcess.Disk,"W:"+t.getID()+COLON+pageNum+COLON+server.getID(),t.getDeadline()));
+                            if (remoteServID != server.getID()) {
+                                server.getNIC().sendMessage(new Message(remoteServID, ServerProcess.Disk, "W:" + t.getID() + COLON + pageNum + COLON + server.getID(), t.getDeadline()));
                             }
                         });
                     });
-
             }
-        }
-        else{
-            if(Log.isLoggingEnabled()) log.log(t, "Tried to commit, not ready yet");
+        } else {
+            if (Log.isLoggingEnabled())
+                log.log(t, "Tried to commit, not ready yet");
         }
     }
 
     /**
      * This is called from a network message, therefor will only be called on cohort transactions
+     *
      * @param t
      */
     private void commit(CohortTransaction t) {
-        if(Log.isLoggingEnabled()) log.log("Committing cohort transaction- " + t);
+        if (Log.isLoggingEnabled())
+            log.log("Committing cohort transaction- " + t);
+
         t.setCommitted(true);
 
-        if(t.getWritePageNums().isEmpty()){
+        if (t.getWritePageNums().isEmpty()) {
             complete(t);
 
-            server.getNIC().sendMessage(new Message(t.getMasterServerID(),ServerProcess.TransactionManager,"CC:"+t.getID()+ COLON +server.getID(),t.getDeadline()));
-        }
-        else
+            server.getNIC().sendMessage(new Message(t.getMasterServerID(), ServerProcess.TransactionManager, "CC:" + t.getID() + COLON + server.getID(), t.getDeadline()));
+        } else
             t.getWritePageNums().forEach(pageNum -> {
-                server.getDisk().addJob(new DiskJob(t.getID(),t.getDeadline(),pageNum,pNum -> {
-                    if(Log.isLoggingEnabled()) log.log(t,"Write job completed for page " + pageNum);
+                server.getDisk().addJob(new DiskJob(t.getID(), t.getDeadline(), pageNum, pNum -> {
+                    if (Log.isLoggingEnabled())
+                        log.log(t, "Write job completed for page " + pageNum);
+
                     t.writeCompleted(pNum);
-                    server.getNIC().sendMessage(new Message(t.getMasterServerID(),ServerProcess.TransactionManager,"WC:"+t.getID()+ COLON +server.getID()+ COLON +pNum,t.getDeadline()));
+                    server.getNIC().sendMessage(new Message(t.getMasterServerID(), ServerProcess.TransactionManager, "WC:" + t.getID() + COLON + server.getID() + COLON + pNum, t.getDeadline()));
 
-
-                    if( t.allWriteJobsCompleted() ){
-
-                        if(Log.isLoggingEnabled()) log.log(t,"All write jobs completed");
+                    if (t.allWriteJobsCompleted()) {
+                        if (Log.isLoggingEnabled())
+                            log.log(t, "All write jobs completed");
 
                         complete(t);
 
-                        server.getNIC().sendMessage(new Message(t.getMasterServerID(),ServerProcess.TransactionManager,"CC:"+t.getID()+ COLON +server.getID(),t.getDeadline()));
+                        server.getNIC().sendMessage(new Message(t.getMasterServerID(), ServerProcess.TransactionManager, "CC:" + t.getID() + COLON + server.getID(), t.getDeadline()));
                     }
                 }));
             });
-
-
     }
 
-
     private void tryToComplete(int transID) {
-
         Transaction t = getActiveTransaction(transID);
         if (t.allWriteJobsCompleted()) {
-            if(Log.isLoggingEnabled()) log.log(t, "All write jobs completed");
+            if (Log.isLoggingEnabled())
+                log.log(t, "All write jobs completed");
+
             complete(t);
         }
     }
 
-
     private void complete(Transaction t) {
-
-        if(Log.isLoggingEnabled()) log.log(t,"Releasing locks!");
+        if (Log.isLoggingEnabled())
+            log.log(t, "Releasing locks!");
 
         LockManager lm = server.getLM();
-        t.getReadPageNums().forEach(pageNum -> lm.releaseLocks(t.getID(),pageNum,t.getDeadline()));
-        t.getWritePageNums().forEach(pageNum -> lm.releaseLocks(t.getID(),pageNum,t.getDeadline()));
-
+        t.getReadPageNums().forEach(pageNum -> lm.releaseLocks(t.getID(), pageNum, t.getDeadline()));
+        t.getWritePageNums().forEach(pageNum -> lm.releaseLocks(t.getID(), pageNum, t.getDeadline()));
 
         int time = simParams.getTime();
         boolean completedOnTime = t.getDeadline() >= time;
 
-        if(Log.isLoggingEnabled()) log.log(t,(t instanceof CohortTransaction ? "Cohort " : "") +"Transaction completed " + (completedOnTime ? "on time! :D": "late! :("));
+        if (Log.isLoggingEnabled())
+            log.log(t, (t instanceof CohortTransaction ? "Cohort " : "") + "Transaction completed " + (completedOnTime ? "on time! :)" : "late! :("));
+
         t.setCompleted(true);
         t.setCompletedTime(time);
 
-        if(!(t instanceof CohortTransaction)) {
+        if (!(t instanceof CohortTransaction)) {
             if (completedOnTime)
                 simParams.stats.addCompletedOnTime(t.getID());
             else
@@ -521,56 +531,45 @@ public class TransactionManager {
 
         completedTransactions.add(t);
         activeTransactions.remove(t);
-        eventQueue.accept(new Event(timeProvider.get()+1, serverID, this::checkToStartTrans));
-
+        eventQueue.accept(new Event(timeProvider.get() + 1, serverID, this::checkToStartTrans));
 
         // Integrity Check!
         lm.getWaitingLocks().values().forEach(locksLists -> {
             locksLists.forEach(lock -> {
-                if( lock.getTransID() == t.getID())
-                    throw new WTFException(serverID +": Transaction "+t.getID()+" just completed but it has waiting locks still! (Page "+lock.getPageNum()+")");
+                if (lock.getTransID() == t.getID())
+                    throw new WTFException(serverID + ": Transaction " + t.getID() + " just completed but it has waiting locks still! (Page " + lock.getPageNum() + ")");
             });
         });
 
         lm.getHeldLocks().values().forEach(locksLists -> {
             locksLists.forEach(lock -> {
-                if( lock.getTransID() == t.getID() )
-                    throw new WTFException(serverID +": Transaction "+t.getID()+" just completed but it has held locks still! (Page "+lock.getPageNum()+")");
+                if (lock.getTransID() == t.getID())
+                    throw new WTFException(serverID + ": Transaction " + t.getID() + " just completed but it has held locks still! (Page " + lock.getPageNum() + ")");
             });
         });
-
     }
 
-
-
-
-
-
-
     private void spawnChildren(Transaction t) {
-        if(Log.isLoggingEnabled()) log.log(t,"SpawnChildren for " + t);
+        if (Log.isLoggingEnabled())
+            log.log(t, "SpawnChildren for " + t);
 
         //Creates a map of servers to a list of pages that are on them.
-        Map<Integer,List<Integer>> serversToPages = new HashMap<>();
+        Map<Integer, List<Integer>> serversToPages = new HashMap<>();
         //List<Integer> servers
-
 
 
         //First look at the read pages
         t.getAllReadPageNums().forEach(pageNum -> {
-
             List<Integer> servsWithPage = simParams.getServersWithPage(pageNum);
 
             //If the page is on this server we will deal with it here, don't create a child for this.
-            if( servsWithPage.contains(server.getID()))
+            if (servsWithPage.contains(server.getID()))
                 return;
 
+            int serverID = servsWithPage.get((int) (simParams.rand.get() * servsWithPage.size()));
 
-
-            int serverID = servsWithPage.get((int)(simParams.rand.get()*servsWithPage.size()));
-
-            if(!serversToPages.containsKey(serverID))
-                serversToPages.put(serverID,new ArrayList<>());
+            if (!serversToPages.containsKey(serverID))
+                serversToPages.put(serverID, new ArrayList<>());
             serversToPages.get(serverID).add(pageNum);
         });
 
@@ -579,62 +578,55 @@ public class TransactionManager {
             List<Integer> servsWithPage = simParams.getServersWithPage(pageNum);
 
             //If the page is on this server we will deal with it here, don't create a child for this.
-            if( servsWithPage.contains(server.getID()))
+            if (servsWithPage.contains(server.getID()))
                 return;
 
-            int serverID = servsWithPage.get((int)(simParams.rand.get()*servsWithPage.size()));
+            int serverID = servsWithPage.get((int) (simParams.rand.get() * servsWithPage.size()));
 
-            if(!serversToPages.containsKey(serverID))
-                serversToPages.put(serverID,new ArrayList<>());
+            if (!serversToPages.containsKey(serverID))
+                serversToPages.put(serverID, new ArrayList<>());
             serversToPages.get(serverID).add(pageNum);
         });
 
 
         //This is to prevent children from being send to 0 and 4 since they have the same pages
-        if( serversToPages.containsKey(0) && serversToPages.containsKey(4) ){
-            if( simParams.rand.get() < 0.5 ){
+        if (serversToPages.containsKey(0) && serversToPages.containsKey(4)) {
+            if (simParams.rand.get() < 0.5) {
                 serversToPages.get(0).addAll(serversToPages.remove(4));
-            }
-            else{
+            } else {
                 serversToPages.get(4).addAll(serversToPages.remove(0));
             }
         }
 
         //This is to prevent children from being send to 1 and 5 since they have the same pages
-        if( serversToPages.containsKey(1) && serversToPages.containsKey(5) ){
-            if( simParams.rand.get() < 0.5 ){
+        if (serversToPages.containsKey(1) && serversToPages.containsKey(5)) {
+            if (simParams.rand.get() < 0.5) {
                 serversToPages.get(1).addAll(serversToPages.remove(5));
-            }
-            else{
+            } else {
                 serversToPages.get(5).addAll(serversToPages.remove(1));
             }
         }
 
         //This is to prevent children from being send to 2 and 6 since they have the same pages
-        if( serversToPages.containsKey(2) && serversToPages.containsKey(6) ){
-            if( simParams.rand.get() < 0.5 ){
+        if (serversToPages.containsKey(2) && serversToPages.containsKey(6)) {
+            if (simParams.rand.get() < 0.5) {
                 serversToPages.get(2).addAll(serversToPages.remove(6));
-            }
-            else{
+            } else {
                 serversToPages.get(6).addAll(serversToPages.remove(2));
             }
         }
 
         //This is to prevent children from being send to 3 and 7 since they have the same pages
-        if( serversToPages.containsKey(3) && serversToPages.containsKey(7) ){
-            if( simParams.rand.get() < 0.5 ){
+        if (serversToPages.containsKey(3) && serversToPages.containsKey(7)) {
+            if (simParams.rand.get() < 0.5) {
                 serversToPages.get(3).addAll(serversToPages.remove(7));
-            }
-            else{
+            } else {
                 serversToPages.get(7).addAll(serversToPages.remove(3));
             }
         }
 
-
-
         //Loop through all the servers that we will be creating children on
         serversToPages.keySet().forEach(serverID -> {
-
             t.addCohort(serverID);
 
             List<Integer> pagesOnThisServer = serversToPages.get(serverID);
@@ -642,9 +634,9 @@ public class TransactionManager {
             List<Integer> writePagesOnThisServer = new ArrayList<>();
 
             pagesOnThisServer.forEach(pageNum -> {
-                if(t.getAllReadPageNums().contains(pageNum))
+                if (t.getAllReadPageNums().contains(pageNum))
                     readPagesOnThisServer.add(pageNum);
-                else if(t.getAllWritePageNums().contains(pageNum))
+                else if (t.getAllWritePageNums().contains(pageNum))
                     writePagesOnThisServer.add(pageNum);
             });
 
@@ -652,82 +644,80 @@ public class TransactionManager {
             t.getReadPageNums().removeAll(readPagesOnThisServer);
             t.getWritePageNums().removeAll(writePagesOnThisServer);
 
+            Message msg = generateCreateChildMessage(server.getID(), serverID, t.getID(), t.getDeadline(), readPagesOnThisServer, writePagesOnThisServer);
 
-            Message msg = generateCreateChildMessage(server.getID(), serverID,t.getID(), t.getDeadline(), readPagesOnThisServer, writePagesOnThisServer);
-
-            if(Log.isLoggingEnabled()) log.log(t,"GenerateChildMessage (serverID = [" + serverID + "], transID = [" + t.getID() + "], deadline = [" + t.getDeadline() + "], readPagesOnThisServer = [" + readPagesOnThisServer + "], writePagesOnThisServer = [" + writePagesOnThisServer + "]");
+            if (Log.isLoggingEnabled())
+                log.log(t, "GenerateChildMessage (serverID = [" + serverID + "], transID = [" + t.getID() + "], deadline = [" + t.getDeadline() + "], readPagesOnThisServer = [" + readPagesOnThisServer + "], writePagesOnThisServer = [" + writePagesOnThisServer + "]");
 
             server.getNIC().sendMessage(msg);
         });
 
-
-        if(Log.isLoggingEnabled()) log.log(t,"Master trans left with pages: readPages = [" + t.getReadPageNums() + "], writePages = [" + t.getWritePageNums() + "]");
-
+        if (Log.isLoggingEnabled())
+            log.log(t, "Master trans left with pages: readPages = [" + t.getReadPageNums() + "], writePages = [" + t.getWritePageNums() + "]");
 
         t.prepareToStart();
     }
 
-    private static Message generateCreateChildMessage(int thisServerID, int serverID, int transID, int deadline, List<Integer> readPagesOnThisServer, List<Integer> writePagesOnThisServer ){
+    private static Message generateCreateChildMessage(int thisServerID, int serverID, int transID, int deadline, List<Integer> readPagesOnThisServer, List<Integer> writePagesOnThisServer) {
         StringBuilder sb = new StringBuilder();
 
         // C:<TransNum>:<deadline>:1,5,25,4:77,45,3,5
         sb.append("C:").append(transID).append(':').append(deadline).append(':').append(thisServerID).append(':');
 
-        if(!readPagesOnThisServer.isEmpty()) {
+        if (!readPagesOnThisServer.isEmpty()) {
             readPagesOnThisServer.forEach(pageNum -> sb.append(pageNum).append(','));
             sb.deleteCharAt(sb.length() - 1);
         }
 
         sb.append(':');
 
-        if(!writePagesOnThisServer.isEmpty()) {
+        if (!writePagesOnThisServer.isEmpty()) {
             writePagesOnThisServer.forEach(pageNum -> sb.append(pageNum).append(','));
             sb.deleteCharAt(sb.length() - 1);
         }
-        return new Message(serverID, ServerProcess.TransactionManager,sb.toString(), deadline);
+        return new Message(serverID, ServerProcess.TransactionManager, sb.toString(), deadline);
     }
 
-
-
-
-    public void start(){
+    public void start() {
         TG.start();
     }
 
-
     public Transaction getTransaction(int transID) {
-        for(Transaction t: activeTransactions)
-            if( t.getID() == transID )
+        /*for (Transaction t : activeTransactions)
+            if (t.getID() == transID)
                 return t;
 
-        for(Transaction t: queuedTransactions)
-            if( t.getID() == transID )
+        for (Transaction t : queuedTransactions)
+            if (t.getID() == transID)
                 return t;
 
-        for(Transaction t: completedTransactions)
-            if( t.getID() == transID )
+        for (Transaction t : completedTransactions)
+            if (t.getID() == transID)
                 return t;
 
-        for(Transaction t: abortedTransactions)
-            if( t.getID() == transID )
+        for (Transaction t : abortedTransactions)
+            if (t.getID() == transID)
+                return t;*/
+
+        for (Transaction t : allTransactions)
+            if (t.getID() == transID)
                 return t;
 
-
-        throw new WTFException(server.getID()+":Could not find transaction " + transID);
+        throw new WTFException(server.getID() + ":Could not find transaction " + transID);
     }
 
     private Transaction getActiveTransaction(int transID) {
-        for(Transaction t: activeTransactions)
-            if( t.getID() == transID )
+        for (Transaction t : activeTransactions)
+            if (t.getID() == transID)
                 return t;
 
-        throw new WTFException(server.getID()+": Could not find transaction " + transID);
+        throw new WTFException(server.getID() + ": Could not find transaction " + transID);
     }
 
     @Nullable
     private Transaction getAbortedTransaction(int transID) {
-        for(Transaction t: abortedTransactions)
-            if( t.getID() == transID )
+        for (Transaction t : abortedTransactions)
+            if (t.getID() == transID)
                 return t;
 
         return null;
@@ -735,14 +725,14 @@ public class TransactionManager {
 
 
     private Transaction getCompletedTransaction(int transID) {
-        for(Transaction t: completedTransactions)
-            if( t.getID() == transID )
+        for (Transaction t : completedTransactions)
+            if (t.getID() == transID)
                 return t;
 
         return null;
     }
 
-
+    /* For debugging purposes
 
     public static void main(String[] args) {
         List<Integer> readPages = Arrays.asList(1, 2, 3, 4);
@@ -753,10 +743,11 @@ public class TransactionManager {
 
         String[] split = msg.getContents().split(COLON);
 
-        for(String s : split ){
+        for (String s : split) {
             System.out.println(s);
         }
     }
+    */
 
     public int getNumberActiveTrans() {
         return activeTransactions.size();
@@ -766,10 +757,9 @@ public class TransactionManager {
         return activeTransactions;
     }
 
-
     public boolean isOnThisServer(int transID) {
-        for(Transaction t: activeTransactions)
-            if( t.getID() == transID )
+        for (Transaction t : activeTransactions)
+            if (t.getID() == transID)
                 return true;
 
         return false;

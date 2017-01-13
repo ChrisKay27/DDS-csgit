@@ -5,6 +5,7 @@ import simulator.protocols.deadlockDetection.Deadlock;
 import simulator.server.Server;
 import simulator.server.network.Message;
 import simulator.server.transactionManager.TransInfo;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,19 +24,15 @@ public class RandomDeadlockResolution implements DeadlockResolutionProtocol {
      */
     @Override
     public void resolveDeadlocks(Deadlock deadlock) {
-        List<TransInfo> transAtThisServer = new ArrayList<>();
+        List<TransInfo> transactionsInDeadlock = deadlock.getTransactionsInvolved();
+        TransInfo firstTrans = transactionsInDeadlock.get(0);
 
-        for(TransInfo ti : deadlock.getTransactionsInvolved() )
-            if( ti.serverID == server.getID() )
-                transAtThisServer.add(ti);
-
-        if( transAtThisServer.isEmpty() )
+        if (firstTrans.serverID != server.getID())
             return;
 
-        TransInfo tInfo = transAtThisServer.get((int) (simParams.rand.get()*transAtThisServer.size()));
         deadlock.setResolutionTime(simParams.getTime());
-        simParams.getDeadlockResolutionListener().accept(deadlock,tInfo.transID);
-        server.getTM().abort(tInfo.getID());
+        simParams.getDeadlockResolutionListener().accept(deadlock, firstTrans.transID);
+        server.getTM().abort(firstTrans.getID());
     }
 
     @Override

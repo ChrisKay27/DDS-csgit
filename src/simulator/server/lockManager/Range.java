@@ -12,9 +12,7 @@ public class Range {
         return value >= min && value <= max;
     }
 
-    public int getMin() {
-        return min;
-    }
+    public int getMin() { return min; }
 
     public int getMax() {
         return max;

@@ -22,7 +22,6 @@ public class TransactionGenerator {
     private final int serverID;
     private final Consumer<Event> eventQueue;
 
-
     public void start() {
         generateTransaction();
     }
@@ -33,14 +32,17 @@ public class TransactionGenerator {
 
         int nextTransArriveTime = timeProvider.get() + getPoisson(simParams.arrivalRateMean);
 
+        int numReadPages = (int) ((8 * rand.get() + 2) * (1 - simParams.getUpdateRate()));
+        int numWritePages = (int) ((8 * rand.get() + 2) * simParams.getUpdateRate());
 
-        int numReadPages = (int) (rand.get() * 4) + 1;
-        int numWritePages = (int) (rand.get() * 5);
+        // Write pages have to be read AND written to disk. So they have 2*disk read write time
+        // Read pages have to be only read from disk then processed.
+        // The coefficient of 4 is arbitrary. It is there to give the transaction time to send messages, acquire locks, etc.
+        int execTime = (numReadPages * 4 * (SimParams.processTime + SimParams.diskReadWriteTime)) + (numWritePages * 4 * (SimParams.processTime + (2 * SimParams.diskReadWriteTime)));
 
-        int execTime = (numReadPages * 200) + (numWritePages * 300);
+        // MANI: CHANGE!!!
         int slackTime = 1;
         int deadline = timeProvider.get() + execTime * slackTime;
-
 
         Transaction t = new Transaction(IDProvider.get(), server.getID(), deadline);
 
@@ -51,27 +53,26 @@ public class TransactionGenerator {
             if (!readPageNums.contains(pageNum)) {
                 allReadPageNums.add(pageNum);
                 readPageNums.add(pageNum);
-            }
-            else{
+            } else {
                 i--;
             }
         }
 
         List<Integer> allWritePageNums = t.getAllWritePageNums();
         List<Integer> writePageNums = t.getWritePageNums();
+
         for (int i = 0; i < numWritePages; i++) {
             int pageNum = pageNumProvider.get();
             if (!readPageNums.contains(pageNum) && !writePageNums.contains(pageNum)) {
                 allWritePageNums.add(pageNum);
                 writePageNums.add(pageNum);
-            }
-            else{
+            } else {
                 i--;
             }
         }
 
-        t.setWorkload(allReadPageNums.size()+allWritePageNums.size());
-        t.setExecutionTime((numReadPages * 200) + (numWritePages * 300));
+        t.setWorkload(allReadPageNums.size() + allWritePageNums.size());
+        t.setExecutionTime(execTime);
 
         transConsumer.accept(t);
 
@@ -93,7 +94,6 @@ public class TransactionGenerator {
         this.transConsumer = transactionConsumer;
 
         remainingTransactions = simParams.getNumTransPerServer();
-
 
         serverID = server.getID();
     }

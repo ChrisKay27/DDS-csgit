@@ -23,18 +23,19 @@ public class PriorityDeadlockresolution implements DeadlockResolutionProtocol {
     @Override
     public void resolveDeadlocks(Deadlock deadlock) {
         int lowestPriority = Integer.MAX_VALUE;
+        List<TransInfo> transactionsInDeadlock = deadlock.getTransactionsInvolved();
 
         TransInfo lowest = null;
-        for(TransInfo ti : deadlock.getTransactionsInvolved() )
-            if( ti.getPriority() < lowestPriority ) {
+        for(TransInfo ti : transactionsInDeadlock )
+            if( ti.getPriority(transactionsInDeadlock, simParams.getPp()) < lowestPriority ) {
                 lowest = ti;
-                lowestPriority = lowest.getPriority();
+                lowestPriority = lowest.getPriority(transactionsInDeadlock, simParams.getPp());
             }
 
         List<TransInfo> transAtThisServer = new ArrayList<>();
 
-        for(TransInfo ti : deadlock.getTransactionsInvolved() )
-            if( ti.getPriority()== lowestPriority && ti.serverID == server.getID())
+        for(TransInfo ti : transactionsInDeadlock )
+            if( ti.getPriority(transactionsInDeadlock, simParams.getPp())== lowestPriority && ti.serverID == server.getID())
                 transAtThisServer.add(ti);
 
         if( transAtThisServer.isEmpty() )

@@ -16,8 +16,6 @@ package simulator.protocols.deadlockDetection.WFG.assertion;
  * limitations under the License.
  */
 
-
-
 public class Preconditions {
 
 	/**

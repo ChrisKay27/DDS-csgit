@@ -2,6 +2,7 @@ package simulator.protocols.priority;
 
 import exceptions.WTFException;
 import simulator.server.lockManager.Lock;
+import simulator.server.transactionManager.TransInfo;
 import simulator.server.transactionManager.Transaction;
 
 import java.util.List;
@@ -9,8 +10,8 @@ import java.util.List;
 public interface PriorityProtocol {
 
     Transaction getHighestPriorityTrans(List<Transaction> transactions);
+    int getTransPriority(List<TransInfo> transactions, int transID);
     Lock getHighestPriorityLock(List<Lock> locks);
-
 
     static PriorityProtocol getPp(String pp) {
         switch(pp){

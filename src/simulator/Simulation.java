@@ -6,6 +6,7 @@ import simulator.server.Server;
 import simulator.server.lockManager.Lock;
 import simulator.server.lockManager.Range;
 import stats.Statistics;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -29,9 +30,9 @@ public class Simulation {
 
 
         //Create simParam object to give to each server, which is given to every component in the simulation
-        simParams = new SimParams(eventQueue::addEvent,rand::nextDouble,eventQueue::getTime,this::getNextTransID,
+        simParams = new SimParams(eventQueue::addEvent, rand::nextDouble, eventQueue::getTime, this::getNextTransID,
                 this::getRandPageNum, simSetupParams.getMaxActiveTrans(), simSetupParams.getArrivalRate(), simSetupParams.getLog(),
-                simSetupParams.getStats(), eventQueue::incurOverhead, simSetupParams.getAgentsHistoryLength(),simSetupParams.getUpdateRate());
+                simSetupParams.getStats(), eventQueue::incurOverhead, simSetupParams.getAgentsHistoryLength(), simSetupParams.getUpdateRate());
 
         simParams.DDP = simSetupParams.getDDP();
         simParams.DRP = simSetupParams.getDRP();
@@ -43,28 +44,28 @@ public class Simulation {
 
         //Calculate which servers get what pages.
 
-        int numPagesPerServer = simSetupParams.getNumPages() /(simSetupParams.getNumServers() /2);
+        int numPagesPerServer = simSetupParams.getNumPages() / (simSetupParams.getNumServers() / 2);
         int minPage = 0;
         int maxPage = numPagesPerServer;
 
         for (int i = 0; i < simSetupParams.getNumServers(); i++) {
             simSetupParams.getLog().accept("Creating server " + i + " with page range: " + minPage + " to " + maxPage);
-            Server s = new Server(simParams, i, new Range(minPage, maxPage-1));
+            Server s = new Server(simParams, i, new Range(minPage, maxPage - 1));
             servers.add(s);
 
-            simParams.serverToPageRange.put(i, new Range(minPage, maxPage-1));
+            simParams.serverToPageRange.put(i, new Range(minPage, maxPage - 1));
 
             minPage += numPagesPerServer;
             maxPage += numPagesPerServer;
 
-            if(minPage == simSetupParams.getNumPages()){
+            if (minPage == simSetupParams.getNumPages()) {
                 minPage = 0;
                 maxPage = numPagesPerServer;
             }
 
             // Set the deadlock detection protocol's 'Graph Listener'. It is used to display the WFGs in the GUI.
             final int serverID = i;
-            s.getDDP().setGraphListener((wfGraph, time)-> {
+            s.getDDP().setGraphListener((wfGraph, time) -> {
                 wfGraph.setServerID(serverID);
                 simSetupParams.getWfGraphConsumer().accept(wfGraph, time);
 //                    eventQueue.stop();
@@ -72,11 +73,11 @@ public class Simulation {
         }
     }
 
-    private int getNextTransID(){
+    private int getNextTransID() {
         return nextTransID++;
     }
 
-    private int getRandPageNum(){
+    private int getRandPageNum() {
         return (int) (rand.nextDouble() * numPages);
     }
 
@@ -97,16 +98,14 @@ public class Simulation {
         servers.forEach(server -> {
             //Check for still active transactions
             int activeTrans = server.getTM().getNumberActiveTrans();
-            if( activeTrans != 0 ){
+            if (activeTrans != 0) {
                 System.out.println("Server " + server.getID() + " has " + activeTrans + " active transactions still. They are: " + server.getTM().getActiveTransactions());
             }
 
             //Check to make sure all transactions have been created
             int remainingTrans = server.getTM().getTG().getRemainingTransactions();
-            if( remainingTrans != -1 )
+            if (remainingTrans != -1)
                 System.out.println("Server " + server.getID() + " has " + remainingTrans + " remaining transactions.");
-
-
 
             //Check to see if locks are still being held
             Map<Integer, List<Lock>> heldLocks = server.getLM().getHeldLocks();
@@ -117,14 +116,12 @@ public class Simulation {
                 numberOfLocksHeld += heldLocks.get(i).size();
 
 
-            if( numberOfLocksHeld != 0 ) {
+            if (numberOfLocksHeld != 0) {
                 System.out.println("Server " + server.getID() + " has " + numberOfLocksHeld + " held locks!");
                 for (int i = pageRange.getMin(); i < pageRange.getMax(); i++)
-                    System.out.println("\tPage: "+i +"\t"+heldLocks.get(i));
+                    System.out.println("\tPage: " + i + "\t" + heldLocks.get(i));
             }
         });
-
-
 
         Statistics stats = simParams.stats;
 

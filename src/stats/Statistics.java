@@ -9,17 +9,15 @@ public class Statistics {
     private int completedOnTime, completedLate;
     private int numAborted;
 
-
     private List<Integer> completedOnTimeTrans = new ArrayList<>();
     private List<Integer> completedLateTrans = new ArrayList<>();
 
-
-    public void addCompletedOnTime(int id){
+    public void addCompletedOnTime(int id) {
         completedOnTime++;
         completedOnTimeTrans.add(id);
     }
 
-    public void addCompletedLate(int id){
+    public void addCompletedLate(int id) {
         completedLate++;
         completedLateTrans.add(id);
     }
@@ -28,7 +26,7 @@ public class Statistics {
         return completedOnTime;
     }
 
-    public void addTimeout(){
+    public void addTimeout() {
         timeouts++;
     }
 

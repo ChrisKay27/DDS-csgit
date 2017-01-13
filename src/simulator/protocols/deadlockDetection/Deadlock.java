@@ -5,8 +5,7 @@ import simulator.server.transactionManager.TransInfo;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Deadlock{
-
+public class Deadlock {
     private static int nextDeadlockID;
 
     private final int deadlockID = getNextDeadlockID();
@@ -16,14 +15,12 @@ public class Deadlock{
     private final boolean globallyDetected;
     private int resolutionTime;
 
-
     public Deadlock(List<TransInfo> transactionsInvolved, int serverID, int detectionTime, boolean globallyDetected) {
         this.serverID = serverID;
         this.detectionTime = detectionTime;
         this.globallyDetected = globallyDetected;
         this.transactionsInvolved.addAll(transactionsInvolved);
     }
-
 
     public int getDeadlockID() {
         return deadlockID;
@@ -35,13 +32,12 @@ public class Deadlock{
 
     @Override
     public boolean equals(Object obj) {
-        if( obj == this ) return true;
-        if(!(obj instanceof Deadlock)) return false;
+        if (obj == this) return true;
+        if (!(obj instanceof Deadlock)) return false;
         Deadlock d = (Deadlock) obj;
 
         return d.deadlockID == deadlockID && transactionsInvolved.equals(d.transactionsInvolved);
     }
-
 
     private static int getNextDeadlockID() {
         return nextDeadlockID++;
@@ -70,22 +66,20 @@ public class Deadlock{
     @Override
     public String toString() {
         return "Deadlock{" +
-                "deadlockID=" + deadlockID +
-                ", serverID=" + serverID +
-                ", detectionTime=" + detectionTime +
+                "deadlockID= " + deadlockID +
+                ", serverID= " + serverID +
+                ", detectionTime= " + detectionTime +
                 '}';
     }
-
 
     public String toLongString() {
         return "Deadlock{" +
-                "deadlockID=" + deadlockID +
-                ", transactionsInvolved=" + transactionsInvolved +
-                ", serverID=" + serverID +
-                ", detectionTime=" + detectionTime +
-                ", resolutionTime=" + resolutionTime +
-                ", globallyDetected=" + globallyDetected +
+                "deadlockID= " + deadlockID +
+                ", transactionsInvolved= " + transactionsInvolved +
+                ", serverID= " + serverID +
+                ", detectionTime= " + detectionTime +
+                ", resolutionTime= " + resolutionTime +
+                ", globallyDetected= " + globallyDetected +
                 '}';
     }
-
 }

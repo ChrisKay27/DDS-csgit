@@ -35,7 +35,6 @@ public class Log {
         log.accept(timeProvider.get() + serverProcess + transID + ": " + message.replace(":", "-"));
     }
 
-
     public static boolean isLoggingEnabled() {
         return LOGGING_ENABLED;
     }

@@ -33,7 +33,6 @@ public class Server {
     private final DeadlockResolutionProtocol DRP;
 
     /**
-     *
      * @param simParams Used to pass parameters and provide utilities to the components
      * @param serverID
      * @param pageRange The range of pages on this server
@@ -45,17 +44,16 @@ public class Server {
         log = new Log(ServerProcess.Server, serverID, simParams.timeProvider, simParams.log);
 
         TM = new TransactionManager(this, simParams);
-        disk = new Disk(serverID, simParams,pageRange);
+        disk = new Disk(serverID, simParams, pageRange);
         CPU = new Processor(serverID, simParams);
         NIC = new NetworkInterface(this, simParams);
-        LM = new LockManager(this,simParams,pageRange);
+        LM = new LockManager(this, simParams, pageRange);
 
         DRP = DeadlockResolutionProtocol.get(this, simParams.DRP);
         DDP = DeadlockDetectionProtocol.get(this, simParams.DDP, simParams.getDeadlockListener());
 
         simParams.add(this);
     }
-
 
     public void start() {
         TM.start();
@@ -69,7 +67,6 @@ public class Server {
         LM.acquireLocks(t);
     }
 
-
     public void abort(Transaction t) {
         LM.abort(t);
         int transNum = t.getID();
@@ -78,12 +75,11 @@ public class Server {
 //        NIC.abort(transNum);
     }
 
-
     /**
      * Receives messages from the network and delegates it to the correct component
      */
     public void receiveMessage(Message msg) {
-        switch(msg.getProcess()){
+        switch (msg.getProcess()) {
             case TransactionManager:
                 TM.receiveMessage(msg);
                 break;
@@ -100,19 +96,14 @@ public class Server {
                 DRP.receiveMessage(msg);
                 break;
             default:
-                throw new WTFException(serverID+": Did not find correct process for this message! : " + msg);
+                throw new WTFException(serverID + ": Did not find correct process for this message! : " + msg);
         }
     }
-
-
 
 
     /*
         Getters and Setters
     */
-
-
-
     public int getID() {
         return serverID;
     }
@@ -137,16 +128,16 @@ public class Server {
         return LM;
     }
 
+    public NetworkInterface getNIC() {
+        return NIC;
+    }
+
     public void incurOverhead(int overhead) {
-        simParams.incurOverhead(serverID,overhead);
+        simParams.incurOverhead(serverID, overhead);
     }
 
     public DeadlockResolutionProtocol getDRP() {
         return DRP;
-    }
-
-    public NetworkInterface getNIC() {
-        return NIC;
     }
 
     public DeadlockDetectionProtocol getDDP() {

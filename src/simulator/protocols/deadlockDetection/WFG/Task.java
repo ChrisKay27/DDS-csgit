@@ -14,8 +14,6 @@ package simulator.protocols.deadlockDetection.WFG; /**
  * limitations under the License.
  */
 
-
-
 import simulator.protocols.deadlockDetection.WFG.assertion.Preconditions;
 
 import java.util.Collections;

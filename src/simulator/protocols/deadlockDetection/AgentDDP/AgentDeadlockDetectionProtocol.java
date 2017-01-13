@@ -3,11 +3,9 @@ package simulator.protocols.deadlockDetection.AgentDDP;
 import java.util.*;
 import java.util.function.Consumer;
 
-import exceptions.WTFException;
 import simulator.SimParams;
 import simulator.enums.ServerProcess;
 import simulator.eventQueue.Event;
-
 import simulator.protocols.deadlockDetection.Deadlock;
 import simulator.protocols.deadlockDetection.WFG.Graph;
 import simulator.protocols.deadlockDetection.WFG.GraphBuilder;
@@ -15,7 +13,6 @@ import simulator.protocols.deadlockDetection.WFG.Task;
 import simulator.protocols.deadlockDetection.WFG.WFGNode;
 import simulator.protocols.deadlockDetection.WFG_DDP;
 import simulator.server.Server;
-import simulator.server.transactionManager.TransInfo;
 import ui.Log;
 
 /**
@@ -23,9 +20,8 @@ import ui.Log;
  */
 public class AgentDeadlockDetectionProtocol extends WFG_DDP {
 
-    protected final Log log ;
-    protected List<Integer> allServers = Arrays.asList(0,1,2,3,4,5,6,7);
-
+    protected final Log log;
+    protected List<Integer> allServers = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7);
 
     private List<List<WFGNode>> deadlocks = new LinkedList<>();
     private final List<Integer> receivedFromServers = new ArrayList<>();
@@ -33,29 +29,23 @@ public class AgentDeadlockDetectionProtocol extends WFG_DDP {
     private final LocalAgent localAgent;
     private GlobalAgent globalAgent;
 
-
     public AgentDeadlockDetectionProtocol(Server server, SimParams simParams, Consumer<List<Deadlock>> resolver, Consumer<Integer> overheadIncurer, Consumer<Deadlock> deadlockListener) {
         super(server, simParams, resolver, overheadIncurer, deadlockListener);
         simParams.usesWFG = true;
-        log = new Log(ServerProcess.DDP,server.getID(),simParams.timeProvider, simParams.log);
-
+        log = new Log(ServerProcess.DDP, server.getID(), simParams.timeProvider, simParams.log);
 
         localAgent = new LocalAgent(this, server);
-
         globalAgent = new GlobalAgent(this, server);
     }
 
     @Override
     public void start() {
-        eventQueue.accept(new Event(simParams.getTime()+simParams.getDeadlockDetectInterval(),serverID,this::startDetectionIteration));
+        eventQueue.accept(new Event(simParams.getTime() + simParams.getDeadlockDetectInterval(), serverID, this::startDetectionIteration));
     }
-
-
 
 //    public void received(int n) {
 //        receivedFromServers.add(n);
-//        if (receivedFromServers.containsAll(allServers)) {
-//
+//        if (receivedFromServers.containsAll(allServers)) {//
 //            if(wfg.getNodesInvolved().contains(serverID))
 //                searchGraph();
 //
@@ -63,14 +53,11 @@ public class AgentDeadlockDetectionProtocol extends WFG_DDP {
 //        }
 //    }
 
-
     protected void searchGraph(Graph<WFGNode> build) {
         localAgent.searchGraph(build);
     }
 
-
     protected void calculateAndIncurOverhead(Graph<WFGNode> WFG) {
-
         //calc overhead
         int overhead = 0;
         for (Task<WFGNode> rt : WFG.getTasks()) {
@@ -81,7 +68,9 @@ public class AgentDeadlockDetectionProtocol extends WFG_DDP {
             overhead += rt.getWaitsForTasks().size();
         }
 
-        if(Log.isLoggingEnabled()) log.log("Incurring overhead- " + overhead);
+        if (Log.isLoggingEnabled())
+            log.log("Incurring overhead- " + overhead);
+
         overheadIncurer.accept(overhead);
     }
 
@@ -89,32 +78,14 @@ public class AgentDeadlockDetectionProtocol extends WFG_DDP {
      * This is called when a WFG is received
      */
     public void updateWFGraph(Graph<WFGNode> graph, int server) {
-        if(Log.isLoggingEnabled()) log.log("Updating graph (created at "+graph.getCreationTime()+") with waits from server " + server);
+        if (Log.isLoggingEnabled())
+            log.log("Updating graph (created at " + graph.getCreationTime() + ") with waits from server " + server);
 
         globalAgent.updateWFGraph(graph, server);
         wfgBuilder = new GraphBuilder<>();
     }
 
-
-
-
-    /////////   TESTING   //////////
-
-    public static void main(String[] args) {
-        System.out.println("Testing Example Case");
-        boolean passed = testExampleCase();
-
-        System.out.println("\nTesting Second Case");
-        passed &= testSecondCase();
-
-        System.out.println("\nTesting Third Case");
-        passed &= testThirdCase();
-
-        System.out.println("\nTests Passed? " +  passed);
-    }
-
-    private static void findDeadlocks(List<? extends WFGNode> trans, List<AgentDeadlockDetectionProtocol> addps, Graph<WFGNode> WFG){
-//
+    private static void findDeadlocks(List<? extends WFGNode> trans, List<AgentDeadlockDetectionProtocol> addps, Graph<WFGNode> WFG) {
 //        for (int j = 0; j < addps.size(); j++) {
 //            AgentDeadlockDetectionProtocol addp = addps.get(j);
 //
@@ -132,13 +103,30 @@ public class AgentDeadlockDetectionProtocol extends WFG_DDP {
 //        }
     }
 
+
+    /* For debugging purposes
+
+    public static void main(String[] args) {
+        System.out.println("Testing Example Case");
+        boolean passed = testExampleCase();
+
+        System.out.println("\nTesting Second Case");
+        passed &= testSecondCase();
+
+        System.out.println("\nTesting Third Case");
+        passed &= testThirdCase();
+
+        System.out.println("\nTests Passed? " + passed);
+    }
+    */
+
     /**
      * Agent 0 should detect
      * t1 -> t2 -> t1
      * Agent 2 should detect
      * t3 -> t4 -> t5 -> t3
      */
-    private static boolean testExampleCase() {
+//    private static boolean testExampleCase() {
 //        WFGraph<WFGNode> WFG = new WFGraph<>();
 //
 //        WFG_Node t1 = new WFG_Node(1);
@@ -175,7 +163,7 @@ public class AgentDeadlockDetectionProtocol extends WFG_DDP {
 //
 //        printResults(addps);
 
-        boolean passed = true;
+//        boolean passed = true;
 
 //
 //
@@ -188,14 +176,14 @@ public class AgentDeadlockDetectionProtocol extends WFG_DDP {
 //            passed = false;
 
 
-        return passed;
-    }
+//        return passed;
+//    }
 
     /**
      * Deadlock should be detected by the first agent
      * t1 -> t2 -> t5 -> t3 -> t4 -> t7 -> t1
      */
-    public static boolean testSecondCase(){
+//    public static boolean testSecondCase() {
 //        WFGraph<WFGNode> WFG = new WFGraph<>();
 //
 //
@@ -220,7 +208,7 @@ public class AgentDeadlockDetectionProtocol extends WFG_DDP {
 //
 //
 
-        boolean passed = true;
+//        boolean passed = true;
 
 //
 //        String deadlock1 = printDeadlocks(addps.get(1).deadlocks.get(0));
@@ -228,20 +216,19 @@ public class AgentDeadlockDetectionProtocol extends WFG_DDP {
 //            passed = false;
 //
 
-        return passed;
-    }
+//        return passed;
+//    }
 
     /**
      * This Deadlock should be detected by agent 1
      * t1 -> t2 -> t5 -> t3 -> t4 -> t7 -> t1
      * t1 -> t2 -> t5 -> t3 -> t8 -> t4 -> t7 -> t1
-     *
+     * <p>
      * This Deadlock should be detected by agent 3
      * t3 -> t4 -> t3
      * t3 -> t8 -> t4 -> t3
-     *
      */
-    public static boolean testThirdCase(){
+//    public static boolean testThirdCase() {
 //        Graph<WFGNode> WFG = new Graph<>();
 //
 //        List<WFGNode> trans = getWFGNodes(9);
@@ -269,7 +256,7 @@ public class AgentDeadlockDetectionProtocol extends WFG_DDP {
 //        printResults(addps);
 //
 
-        boolean passed = true;
+//        boolean passed = true;
 //
 //        String deadlock1 = printDeadlocks(addps.get(1).deadlocks.get(0));
 //        if( !deadlock1.equals("t1 -> t2 -> t5 -> t3 -> t4 -> t7 -> t1"))
@@ -288,28 +275,24 @@ public class AgentDeadlockDetectionProtocol extends WFG_DDP {
 //            passed = false;
 
 
-        return passed;
-    }
-
-
-
+//        return passed;
+//    }
     private static void printResults(List<AgentDeadlockDetectionProtocol> addps) {
         for (int j = 0; j < addps.size(); j++) {
             AgentDeadlockDetectionProtocol addp = addps.get(j);
 
             final int J = j;
             addp.deadlocks.forEach(deadlock -> {
-                System.out.print("addp"+J+".deadlocks = " );
+                System.out.print("addp" + J + ".deadlocks = ");
                 System.out.println("[" + printDeadlocks(deadlock) + "], ");
             });
         }
     }
 
-
-    public static String printDeadlocks(List<WFGNode> deadlocks){
+    public static String printDeadlocks(List<WFGNode> deadlocks) {
         StringBuilder sb = new StringBuilder();
 
-        for (WFGNode wfgNode : deadlocks ){
+        for (WFGNode wfgNode : deadlocks) {
             sb.append('t').append(wfgNode.getID()).append(" -> ");
         }
         sb.append('t').append(deadlocks.get(0).getID());
@@ -317,26 +300,30 @@ public class AgentDeadlockDetectionProtocol extends WFG_DDP {
         return sb.toString();
     }
 
-
-    private static List<WFGNode> getWFGNodes(int numberOfNodes){
+    private static List<WFGNode> getWFGNodes(int numberOfNodes) {
         List<WFGNode> addps = new ArrayList<>();
         for (int i = 0; i < numberOfNodes; i++)
             addps.add(new WFG_Node(i));
         return addps;
     }
 
-    private static List<AgentDeadlockDetectionProtocol> getADDPS(int numberOfAgents){
+    private static List<AgentDeadlockDetectionProtocol> getADDPS(int numberOfAgents) {
         List<AgentDeadlockDetectionProtocol> addps = new ArrayList<>();
         for (int i = 0; i < numberOfAgents; i++)
-            addps.add(new AgentDeadlockDetectionProtocol(null,null,l->{},overhead->{}, deadlock -> {}));
+            addps.add(new AgentDeadlockDetectionProtocol(null, null, l -> {
+            }, overhead -> {
+            }, deadlock -> {
+            }));
         return addps;
     }
 
-    public static class WFG_Node implements WFGNode{
-        public WFG_Node(int id){
+    public static class WFG_Node implements WFGNode {
+        public WFG_Node(int id) {
             this.id = id;
         }
+
         int id;
+
         @Override
         public int getID() {
             return id;
@@ -348,12 +335,11 @@ public class AgentDeadlockDetectionProtocol extends WFG_DDP {
         }
 
         public int compareTo(WFGNode o) {
-            if( id < o.getID() )
+            if (id < o.getID())
                 return 1;
-            else if( id > o.getID() )
+            else if (id > o.getID())
                 return -1;
             return 0;
         }
     }
-
 }

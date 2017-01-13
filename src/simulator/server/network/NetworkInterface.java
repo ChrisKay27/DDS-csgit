@@ -21,7 +21,6 @@ public class NetworkInterface {
     private final int serverID;
     private final SimParams simParams;
 
-
     public NetworkInterface(Server server, SimParams simParams) {
         this.server = server;
         serverID = server.getID();
@@ -43,6 +42,8 @@ public class NetworkInterface {
             simParams.eventQueue.accept(new Event(simParams.getTime() + 1, serverID, () -> receiveMessage(message), message.isReoccuring()));
         } else
             route(message).sendMessage(message);
+
+        simParams.messageOverhead += message.getSize();
     }
 
     private NetworkConnection route(Message message) {
@@ -69,12 +70,13 @@ public class NetworkInterface {
 //    }
 
     public void receiveMessage(Message msg) {
-
         //If the message arrived here but must be forwarded to another node
         if (msg.getDestServerID() != server.getID()) {
             sendMessage(msg);
         } else {
-            if (Log.isLoggingEnabled()) log.log("Message Arrives- " + msg);
+            if (Log.isLoggingEnabled())
+                log.log("Message Arrives- " + msg);
+
             server.receiveMessage(msg);
         }
     }

@@ -2,11 +2,10 @@ package simulator.server.disk;
 
 import simulator.eventQueue.Event;
 
-import java.nio.channels.AsynchronousServerSocketChannel;
 import java.util.function.Consumer;
 
-public class DiskJob implements Comparable<DiskJob>{
-    private final int transID , deadline, pageNum;
+public class DiskJob implements Comparable<DiskJob> {
+    private final int transID, deadline, pageNum;
 
     private Event activeEvent;
     private Consumer<Integer> completedListener;
@@ -40,9 +39,9 @@ public class DiskJob implements Comparable<DiskJob>{
 
     @Override
     public int compareTo(DiskJob o) {
-        if( deadline < o.deadline )
+        if (deadline < o.deadline)
             return -1;
-        else if( deadline > o.deadline )
+        else if (deadline > o.deadline)
             return 1;
         else
             return 0;

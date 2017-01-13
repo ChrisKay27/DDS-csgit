@@ -2,11 +2,11 @@ LOGGING:False
 SEED:65
 Topology:HyperCube
 NumPages:400
-ArrivalRate:300,350
+ArrivalRate:350
 DDP:AgentDeadlockDetectionProtocol
-DRP:PriorityDeadlockresolution
+DRP:AgentDeadlockResolutionProtocol
 PP:EarliestDeadlineFirst
 DetectionInterval:2000
 MaxActiveTransactions:30
 AgentsHistoryLength:3
-UpdateRate:0.25
+UpdateRate:0.30

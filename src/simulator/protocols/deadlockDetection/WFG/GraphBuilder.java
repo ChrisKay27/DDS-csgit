@@ -241,7 +241,6 @@ public class GraphBuilder<T> {
 	}
 
 	public int size() {
-
 		return taskMap.size();
 	}
 }

@@ -33,7 +33,6 @@ public class Main {
             // handle the error
         }
 
-
         // This is the simulation number associated with ALL the variations in the parameter file. It is used to compare results of an experiment*
         // *an experiment is a combination of parameters
         long simNumber = System.currentTimeMillis();
@@ -55,7 +54,7 @@ public class Main {
         String agentsHistoryLengthStr = "";
         String updateRateStr = "";
 
-        try( BufferedReader br = new BufferedReader(new FileReader(paramFile))){
+        try (BufferedReader br = new BufferedReader(new FileReader(paramFile))) {
 
             Log.setLoggingEnabled(Boolean.parseBoolean(br.readLine().split(":")[1]));
             SEEDs = br.readLine().split(":")[1];
@@ -64,9 +63,9 @@ public class Main {
             arrivalRateStr = br.readLine().split(":")[1];
             DDPs = br.readLine().split(":")[1];
             DRPs = br.readLine().split(":")[1];
-            PPs  = br.readLine().split(":")[1];
-            DetectIntervals  = br.readLine().split(":")[1];
-            maxActiveTransStr  = br.readLine().split(":")[1];
+            PPs = br.readLine().split(":")[1];
+            DetectIntervals = br.readLine().split(":")[1];
+            maxActiveTransStr = br.readLine().split(":")[1];
             agentsHistoryLengthStr = br.readLine().split(":")[1];
             updateRateStr = br.readLine().split(":")[1];
 
@@ -85,7 +84,7 @@ public class Main {
 
         //These nested loops are to loop through all the different parameter combinations
 
-        for(String SEEDStr : SEEDs.split(",")) {
+        for (String SEEDStr : SEEDs.split(",")) {
             long SEED = Long.parseLong(SEEDStr);
 
             for (String topStr : topologyStr.split(",")) {
@@ -103,19 +102,19 @@ public class Main {
 
                                 for (String PP : PPs.split(",")) {
 
-                                    for(String detectIntervalStr : DetectIntervals.split(",") ) {
+                                    for (String detectIntervalStr : DetectIntervals.split(",")) {
                                         int detectInterval = Integer.parseInt(detectIntervalStr);
 
-                                        for(String maxActiveTransStr_ : maxActiveTransStr.split(",") ) {
+                                        for (String maxActiveTransStr_ : maxActiveTransStr.split(",")) {
                                             int maxActiveTrans = Integer.parseInt(maxActiveTransStr_);
 
-                                            for(String agentsHistoryLengthStr_ : agentsHistoryLengthStr.split(",") ) {
+                                            for (String agentsHistoryLengthStr_ : agentsHistoryLengthStr.split(",")) {
                                                 int agentsHistoryLength = Integer.parseInt(agentsHistoryLengthStr_);
 
-                                                for(String updateRateStr_ : updateRateStr.split(",") ) {
+                                                for (String updateRateStr_ : updateRateStr.split(",")) {
                                                     double updateRate = Double.parseDouble(updateRateStr_);
 
-                                                    if(updateRate > 1 || updateRate < 0)
+                                                    if (updateRate > 1 || updateRate < 0)
                                                         throw new WTFException("update rate has to be between 0 and 1, it was " + updateRate);
 
                                                     Runnable r = () -> {
@@ -149,11 +148,16 @@ public class Main {
                                                             deadlockResListener = dPanel::deadLockResolved;
                                                         } else {
                                                             getSleepTime = () -> 0L;
-                                                            updateTime = time -> {};
-                                                            log = logMsg -> {};
-                                                            wfGraphConsumer = (wfgNodeWFGraph, i) -> {};
-                                                            deadlockConsumer = deadlock -> {};
-                                                            deadlockResListener = (deadlock, f) -> {};
+                                                            updateTime = time -> {
+                                                            };
+                                                            log = logMsg -> {
+                                                            };
+                                                            wfGraphConsumer = (wfgNodeWFGraph, i) -> {
+                                                            };
+                                                            deadlockConsumer = deadlock -> {
+                                                            };
+                                                            deadlockResListener = (deadlock, f) -> {
+                                                            };
                                                         }
 
                                                         //Setup params object
@@ -192,28 +196,25 @@ public class Main {
                                                             System.out.println("ERROR: Completed + Late + Aborted != Total Num of Transactions!");
                                                         System.out.println("Timeouts: " + stats.getTimeouts());
 
-                                                        simsRanSoFar++;
-                                                        if (simsRanSoFar == numberOfSims) {
-//                                                      System.exit(0);
-                                                        }
+                                                        //simsRanSoFar++;
+                                                        //if (simsRanSoFar == numberOfSims) {
+                                                            //System.exit(0);
+                                                        //}
                                                     };
 
                                                     //Run this simulation in a new thread
                                                     new Thread(r).start();
                                                 }
                                             }
-
                                         }
                                     }
                                 }
-
                             }
                         }
                     }
                 }
             }
         }
-
     }
 
     private static void openSimExperimentNumberWindow(long simNumber) {
@@ -221,7 +222,7 @@ public class Main {
 
         frame.setContentPane(new JTextField("Experiment Number is " + simNumber));
         frame.pack();
-        frame.setSize(400,100);
+        frame.setSize(400, 100);
 
         frame.setVisible(true);
         frame.setLocationRelativeTo(null);

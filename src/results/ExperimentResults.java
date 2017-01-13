@@ -38,21 +38,17 @@ public class ExperimentResults {
         return expNum;
     }
 
-
     public double getPCOT() {
         return PCOT;
     }
-
 
     public String getDDP() {
         return DDP;
     }
 
-
     public String getDRP() {
         return DRP;
     }
-
 
     public String getTopology() {
         return topology;
@@ -86,9 +82,5 @@ public class ExperimentResults {
         return messageOverheadIncurred;
     }
 
-    public double getUpdateRate() {
-        return updateRate;
-    }
-
-
+    public double getUpdateRate() { return updateRate; }
 }

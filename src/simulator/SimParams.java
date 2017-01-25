@@ -26,10 +26,10 @@ public class SimParams {
     public final Statistics stats;
     public final List<Server> allServers = new ArrayList<>();
 
-    public static final int diskReadWriteTime = 30;
+    public static final int diskReadWriteTime = 35;
     public static final int processTime = 15;
     public static int Bandwidth = 10000;
-    public static int latency = 10;
+    public static int latency = 5;
     public final int arrivalRateMean;
     public final int maxActiveTrans;
     private int numTransPerServer = 500;
@@ -43,6 +43,9 @@ public class SimParams {
 
     public final int numberOfServers = 8;
     public int messageOverhead = 0;
+
+    public static final int transactionTimeoutMean = 5000;
+
 
     public final Map<Integer, Range> serverToPageRange = new HashMap<>();
     public final Consumer<Event> eventQueue;

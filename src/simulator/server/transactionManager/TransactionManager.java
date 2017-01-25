@@ -105,8 +105,8 @@ public class TransactionManager {
         //Set up a timeout event, only for master transactions
         if (!(t instanceof CohortTransaction))
 
-            //In 50000 ticks the timeout will occur
-            eventQueue.accept(new Event(simParams.getTime() + 50000, serverID, () -> {
+            //In certain ticks the timeout will occur
+            eventQueue.accept(new Event(simParams.getTime() + simParams.transactionTimeoutMean, serverID, () -> {
 
                 //timeout will only occur if the trans hasn't committed, completed, or aborted
                 if (!t.isCommitted() && !t.isCompleted() && !t.isAborted()) {

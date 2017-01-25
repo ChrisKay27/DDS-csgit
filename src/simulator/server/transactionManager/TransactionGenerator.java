@@ -41,8 +41,9 @@ public class TransactionGenerator {
         int execTime = (numReadPages * 4 * (SimParams.processTime + SimParams.diskReadWriteTime)) + (numWritePages * 4 * (SimParams.processTime + (2 * SimParams.diskReadWriteTime)));
 
         // MANI: CHANGE!!!
-        int slackTime = 1;
-        int deadline = timeProvider.get() + execTime * slackTime;
+        int SLACKTIME_COEFF = 1;
+        int slackTime = execTime * SLACKTIME_COEFF;
+        int deadline = timeProvider.get() + execTime + slackTime;
 
         Transaction t = new Transaction(IDProvider.get(), server.getID(), deadline);
 

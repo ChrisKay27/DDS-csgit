@@ -110,7 +110,6 @@ public class WFG_DDP extends DeadlockDetectionProtocol {
                 message.setSize(size);
                 message.setReoccuring(true);
                 NIC.sendMessage(message);
-
                 //simParams.messageOverhead += size;
             }
         }
@@ -152,7 +151,7 @@ public class WFG_DDP extends DeadlockDetectionProtocol {
                     if (t.getCompletedTime() < simParams.getTime() - 200)
                         throw new WTFException(serverID + ": This waiting lock " + waitingLock + " doesn't belong to an active transaction!");
                     else {
-                        System.out.println(simParams.getTime() + " - Adding lock of " + t + " that has recently completed at " + t.getCompletedTime());
+                        //System.out.println(simParams.getTime() + " - Adding lock of " + t + " that has recently completed at " + t.getCompletedTime());
                     }
                 }
 
@@ -167,7 +166,7 @@ public class WFG_DDP extends DeadlockDetectionProtocol {
                         if (t.getCompletedTime() < simParams.getTime() - 200)
                             throw new WTFException(serverID + ": This held lock " + heldLock + " doesn't belong to an active transaction!");
                         else {
-                            System.out.println(simParams.getTime() + " - Adding lock of " + t + " that has recently completed at " + t.getCompletedTime());
+                            //System.out.println(simParams.getTime() + " - Adding lock of " + t + " that has recently completed at " + t.getCompletedTime());
                         }
                     }
 

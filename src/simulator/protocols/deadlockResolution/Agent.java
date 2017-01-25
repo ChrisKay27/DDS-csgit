@@ -19,8 +19,6 @@ import java.util.stream.Collectors;
  * Created by Mani
  */
 public class Agent {
-    private static final String deadlockResolutionReceiveDropability = "deadlockResolutionReceiveDropability";
-
     // MANI: Change!
     private static final long WORKLOAD_COEFF = 5;
     private static final long PRIORITY_COEFF = 10;
@@ -63,17 +61,20 @@ public class Agent {
 
         dropability = (EXTRATIME_COEFF * extraTime) / ((PRIORITY_COEFF * priority) + (WORKLOAD_COEFF * workload));
 
-        System.out.println("*******************************");
-        System.out.print("AgentInfo: " + agentID + "; dropability = " + dropability);
-        System.out.print("; extraTime = " + extraTime);
-        System.out.print("; deadline = " + trans.getDeadline());
-        System.out.print("; workload = " + workload);
-        System.out.println("; priority = " + priority);
-        System.out.println("*******************************");
-
-        if (simParams.getTime() + trans.getExecutionTime() > trans.getDeadline()) {
-            System.out.println("####### HELP AGENT " + myTrans.getID() + "##########");
+        if (simParams.getTime() + trans.getExecutionTime()> trans.getDeadline()) {
+            //System.out.println("####### HELP AGENT " + myTrans.getID() + " ##########");
+            dropability = Integer.MAX_VALUE;
         }
+
+//        System.out.println("*******************************");
+//        System.out.print("AgentInfo: " + agentID + "; dropability = " + dropability);
+//        System.out.print("; extraTime = " + extraTime);
+//        System.out.print("; execution time = " + trans.getExecutionTime());
+//        System.out.print("; deadline = " + trans.getDeadline());
+//        System.out.print("; workload = " + workload);
+//        System.out.println("; priority = " + priority);
+//        System.out.println("*******************************");
+
         transactionsInDeadlock.forEach(ti -> {
             //If the transaction isn't that agent's transaction
             if (ti.transID != agentID) {
@@ -101,12 +102,12 @@ public class Agent {
             if (maxDropability < this.dropability) {
 
                 // If there is not enough time to restart, abort the transaction and do not restart it
-                if (simParams.getTime() + myTrans.executionTime > myTrans.deadline) {
-                    if (server.getTM().isOnThisServer(agentID)) {
-                        System.out.println("####### HELP AGENT " + myTrans.getID() + "##########");
-//                        if(Log.isLoggingEnabled()) log.log(agentID, "Agents determined that " + agentID + ",  should be dropped.");
-                    }
-                }
+//                if (simParams.getTime() + myTrans.executionTime > myTrans.deadline) {
+//                    if (server.getTM().isOnThisServer(agentID)) {
+//                        System.out.println("####### HELP AGENT (message) " + myTrans.getID() + "##########");
+////                        if(Log.isLoggingEnabled()) log.log(agentID, "Agents determined that " + agentID + ",  should be dropped.");
+//                    }
+//                }
                 if (Log.isLoggingEnabled())
                     log.log(agentID, deadlockID + ": Agents determined that " + agentID + "  should be dropped.");
 
@@ -120,6 +121,15 @@ public class Agent {
                 if (count(agentsToDropabilities.values(), this.dropability) > 1) {
                     List<TransInfo> dropables = agentsToDropabilities.keySet().stream().filter(
                             agent -> agentsToDropabilities.get(agent) == this.dropability).collect(Collectors.toList());
+
+                    // If current agent has the passed deadline then drop its transaction
+                    if (maxDropability == Integer.MAX_VALUE){
+                        deadlock.setResolutionTime(simParams.getTime());
+                        simParams.getDeadlockResolutionListener().accept(deadlock, agentID);
+                        server.getTM().abort(agentID);
+
+                        return;
+                    }
 
                     List<Integer> priorities = new ArrayList<>();
                     for (TransInfo dropable : dropables)

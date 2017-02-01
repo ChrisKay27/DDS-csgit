@@ -28,7 +28,7 @@ public class SimParams {
 
     public static final int diskReadWriteTime = 35;
     public static final int processTime = 15;
-    public static int Bandwidth = 10000;
+    public static int Bandwidth = 1000;
     public static int latency = 5;
     public final int arrivalRateMean;
     public final int maxActiveTrans;

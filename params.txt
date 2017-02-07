@@ -4,7 +4,7 @@ Topology:HyperCube
 NumPages:1000
 ArrivalRate:300
 DDP:AgentDeadlockDetectionProtocol
-DRP:AgentDeadlockResolutionProtocol
+DRP:FirstDeadlockResolution
 PP:EarliestDeadlineFirst
 DetectionInterval:100
 MaxActiveTransactions:30

@@ -8,6 +8,7 @@ import simulator.protocols.deadlockDetection.AgentDDP.AgentDeadlockDetectionProt
 import simulator.protocols.deadlockDetection.ChandyMisraHaas.ChandyMisraHaasDDP;
 import simulator.protocols.deadlockDetection.WFG.Graph;
 import simulator.protocols.deadlockDetection.WFG.WFGNode;
+import simulator.protocols.deadlockDetection.mobileAgentEnabledApproach.MAEDD;
 import simulator.server.Server;
 import simulator.server.network.Message;
 import ui.Log;
@@ -111,6 +112,8 @@ public class DeadlockDetectionProtocol {
                 return new TimeoutDeadlockDetection(server, server.getSimParams(), server.getDRP()::resolveMultiple, server::incurOverhead);
             case "ChandyMisraHaasDDP":
                 return new ChandyMisraHaasDDP(server, server.getSimParams(), server.getDRP()::resolveMultiple, server::incurOverhead, deadlockListener);
+            case "MAEDD":
+                return new MAEDD(server, server.getSimParams(), server.getDRP()::resolveMultiple, server::incurOverhead, deadlockListener);
         }
         throw new WTFException("Deadlock Detection Protocol has not been registered! add it here in the WFG_DDP class!");
     }

@@ -9,12 +9,12 @@ import simulator.server.transactionManager.TransInfo;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RandomDeadlockResolution implements DeadlockResolutionProtocol {
+public class FirstDeadlockResolution implements DeadlockResolutionProtocol {
 
     private final Server server;
     private final SimParams simParams;
 
-    public RandomDeadlockResolution(Server server) {
+    public FirstDeadlockResolution(Server server) {
         this.server = server;
         this.simParams = server.getSimParams();
     }

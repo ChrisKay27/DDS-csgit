@@ -165,7 +165,6 @@ public class GlobalAgent {
         addp.getResolver().accept(deadlocksList);
     }
 
-
     private void followCycle(WFGNode lookingFor, List<Task<WFGNode>> edges, List<WFGNode> path) {
         if (edges.isEmpty())
             return;

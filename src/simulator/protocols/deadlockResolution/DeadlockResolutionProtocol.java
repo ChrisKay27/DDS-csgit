@@ -14,7 +14,7 @@ public interface DeadlockResolutionProtocol {
     static DeadlockResolutionProtocol get(Server server, String drp) {
         switch (drp){
             case "AgentDeadlockResolutionProtocol": return new AgentDeadlockResolutionProtocol(server);
-            case "RandomDeadlockResolution": return new RandomDeadlockResolution(server);
+            case "FirstDeadlockResolution": return new FirstDeadlockResolution(server);
             case "PriorityDeadlockresolution": return new PriorityDeadlockresolution(server);
         }
 

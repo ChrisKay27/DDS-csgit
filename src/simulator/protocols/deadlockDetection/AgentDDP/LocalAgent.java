@@ -38,7 +38,7 @@ public class LocalAgent {
 
         List<Integer> serversInvolved = addp.allServers;
 
-        int thisNodesIndex = serversInvolved.indexOf(server.getID());
+        //int thisNodesIndex = serversInvolved.indexOf(server.getID());
 
         List<Task<WFGNode>> allTransactions = new ArrayList<>(build.getTasks());
         List<TransInfo> transThisAgentCaresAbout = new ArrayList<>();

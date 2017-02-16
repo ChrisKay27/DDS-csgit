@@ -13,6 +13,8 @@ import simulator.protocols.deadlockDetection.WFG.Task;
 import simulator.protocols.deadlockDetection.WFG.WFGNode;
 import simulator.protocols.deadlockDetection.WFG_DDP;
 import simulator.server.Server;
+import simulator.server.network.Message;
+import simulator.server.network.NetworkInterface;
 import ui.Log;
 
 /**
@@ -83,6 +85,43 @@ public class AgentDeadlockDetectionProtocol extends WFG_DDP {
 
         globalAgent.updateWFGraph(graph, server);
         wfgBuilder = new GraphBuilder<>();
+    }
+
+    @Override
+    public void sendLocalWFGToGlobals() {
+
+        //Create the local WFG
+        Graph<WFGNode> localWFG = createLocalGraphOfWaits();
+
+        //clear the wfgBuilder now that we have the local WFG
+        wfgBuilder = new GraphBuilder<>();
+
+        NetworkInterface NIC = server.getNIC();
+
+        //Calculate the amount of overhead to incur
+        int size = localWFG.getNumberOfWaits();
+        if (size == 0)
+            size = 1;
+
+        //Send our graph to the detector nodes
+        for (int i = 0; i < simParams.globalDetectors; i++) {
+            if (i != serverID) {
+                Message message = new Message(i, ServerProcess.DDP, serverID + "", localWFG, simParams.getTime());
+                message.setSize(size);
+                message.setReoccuring(true);
+                NIC.sendMessage(message);
+                //simParams.messageOverhead += size;
+            }
+        }
+
+        boolean isAGlobalDetector = serverID < simParams.globalDetectors;
+        if (!isAGlobalDetector) {
+            //If this isn't a global detector it posts an event to check for deadlocks in the future and clears its WFGBuilder
+            eventQueue.accept(new Event(simParams.getTime() + simParams.getDeadlockDetectInterval() + 100, serverID, this::startDetectionIteration, true));
+            return;
+        }
+
+        updateWFGraph(localWFG, serverID);
     }
 
     private static void findDeadlocks(List<? extends WFGNode> trans, List<AgentDeadlockDetectionProtocol> addps, Graph<WFGNode> WFG) {

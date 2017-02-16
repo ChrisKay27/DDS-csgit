@@ -3,7 +3,7 @@ SEED:65
 Topology:HyperCube
 NumPages:1000
 ArrivalRate:300
-DDP:AgentDeadlockDetectionProtocol
+DDP:MAEDD
 DRP:FirstDeadlockResolution
 PP:EarliestDeadlineFirst
 DetectionInterval:100

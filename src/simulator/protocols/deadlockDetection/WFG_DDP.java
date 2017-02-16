@@ -87,7 +87,7 @@ public class WFG_DDP extends DeadlockDetectionProtocol {
         eventQueue.accept(new Event(simParams.getTime() + 100, serverID, this::sendLocalWFGToGlobals, true));
     }
 
-    private void sendLocalWFGToGlobals() {
+    public void sendLocalWFGToGlobals() {
 //        System.out.println("sendLocalWFGToGlobals() simParams.globalDetectors=" + simParams.globalDetectors);
 
         //Create the local WFG
@@ -112,13 +112,6 @@ public class WFG_DDP extends DeadlockDetectionProtocol {
                 NIC.sendMessage(message);
                 //simParams.messageOverhead += size;
             }
-        }
-
-        boolean isAGlobalDetector = serverID < simParams.globalDetectors;
-        if (!isAGlobalDetector) {
-            //If this isn't a global detector it posts an event to check for deadlocks in the future and clears its WFGBuilder
-            eventQueue.accept(new Event(simParams.getTime() + simParams.getDeadlockDetectInterval() + 100, serverID, this::startDetectionIteration, true));
-            return;
         }
 
         updateWFGraph(localWFG, serverID);

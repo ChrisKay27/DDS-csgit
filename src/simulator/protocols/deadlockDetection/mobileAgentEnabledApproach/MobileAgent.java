@@ -13,6 +13,7 @@ import simulator.server.transactionManager.TransInfo;
 import ui.Log;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -34,9 +35,21 @@ public class MobileAgent {
     private List<Graph<WFGNode>> receivedWFGs;
     private Consumer<Event> eventQueue;
 
-    private final String direction;
+    private final String BACKWARD = "BACKWARD";
+    private final String FORWARD = "FORWARD";
 
-    public MobileAgent(MAEDD maedd, Server server, String direction) {
+    /**
+     * List of servers for this agent to visit.
+     */
+    private final HashSet S_List;
+
+
+    /**
+     * List of processes involved
+     */
+    private List<Integer> P_List = new LinkedList<>();
+
+    public MobileAgent(MAEDD maedd, Server server) {
         this.maedd = maedd;
         log = maedd.log;
         this.server = server;
@@ -47,19 +60,8 @@ public class MobileAgent {
         receivedFromServers = maedd.getReceivedFromServers();
         eventQueue = simParams.eventQueue;
 
-        this.direction = direction;
+        S_List = new HashSet();
     }
-
-    /**
-     * List of servers for this agent to visit.
-     */
-    private List<Integer> S_List = new LinkedList<>();
-
-
-    /**
-     * List of processes involved
-     */
-    private List<Integer> P_List = new LinkedList<>();
 
     /**
      * This is called when a WFG is received
@@ -82,6 +84,9 @@ public class MobileAgent {
         receivedFromServers.add(server);
 
         if (receivedFromServers.containsAll(simParams.allServersList)) {
+        //if (receivedFromServers.containsAll(getS_List())) {
+            System.out.println("######### MANI MANI MANI, MUST BE FUNNY #########");
+
             BiConsumer<Graph<WFGNode>, Integer> wfGraphConsumer = maedd.getWfGraphConsumer();
             if (wfGraphConsumer != null) {
                 //System.out.println("Graph has " + wfgBuilder.size() + " nodes at time " + simParams.getTime());
@@ -97,6 +102,7 @@ public class MobileAgent {
             wfgBuilder = new GraphBuilder<>();
 
             receivedFromServers.clear();
+            S_List.clear();
         }
     }
 
@@ -108,7 +114,6 @@ public class MobileAgent {
         deadlocks.clear();
 
         // MANI: CHANGE!!!
-        String direction = getDirection();
 
         List<Integer> globalDetectors = new ArrayList<>();
         for (int i = 0; i < maedd.getNumberGlobalDetectors(); i++) {
@@ -200,7 +205,20 @@ public class MobileAgent {
         }
     }
 
-    public String getDirection() {
-        return direction;
+    public void update_S_List(HashSet Local_S_List, int server){
+        S_List.addAll(Local_S_List);
+
+        receivedFromServers.add(server);
+
+        System.out.println("        receivedFromServers of " + this.serverID + " added " + server + " SO = " + receivedFromServers);
+        if (receivedFromServers.containsAll(simParams.allServersList)) {
+            System.out.println("MANI MANI MANI, MUST BE FUNNY");
+            eventQueue.accept(new Event(simParams.getTime() + 100, serverID, maedd::sendLocalWFGToGlobals, true));
+        }
+    }
+
+    public HashSet getS_List() {
+        System.out.println(S_List);
+        return S_List;
     }
 }

@@ -11,8 +11,7 @@ public class DBConnection {
         Connection conn = null;
 
         try {
-            conn = DriverManager.getConnection("jdbc:mysql://localhost/ddb_results?" + "user=Mani&password=thesis");
-
+            conn = DriverManager.getConnection("jdbc:mysql://localhost/ddb_results?" + "user=root&password=thesis");
 
             PreparedStatement statement = conn.prepareStatement("INSERT INTO results(experimentNumber,pcot,deadlockDetectionProtocol,deadlockResolutionProtocol," +
                     "topology,arrivalRate,priorityProtocol,numPages,detectionInterval,maxActiveTrans,overHeadIncurred,messageOverHeadIncurred,updateRate) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");

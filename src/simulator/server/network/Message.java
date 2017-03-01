@@ -24,18 +24,18 @@ public class Message implements Comparable<Message> {
         object = null;
     }
 
-    public Message(int destServerID, ServerProcess process, String msg, Object contents, int deadline) {
+    public Message(int destServerID, ServerProcess process, String contents, Object object, int deadline) {
         this.destServerID = destServerID;
         this.process = process;
-        this.object = contents;
+        this.object = object;
         this.deadline = deadline;
-        this.contents = msg;
+        this.contents = contents;
     }
 
-    public Message(int destServerID, ServerProcess process, Object contents, int deadline) {
+    public Message(int destServerID, ServerProcess process, Object object, int deadline) {
         this.destServerID = destServerID;
         this.process = process;
-        this.object = contents;
+        this.object = object;
         this.deadline = deadline;
         this.contents = OBJECT;
 

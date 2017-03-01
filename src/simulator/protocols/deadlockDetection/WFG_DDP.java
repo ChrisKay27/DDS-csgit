@@ -57,7 +57,7 @@ public class WFG_DDP extends DeadlockDetectionProtocol {
      */
     public void receiveMessage(Message msg) {
         if (Log.isLoggingEnabled())
-            log.log("Received message- " + msg);
+            log.log("Received message - " + msg.toString());
 
         int remoteServerID = Integer.parseInt(msg.getContents());
 
@@ -239,6 +239,23 @@ public class WFG_DDP extends DeadlockDetectionProtocol {
             globalWfgBuilder = new GraphBuilder<>();
             receivedFromServers.clear();
         }
+    }
+
+    public void calculateAndIncurOverhead(Graph<WFGNode> WFG) {
+        //calc overhead
+        int overhead = 1;
+        for (Task<WFGNode> rt : WFG.getTasks()) {
+            //add one for each vertex
+            overhead++;
+
+            //add one for each edge
+            overhead += rt.getWaitsForTasks().size();
+        }
+
+        if (Log.isLoggingEnabled())
+            log.log("Incurring overhead- " + overhead);
+
+        overheadIncurer.accept(overhead);
     }
 
     protected void searchGraph(Graph<WFGNode> wfg) {

@@ -59,23 +59,6 @@ public class AgentDeadlockDetectionProtocol extends WFG_DDP {
         localAgent.searchGraph(build);
     }
 
-    protected void calculateAndIncurOverhead(Graph<WFGNode> WFG) {
-        //calc overhead
-        int overhead = 0;
-        for (Task<WFGNode> rt : WFG.getTasks()) {
-            //add one for each vertex
-            overhead++;
-
-            //add one for each edge
-            overhead += rt.getWaitsForTasks().size();
-        }
-
-        if (Log.isLoggingEnabled())
-            log.log("Incurring overhead- " + overhead);
-
-        overheadIncurer.accept(overhead);
-    }
-
     /**
      * This is called when a WFG is received
      */
@@ -89,7 +72,6 @@ public class AgentDeadlockDetectionProtocol extends WFG_DDP {
 
     @Override
     public void sendLocalWFGToGlobals() {
-
         //Create the local WFG
         Graph<WFGNode> localWFG = createLocalGraphOfWaits();
 

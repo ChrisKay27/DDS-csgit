@@ -2,6 +2,7 @@ package simulator.protocols.deadlockDetection.mobileAgentEnabledApproach;
 
 import exceptions.WTFException;
 import simulator.SimParams;
+import simulator.enums.ServerProcess;
 import simulator.eventQueue.Event;
 import simulator.protocols.deadlockDetection.Deadlock;
 import simulator.protocols.deadlockDetection.WFG.Graph;
@@ -9,13 +10,12 @@ import simulator.protocols.deadlockDetection.WFG.GraphBuilder;
 import simulator.protocols.deadlockDetection.WFG.Task;
 import simulator.protocols.deadlockDetection.WFG.WFGNode;
 import simulator.server.Server;
+import simulator.server.network.Message;
+import simulator.server.network.NetworkInterface;
 import simulator.server.transactionManager.TransInfo;
 import ui.Log;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -41,8 +41,7 @@ public class MobileAgent {
     /**
      * List of servers for this agent to visit.
      */
-    private final HashSet S_List;
-
+    private final Set<Integer> S_List;
 
     /**
      * List of processes involved
@@ -60,7 +59,8 @@ public class MobileAgent {
         receivedFromServers = maedd.getReceivedFromServers();
         eventQueue = simParams.eventQueue;
 
-        S_List = new HashSet();
+        S_List = new HashSet<>();
+        P_List = new LinkedList<>();
     }
 
     /**
@@ -68,7 +68,7 @@ public class MobileAgent {
      */
     public void updateWFGraph(Graph<WFGNode> graph, int server) {
         if (Log.isLoggingEnabled())
-            log.log("Updating graph with waits from server " + server);
+            log.log("Mobile Agent Updating graph with waits from server " + server);
 
         if (receivedWFGs.contains(graph))
             throw new WTFException(serverID + ": Have already received this WFG! " + graph);
@@ -83,10 +83,8 @@ public class MobileAgent {
 
         receivedFromServers.add(server);
 
-        if (receivedFromServers.containsAll(simParams.allServersList)) {
-        //if (receivedFromServers.containsAll(getS_List())) {
-            System.out.println("######### MANI MANI MANI, MUST BE FUNNY #########");
-
+        //if (receivedFromServers.containsAll(simParams.allServersList)) {
+        if (receivedFromServers.containsAll(getS_List())) {
             BiConsumer<Graph<WFGNode>, Integer> wfGraphConsumer = maedd.getWfGraphConsumer();
             if (wfGraphConsumer != null) {
                 //System.out.println("Graph has " + wfgBuilder.size() + " nodes at time " + simParams.getTime());
@@ -96,7 +94,7 @@ public class MobileAgent {
             }
 
             searchGraph(wfgBuilder.build());
-            eventQueue.accept(new Event(simParams.getTime() + simParams.getDeadlockDetectInterval(), serverID, maedd::startDetectionIteration));
+            //eventQueue.accept(new Event(simParams.getTime() + simParams.getDeadlockDetectInterval(), serverID, maedd::startDetectionIteration));
 
             //clear wfgBuilder so we can start fresh next round
             wfgBuilder = new GraphBuilder<>();
@@ -113,33 +111,54 @@ public class MobileAgent {
         maedd.calculateAndIncurOverhead(build);
         deadlocks.clear();
 
-        // MANI: CHANGE!!!
+        List<Integer> globalDetectors = maedd.getMobileAgentServers();
 
-        List<Integer> globalDetectors = new ArrayList<>();
-        for (int i = 0; i < maedd.getNumberGlobalDetectors(); i++) {
-            globalDetectors.add(i);
-        }
+// MANI: CHANGE!!!
+        List<Integer> involvedServers = new ArrayList<>(getS_List());
+        Collections.sort(involvedServers);
+        List<Integer> forward = new ArrayList<>(involvedServers.subList(0, involvedServers.size()/2));
+        involvedServers.removeAll(forward);
+        List<Integer> backward = new ArrayList<>(involvedServers);
 
-        int thisNodesIndex = globalDetectors.indexOf(server.getID());
+        System.out.println("************");
+        System.out.println("Forward: " + forward);
+        System.out.println("Backward: " + backward);
+
+        //TODO share servers in s_list and hence the transactions between two agents
+        System.out.println(serverID);
+
+        //int thisNodesIndex = globalDetectors.indexOf(server.getID());
 
         List<Task<WFGNode>> allTransactions = new ArrayList<>(build.getTasks());
         List<TransInfo> transThisAgentCaresAbout = new ArrayList<>();
 
         //collect all transactions this agent cares about
         for (int i = 0; i < allTransactions.size(); i++) {
-            if (i % globalDetectors.size() == thisNodesIndex)
-                transThisAgentCaresAbout.add((TransInfo) allTransactions.get(i).getId());
+            //if (i % globalDetectors.size() == thisNodesIndex)
+            TransInfo transaction = (TransInfo) allTransactions.get(i).getId();
+            System.out.println("Transaction Server: "+ transaction.serverID);
+
+            if(serverID == globalDetectors.get(0)){
+                if (forward.contains(transaction.serverID))
+                    transThisAgentCaresAbout.add(transaction);
+            }
+            else if(serverID == globalDetectors.get(1)) {
+                if (backward.contains(transaction.serverID))
+                    transThisAgentCaresAbout.add(transaction);
+            }
         }
+
+        System.out.println("Mobile Agent on server " + serverID + " cares about - " + transThisAgentCaresAbout.toString());
 
         if (transThisAgentCaresAbout.isEmpty()) {
             if (Log.isLoggingEnabled())
-                log.log("Global Agent - No transactions for this agent");
+                log.log("Mobile Agent Mobile Agent - No transactions for this agent");
 
             return;
         }
 
         if (Log.isLoggingEnabled())
-            log.log("Global Agent - This agent cares about - " + transThisAgentCaresAbout);
+            log.log("Mobile Agent - This agent cares about - " + transThisAgentCaresAbout);
 
         //Get transInfo and start searching through its children
         for (TransInfo t : transThisAgentCaresAbout) {
@@ -167,7 +186,7 @@ public class MobileAgent {
 
         if (deadlocksList.isEmpty()) {
             if (Log.isLoggingEnabled())
-                log.log("Global Agent - Found no deadlocks");
+                log.log("Mobile Agent - Found no deadlocks");
 
             return;
         }
@@ -194,7 +213,7 @@ public class MobileAgent {
 
                 deadlocks.add(deadlockPath);
                 if (Log.isLoggingEnabled())
-                    log.log("Global Agent - Found deadlock - " + deadlockPath);
+                    log.log("Mobile Agent - Found deadlock - " + deadlockPath);
 
                 path.remove(edge);
             } else if ((edge.getID() > lookingFor.getID() && !path.contains(edge))) {
@@ -205,20 +224,36 @@ public class MobileAgent {
         }
     }
 
-    public void update_S_List(HashSet Local_S_List, int server){
+    public void update_S_List(HashSet Local_S_List, int fromServerId) {
+        if (Log.isLoggingEnabled())
+            log.log("Mobile Agent Server " + fromServerId + " sent its S_List of " + Local_S_List);
+
         S_List.addAll(Local_S_List);
 
-        receivedFromServers.add(server);
+        receivedFromServers.add(fromServerId);
 
-        System.out.println("        receivedFromServers of " + this.serverID + " added " + server + " SO = " + receivedFromServers);
+        System.out.println("\t Creating receivedFromServers of mobile agent in server " + serverID + " | adding " + fromServerId + " to " + receivedFromServers);
+
+        if (Log.isLoggingEnabled())
+            log.log("Creating receivedFromServers. Adding " + fromServerId + " | it is now: " + receivedFromServers);
+
         if (receivedFromServers.containsAll(simParams.allServersList)) {
-            System.out.println("MANI MANI MANI, MUST BE FUNNY");
-            eventQueue.accept(new Event(simParams.getTime() + 100, serverID, maedd::sendLocalWFGToGlobals, true));
+            NetworkInterface NIC = server.getNIC();
+
+            for (Integer s : S_List)
+                NIC.sendMessage(new Message(s, ServerProcess.DDP, serverID + "", "Send LocalWFG to Mobiles", simParams.getTime()));
+
+
+            //eventQueue.accept(new Event(simParams.getTime() + 1, serverID, maedd::sendLocalWFGToGlobals, true));
+
+            receivedFromServers.clear();
+
+            if (Log.isLoggingEnabled())
+                log.log("Cleared received from servers list, it is now: " + receivedFromServers);
         }
     }
 
-    public HashSet getS_List() {
-        System.out.println(S_List);
+    public Set getS_List() {
         return S_List;
     }
 }

@@ -6,7 +6,6 @@ import simulator.eventQueue.Event;
 import simulator.protocols.deadlockDetection.Deadlock;
 import simulator.protocols.deadlockDetection.WFG.Graph;
 import simulator.protocols.deadlockDetection.WFG.GraphBuilder;
-import simulator.protocols.deadlockDetection.WFG.Task;
 import simulator.protocols.deadlockDetection.WFG.WFGNode;
 import simulator.protocols.deadlockDetection.WFG_DDP;
 import simulator.server.Server;
@@ -21,6 +20,7 @@ public class MAEDD extends WFG_DDP {
 
     protected final Log log;
     protected List<Integer> allServers = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7);
+
     protected List<Integer> mobileAgentServers = Arrays.asList(0, 7);
 
     private final StaticAgent staticAgent;
@@ -49,33 +49,6 @@ public class MAEDD extends WFG_DDP {
 
     protected void searchGraph(Graph<WFGNode> build) {
         staticAgent.searchGraph(build);
-
-        /**
-         * if your on the same server as  global agent, update the list directly
-         * if not, send the list to the mobile agents
-         */
-        //Posts an event to check for deadlocks in the future and clears its WFGBuilder
-        eventQueue.accept(new Event(simParams.getTime() + simParams.getDeadlockDetectInterval() + 1, serverID, this::sendSListToMobiles));
-
-        //post an event to send the local WFG to the global detectors. We wait for this so the local deadlocks can resolve before going global
-        //eventQueue.accept(new Event(simParams.getTime() + 100, serverID, this::sendLocalWFGToGlobals, true));
-    }
-
-    protected void calculateAndIncurOverhead(Graph<WFGNode> WFG) {
-        //calc overhead
-        int overhead = 0;
-        for (Task<WFGNode> rt : WFG.getTasks()) {
-            //add one for each vertex
-            overhead++;
-
-            //add one for each edge
-            overhead += rt.getWaitsForTasks().size();
-        }
-
-        if (Log.isLoggingEnabled())
-            log.log("Incurring overhead- " + overhead);
-
-        overheadIncurer.accept(overhead);
     }
 
     /**
@@ -109,14 +82,13 @@ public class MAEDD extends WFG_DDP {
         //Search the local graph
         searchGraph(localWFG);
 
-        //post an event to send the local WFG to the global detectors. We wait for this so the local deadlocks can resolve before going global
-        //eventQueue.accept(new Event(simParams.getTime() + 100, serverID, this::sendLocalWFGToGlobals, true));
+        //post an event to send the S_List to the mobile agents.
+        eventQueue.accept(new Event(simParams.getTime() + 1, serverID, this::sendSListToMobiles, true));
     }
 
     private void sendSListToMobiles() {
         // Create the S_List
-        HashSet s_List = staticAgent.getS_List();
-        System.out.println("sendSListToMobiles(): " + s_List + " Server: " + serverID);
+        Set s_List = staticAgent.getS_List();
 
         NetworkInterface NIC = server.getNIC();
 
@@ -125,14 +97,24 @@ public class MAEDD extends WFG_DDP {
         if (size == 0)
             size = 1;
 
-        //Send our S_List to the detector nodes
-        for (int i = 0; i < simParams.globalDetectors; i++) {
+        if (Log.isLoggingEnabled())
+            log.log("sending S_list from static agent " + serverID + " | list: " + s_List);
+
+        //Send our S_List to the mobile agents
+        for (int i = 0; i < mobileAgentServers.size(); i++) {
             int globalDetector = mobileAgentServers.get(i);
-            System.out.println("+sending  " + s_List + " from " + serverID + " to " + globalDetector);
+
             Message message = new Message(globalDetector, ServerProcess.DDP, serverID + "", s_List, simParams.getTime());
             message.setSize(size);
+            message.setReoccuring(true);
             NIC.sendMessage(message);
         }
+
+        if (Log.isLoggingEnabled())
+            log.log("Posting event for the next iteration");
+
+        //If this isn't a global detector it posts an event to check for deadlocks in the future and clears its WFGBuilder
+        eventQueue.accept(new Event(simParams.getTime() + simParams.getDeadlockDetectInterval() + 100, serverID, this::startDetectionIteration, true));
     }
 
     /**
@@ -143,11 +125,13 @@ public class MAEDD extends WFG_DDP {
     @Override
     public void receiveMessage(Message msg) {
         if (Log.isLoggingEnabled())
-            log.log("Received message- " + msg);
+            log.log("Received message - " + msg.toString());
 
         int remoteServerID = Integer.parseInt(msg.getContents());
 
-        if (msg.getObject() instanceof HashSet)
+        if ("Send LocalWFG to Mobiles".equals(msg.getObject()))
+            sendLocalWFGToGlobals();
+        else if (msg.getObject() instanceof HashSet)
             mobileAgent.update_S_List((HashSet) msg.getObject(), remoteServerID);
         else
             updateWFGraph((Graph<WFGNode>) msg.getObject(), remoteServerID);
@@ -168,18 +152,33 @@ public class MAEDD extends WFG_DDP {
         if (size == 0)
             size = 1;
 
+        if (Log.isLoggingEnabled())
+            log.log("Sending local WFG = " + localWFG.toString() + " From Server " + serverID);
+
         //Send our graph to the detector nodes
-        for (int i = 0; i < simParams.globalDetectors; i++) {
+        for (int i = 0; i < mobileAgentServers.size(); i++) {
             int globalDetector = mobileAgentServers.get(i);
-            if (globalDetector != serverID) {
-                System.out.println("+sending lwfg " + localWFG + " from " + serverID + " to " + globalDetector);
-                Message message = new Message(globalDetector, ServerProcess.DDP, serverID + "", localWFG, simParams.getTime());
-                message.setSize(size);
-                message.setReoccuring(true);
-                NIC.sendMessage(message);
-            }
+
+            //if (globalDetector != serverID) {
+            Message message = new Message(globalDetector, ServerProcess.DDP, serverID + "", localWFG, simParams.getTime());
+            message.setSize(size);
+            message.setReoccuring(true);
+            NIC.sendMessage(message);
+            //}
         }
 
-        updateWFGraph(localWFG, serverID);
+        //if (!mobileAgentServers.contains(serverID)) {
+//            log.log("Posting event for the next iteration");
+//            //If this isn't a global detector it posts an event to check for deadlocks in the future and clears its WFGBuilder
+//            eventQueue.accept(new Event(simParams.getTime() + simParams.getDeadlockDetectInterval() + 100, serverID, this::startDetectionIteration, true));
+            //return;
+        //}
+
+        //updateWFGraph(localWFG, serverID);
     }
+
+    public List<Integer> getMobileAgentServers() {
+        return mobileAgentServers;
+    }
+
 }

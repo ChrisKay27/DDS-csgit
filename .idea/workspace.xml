@@ -2,12 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ccedab0e-c551-476f-865b-f80f2a4de36f" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/main/Main.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/main/Main.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/protocols/deadlockDetection/WFG/Graph.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/protocols/deadlockDetection/WFG/Graph.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/protocols/deadlockDetection/WFG_DDP.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/protocols/deadlockDetection/WFG_DDP.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/server/transactionManager/TransactionManager.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/server/transactionManager/TransactionManager.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/stats/Statistics.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/stats/Statistics.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/ui/GraphVisualizer.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/ui/GraphVisualizer.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/simulator/server/transactionManager/TransactionManager.java" afterPath="$PROJECT_DIR$/src/simulator/server/transactionManager/TransactionManager.java" />
     </list>
@@ -45,7 +39,7 @@
         <entry file="file://$PROJECT_DIR$/src/simulator/server/transactionManager/TransactionManager.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="239">
-              <caret line="179" column="108" lean-forward="false" selection-start-line="179" selection-start-column="108" selection-end-line="179" selection-end-column="108" />
+              <caret line="179" column="8" lean-forward="false" selection-start-line="179" selection-start-column="8" selection-end-line="179" selection-end-column="8" />
               <folding />
             </state>
           </provider>
@@ -114,11 +108,11 @@
       <file leaf-file-name="SimParams.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/simulator/SimParams.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="128" column="19" lean-forward="false" selection-start-line="128" selection-start-column="19" selection-end-line="128" selection-end-column="19" />
+            <state relative-caret-position="273">
+              <caret line="31" column="39" lean-forward="true" selection-start-line="31" selection-start-column="39" selection-end-line="31" selection-end-column="39" />
               <folding>
-                <element signature="e#4938#4939#0" expanded="true" />
-                <element signature="e#4978#4979#0" expanded="true" />
+                <element signature="e#4993#4994#0" expanded="true" />
+                <element signature="e#5033#5034#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -231,7 +225,6 @@
         <option value="$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/ChandyMisraHaas/ReleaseMessage.java" />
         <option value="$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/ChandyMisraHaas/ChandyMisraHaasDDP.java" />
         <option value="$PROJECT_DIR$/src/simulator/protocols/deadlockResolution/Agent.java" />
-        <option value="$PROJECT_DIR$/src/simulator/SimParams.java" />
         <option value="$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/AgentDDP/GlobalAgent.java" />
         <option value="$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/DeadlockDetectionProtocol.java" />
         <option value="$PROJECT_DIR$/src/simulator/protocols/deadlockResolution/FirstDeadlockResolution.java" />
@@ -251,6 +244,7 @@
         <option value="$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/WFG/Graph.java" />
         <option value="$PROJECT_DIR$/params.txt" />
         <option value="$PROJECT_DIR$/Time.txt" />
+        <option value="$PROJECT_DIR$/src/simulator/SimParams.java" />
         <option value="$PROJECT_DIR$/src/simulator/server/transactionManager/TransactionManager.java" />
       </list>
     </option>
@@ -779,7 +773,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="54" y="-8" width="1874" height="1096" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -800,7 +794,7 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.12844543" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.46313605" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.46313605" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Debug with VisualVM" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -870,7 +864,8 @@
     <MESSAGE value="test commit" />
     <MESSAGE value="Update" />
     <MESSAGE value="Made it so transactions restart after being aborted if they have time to complete.&#10;Also made the WFG view a bit better" />
-    <option name="LAST_COMMIT_MESSAGE" value="Made it so transactions restart after being aborted if they have time to complete.&#10;Also made the WFG view a bit better" />
+    <MESSAGE value="Made the predicted transaction period a parameter in simParams" />
+    <option name="LAST_COMMIT_MESSAGE" value="Made the predicted transaction period a parameter in simParams" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -907,7 +902,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/simulator/server/transactionManager/TransactionManager.java</url>
-          <line>743</line>
+          <line>744</line>
           <properties />
           <option name="timeStamp" value="124" />
         </line-breakpoint>
@@ -1233,17 +1228,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/simulator/SimParams.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="128" column="19" lean-forward="false" selection-start-line="128" selection-start-column="19" selection-end-line="128" selection-end-column="19" />
-          <folding>
-            <element signature="e#4938#4939#0" expanded="true" />
-            <element signature="e#4978#4979#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/stats/Statistics.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-353">
@@ -1313,10 +1297,21 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/simulator/SimParams.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="273">
+          <caret line="31" column="39" lean-forward="true" selection-start-line="31" selection-start-column="39" selection-end-line="31" selection-end-column="39" />
+          <folding>
+            <element signature="e#4993#4994#0" expanded="true" />
+            <element signature="e#5033#5034#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/simulator/server/transactionManager/TransactionManager.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="239">
-          <caret line="179" column="108" lean-forward="false" selection-start-line="179" selection-start-column="108" selection-end-line="179" selection-end-column="108" />
+          <caret line="179" column="8" lean-forward="false" selection-start-line="179" selection-start-column="8" selection-end-line="179" selection-end-column="8" />
           <folding />
         </state>
       </provider>

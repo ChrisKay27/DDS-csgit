@@ -35,6 +35,7 @@ public class TransactionManager {
     private final List<Transaction> completedTransactions = new ArrayList<>();
     private final List<Transaction> abortedTransactions = new ArrayList<>();
     private final List<Transaction> allTransactions = new ArrayList<>();
+    private final List<Transaction> abortedAndGoingToBeRestartedTransactions = new ArrayList<>();
 
     public TransactionManager(Server server, SimParams simParams) {
         this.server = server;
@@ -99,30 +100,33 @@ public class TransactionManager {
         if (Log.isLoggingEnabled())
             log.log(t, "Starting " + t.fullToString());
 
+        boolean abortedAndRestarted = abortedAndGoingToBeRestartedTransactions.remove(t);
         queuedTransactions.remove(t);
         activeTransactions.add(t);
 
         //Set up a timeout event, only for master transactions
         if (!(t instanceof CohortTransaction))
 
-            //In certain ticks the timeout will occur
-            eventQueue.accept(new Event(simParams.getTime() + simParams.transactionTimeoutMean, serverID, () -> {
+//            if( !abortedAndRestarted ) {
+                //In certain ticks the timeout will occur
+                eventQueue.accept(new Event(simParams.getTime() + simParams.transactionTimeoutMean, serverID, () -> {
 
-                //timeout will only occur if the trans hasn't committed, completed, or aborted
-                if (!t.isCommitted() && !t.isCompleted() && !t.isAborted()) {
-                    if (Log.isLoggingEnabled()) {
-                        log.log(t.getID(), "<b>Timeout!</b>");
-                        log.log(t.getID(), "Locked read pages: " + t.getLockedReadPages());
-                        log.log(t.getID(), "Locked write pages: " + t.getPageNumsToServerIDLocksAcquired());
-                        log.log(t.getID(), "Processed pages: " + t.getProcessedPages());
-                        log.log(t.getID(), "Ready to commit cohorts: " + t.getReadyToCommitCohorts());
-                        log.log(t.getID(), "Committed cohorts: " + t.getCommittedCohorts());
-                        log.log(t.getID(), "Complete cohorts: " + t.getCompletedCohorts());
+                    //timeout will only occur if the trans hasn't committed, completed, or aborted
+                    if (!t.isCommitted() && !t.isCompleted() && !t.isAborted()) {
+                        if (Log.isLoggingEnabled()) {
+                            log.log(t.getID(), "<b>Timeout!</b>");
+                            log.log(t.getID(), "Locked read pages: " + t.getLockedReadPages());
+                            log.log(t.getID(), "Locked write pages: " + t.getPageNumsToServerIDLocksAcquired());
+                            log.log(t.getID(), "Processed pages: " + t.getProcessedPages());
+                            log.log(t.getID(), "Ready to commit cohorts: " + t.getReadyToCommitCohorts());
+                            log.log(t.getID(), "Committed cohorts: " + t.getCommittedCohorts());
+                            log.log(t.getID(), "Complete cohorts: " + t.getCompletedCohorts());
+                        }
+                        abort(t);
+                        simParams.stats.addTimeout();
                     }
-                    abort(t);
-                    simParams.stats.addTimeout();
-                }
-            }));
+                }));
+//            }
 
         if (!(t instanceof CohortTransaction))
             spawnChildren(t);
@@ -135,7 +139,7 @@ public class TransactionManager {
      */
     public void abort(int transID) {
         Transaction t = getAbortedTransaction(transID);
-        if (t == null) {
+        if (t == null && !hasBeenAbortedAndGoingToBeRestarted(transID)) {
             t = getCompletedTransaction(transID);
             if (t == null) {
                 t = getActiveTransaction(transID);
@@ -153,8 +157,11 @@ public class TransactionManager {
      * Abort this transactiont
      */
     private void abort(Transaction t) {
+        t.incAbortCount();
         if (Log.isLoggingEnabled())
-            log.log(t, "Aborting");
+            log.log(t, "Aborting for the " + t.getAbortCount() + " time");
+
+
 
         if (!(t instanceof CohortTransaction)) {
             NetworkInterface NIC = server.getNIC();
@@ -163,17 +170,36 @@ public class TransactionManager {
                 if (Log.isLoggingEnabled())
                     log.log(t, "Sending abort message to server " + serverID);
 
-                NIC.sendMessage(new Message(serverID, ServerProcess.TransactionManager, abortMsg, t.getDeadline()));
+                NIC.sendMessage(new Message(serverID, ServerProcess.TransactionManager, abortMsg, timeProvider.get()));
             });
-
-            simParams.stats.addNumAborted();
         }
 
-        t.setCompletedTime(Integer.MAX_VALUE);
-        t.setAborted(true);
-        activeTransactions.remove(t);
-        abortedTransactions.add(t);
         server.abort(t);
+        activeTransactions.remove(t);
+
+        if( true && !(t instanceof CohortTransaction) && t.getDeadline() > simParams.timeProvider.get() ){
+            log.log(t, "Deadline in the future, restarting transaction");
+
+            abortedAndGoingToBeRestartedTransactions.add(t);
+
+            t.resetAfterAbort();
+            eventQueue.accept(new Event(timeProvider.get()+50 ,serverID, () -> {
+                queuedTransactions.add(t);
+                startTransaction(t);
+            }));
+
+            simParams.stats.addNumAbortedAndRestarted();
+        }
+        else {
+            t.setCompletedTime(Integer.MAX_VALUE);
+            t.setAborted(true);
+            abortedTransactions.add(t);
+
+            if( !(t instanceof CohortTransaction) )
+                simParams.stats.addNumAborted();
+        }
+
+
     }
 
 
@@ -213,7 +239,8 @@ public class TransactionManager {
         int transID = Integer.parseInt(components[1]);
 
         switch (components[0]) {
-            case "A":
+            case "A": {
+
                 if (Log.isLoggingEnabled())
                     log.log(transID, "Abort message received");
 
@@ -221,6 +248,7 @@ public class TransactionManager {
                     abort(getActiveTransaction(transID));
 
                 break;
+            }
             case "C": {
                 if (Log.isLoggingEnabled())
                     log.log(transID, "Received message to create a cohort transaction: " + msg);
@@ -281,7 +309,7 @@ public class TransactionManager {
                 if (Log.isLoggingEnabled())
                     log.log(transID, "Received ready to commit message: " + msg);
 
-                if (hasBeenAborted(transID)) {
+                if (hasBeenAborted(transID) || hasBeenAbortedAndGoingToBeRestarted(transID)) {
                     if (Log.isLoggingEnabled())
                         log.log(transID, "Have already aborted though.");
 
@@ -334,7 +362,7 @@ public class TransactionManager {
      * Used when the LM on this server has acquired a lock
      */
     public void lockAcquired(int transID, int pageNum) {
-        if (!hasBeenAborted(transID))
+        if (!hasBeenAborted(transID) && !hasBeenAbortedAndGoingToBeRestarted(transID))
             lockAcquired(getActiveTransaction(transID), pageNum, server.getID());
     }
 
@@ -371,7 +399,7 @@ public class TransactionManager {
         if (Log.isLoggingEnabled())
             log.log(transID, "Lock acquired for page " + pageNum + " on server " + serverID);
 
-        if (!hasBeenAborted(transID)) {
+        if (!hasBeenAborted(transID) && !hasBeenAbortedAndGoingToBeRestarted(transID)) {
             Transaction t = getActiveTransaction(transID);
             t.lockAcquired(pageNum, serverID);
             tryToCommit(t);
@@ -385,6 +413,16 @@ public class TransactionManager {
 
         return false;
     }
+
+    private boolean hasBeenAbortedAndGoingToBeRestarted(int transID) {
+        for (Transaction t : abortedAndGoingToBeRestartedTransactions)
+            if (t.getID() == transID)
+                return true;
+
+        return false;
+    }
+
+
 
     /**
      * This method is called to attempt to commit the transaction
@@ -683,7 +721,7 @@ public class TransactionManager {
     }
 
     public Transaction getTransaction(int transID) {
-        /*for (Transaction t : activeTransactions)
+        for (Transaction t : activeTransactions)
             if (t.getID() == transID)
                 return t;
 
@@ -697,8 +735,8 @@ public class TransactionManager {
 
         for (Transaction t : abortedTransactions)
             if (t.getID() == transID)
-                return t;*/
-
+                return t;
+//
         for (Transaction t : allTransactions)
             if (t.getID() == transID)
                 return t;

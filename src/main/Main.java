@@ -192,6 +192,9 @@ public class Main {
                                                         System.out.println("Completed On Time: " + stats.getCompletedOnTime());
                                                         System.out.println("Completed Late: " + stats.getCompletedLate());
                                                         System.out.println("Aborted: " + stats.getNumAborted());
+                                                        System.out.println("Aborted and restarted: " + stats.getNumAbortedAndRestarted());
+                                                        System.out.println("Total Transactions: " + servers.size() * s.getSimParams().getNumTransPerServer());
+
                                                         if (stats.getCompletedOnTime() + stats.getCompletedLate() + stats.getNumAborted() != servers.size() * s.getSimParams().getNumTransPerServer())
                                                             System.out.println("ERROR: Completed + Late + Aborted != Total Num of Transactions!");
                                                         System.out.println("Timeouts: " + stats.getTimeouts());

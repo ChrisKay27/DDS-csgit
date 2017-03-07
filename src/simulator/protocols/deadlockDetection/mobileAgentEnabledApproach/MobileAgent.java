@@ -120,12 +120,12 @@ public class MobileAgent {
         involvedServers.removeAll(forward);
         List<Integer> backward = new ArrayList<>(involvedServers);
 
-        System.out.println("************");
-        System.out.println("Forward: " + forward);
-        System.out.println("Backward: " + backward);
+//        System.out.println("************");
+        log.log("Forward: " + forward);
+        log.log("Backward: " + backward);
 
         //TODO share servers in s_list and hence the transactions between two agents
-        System.out.println(serverID);
+        log.log("serverID: "+serverID);
 
         //int thisNodesIndex = globalDetectors.indexOf(server.getID());
 
@@ -136,7 +136,7 @@ public class MobileAgent {
         for (int i = 0; i < allTransactions.size(); i++) {
             //if (i % globalDetectors.size() == thisNodesIndex)
             TransInfo transaction = (TransInfo) allTransactions.get(i).getId();
-            System.out.println("Transaction Server: "+ transaction.serverID);
+            log.log("Transaction Server: "+ transaction.serverID);
 
             if(serverID == globalDetectors.get(0)){
                 if (forward.contains(transaction.serverID))
@@ -148,7 +148,7 @@ public class MobileAgent {
             }
         }
 
-        System.out.println("Mobile Agent on server " + serverID + " cares about - " + transThisAgentCaresAbout.toString());
+        log.log("Mobile Agent on server " + serverID + " cares about - " + transThisAgentCaresAbout.toString());
 
         if (transThisAgentCaresAbout.isEmpty()) {
             if (Log.isLoggingEnabled())
@@ -232,7 +232,7 @@ public class MobileAgent {
 
         receivedFromServers.add(fromServerId);
 
-        System.out.println("\t Creating receivedFromServers of mobile agent in server " + serverID + " | adding " + fromServerId + " to " + receivedFromServers);
+        log.log("\t Creating receivedFromServers of mobile agent in server " + serverID + " | adding " + fromServerId + " to " + receivedFromServers);
 
         if (Log.isLoggingEnabled())
             log.log("Creating receivedFromServers. Adding " + fromServerId + " | it is now: " + receivedFromServers);

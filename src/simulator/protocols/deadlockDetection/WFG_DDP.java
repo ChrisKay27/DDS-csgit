@@ -141,7 +141,7 @@ public class WFG_DDP extends DeadlockDetectionProtocol {
                 if (!activeTrans.containsKey(waitingLock.getTransID())) {
                     Transaction t = allTrans.get(waitingLock.getTransID());
                     //Sometimes a transaction that has just finished, so don't throw an error if it just finished
-                    if (t.getCompletedTime() < simParams.getTime() - 200)
+                    if (t.isCompleted() && t.getCompletedTime() < simParams.getTime() - 1000)
                         throw new WTFException(serverID + ": This waiting lock " + waitingLock + " doesn't belong to an active transaction!");
                     else {
                         //System.out.println(simParams.getTime() + " - Adding lock of " + t + " that has recently completed at " + t.getCompletedTime());
@@ -156,7 +156,7 @@ public class WFG_DDP extends DeadlockDetectionProtocol {
 
                         Transaction t = allTrans.get(heldLock.getTransID());
                         //Sometimes a transaction that has just finished, so don't throw an error if it just finished
-                        if (t.getCompletedTime() < simParams.getTime() - 200)
+                        if (t.isCompleted() && t.getCompletedTime() < simParams.getTime() - 1000)
                             throw new WTFException(serverID + ": This held lock " + heldLock + " doesn't belong to an active transaction!");
                         else {
                             //System.out.println(simParams.getTime() + " - Adding lock of " + t + " that has recently completed at " + t.getCompletedTime());

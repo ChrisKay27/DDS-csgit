@@ -8,9 +8,11 @@ public class Statistics {
     private int timeouts;
     private int completedOnTime, completedLate;
     private int numAborted;
+    private int numAbortedAndRestarted;
 
     private List<Integer> completedOnTimeTrans = new ArrayList<>();
     private List<Integer> completedLateTrans = new ArrayList<>();
+
 
     public void addCompletedOnTime(int id) {
         completedOnTime++;
@@ -48,5 +50,17 @@ public class Statistics {
 
     public void addNumAborted() {
         this.numAborted += 1;
+    }
+
+    public void addNumAbortedAndRestarted() {
+        numAbortedAndRestarted += 1;
+    }
+
+    public int getNumAbortedAndRestarted() {
+        return numAbortedAndRestarted;
+    }
+
+    public void setNumAbortedAndRestarted(int numAbortedAndRestarted) {
+        this.numAbortedAndRestarted = numAbortedAndRestarted;
     }
 }

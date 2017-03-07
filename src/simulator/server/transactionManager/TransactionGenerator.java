@@ -30,7 +30,7 @@ public class TransactionGenerator {
         if (remainingTransactions-- == 0)
             return;
 
-        int nextTransArriveTime = timeProvider.get() + getPoisson(simParams.arrivalRateMean);
+        int nextTransArriveTime = timeProvider.get() + getPoisson(simParams.arrivalRateMean, simParams.rand);
 
         int numReadPages = (int) ((8 * rand.get() + 2) * (1 - simParams.getUpdateRate()));
         int numWritePages = (int) ((8 * rand.get() + 2) * simParams.getUpdateRate());
@@ -41,7 +41,7 @@ public class TransactionGenerator {
         int execTime = (numReadPages * 4 * (SimParams.processTime + SimParams.diskReadWriteTime)) + (numWritePages * 4 * (SimParams.processTime + (2 * SimParams.diskReadWriteTime)));
 
         // MANI: CHANGE!!!
-        int SLACKTIME_COEFF = 2;
+        int SLACKTIME_COEFF = 3;
         int slackTime = execTime * SLACKTIME_COEFF;
         int deadline = timeProvider.get() + execTime + slackTime;
 
@@ -99,14 +99,14 @@ public class TransactionGenerator {
         serverID = server.getID();
     }
 
-    public static int getPoisson(double lambda) {
+    public static int getPoisson(double lambda, Supplier<Double> rand) {
         double L = Math.exp(-lambda);
         double p = 1.0;
         int k = 0;
 
         do {
             k++;
-            p *= Math.random();
+            p *= rand.get();
         } while (p > L);
 
         return k - 1;

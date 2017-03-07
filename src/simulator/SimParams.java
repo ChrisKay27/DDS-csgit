@@ -22,6 +22,7 @@ import java.util.function.Supplier;
  */
 public class SimParams {
 
+    public static int predictedTransactionTime = 1000;
     public final Consumer<String> log;
     public final Statistics stats;
     public final List<Server> allServers = new ArrayList<>();

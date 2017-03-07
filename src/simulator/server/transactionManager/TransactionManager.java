@@ -177,7 +177,7 @@ public class TransactionManager {
         server.abort(t);
         activeTransactions.remove(t);
 
-        if( true && !(t instanceof CohortTransaction) && t.getDeadline() > simParams.timeProvider.get()+1000 ){
+        if( true && !(t instanceof CohortTransaction) && t.getDeadline() > simParams.timeProvider.get()+SimParams.predictedTransactionTime ){
             log.log(t, "Deadline in the future, restarting transaction");
 
             abortedAndGoingToBeRestartedTransactions.add(t);

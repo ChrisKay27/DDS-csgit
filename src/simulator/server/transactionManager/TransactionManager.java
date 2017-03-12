@@ -102,14 +102,37 @@ public class TransactionManager {
 
         boolean abortedAndRestarted = abortedAndGoingToBeRestartedTransactions.remove(t);
         queuedTransactions.remove(t);
+
+
+        /*
+            If the system is performing very poorly the deadline will be in the past before the transaction is even started.
+            This prevents the transaction from starting, then hitting its deadline
+        */
+        if( t.getDeadline() < timeProvider.get() ){
+            if (Log.isLoggingEnabled()) {
+                log.log(t, "Transaction's deadline is in the past! (This happens in very low performing runs) :(");
+                log.log(t, "Not starting transaction");
+            }
+
+            t.setCompletedTime(Integer.MAX_VALUE);
+            t.setAborted(true);
+            abortedTransactions.add(t);
+
+            if( !(t instanceof CohortTransaction) )
+                simParams.stats.addNumAborted();
+            return;
+        }
+        //*/
+
+
         activeTransactions.add(t);
 
         //Set up a timeout event, only for master transactions
         if (!(t instanceof CohortTransaction))
 
-//            if( !abortedAndRestarted ) {
+            if( !abortedAndRestarted ) {
                 //In certain ticks the timeout will occur
-                eventQueue.accept(new Event(simParams.getTime() + simParams.transactionTimeoutMean, serverID, () -> {
+                eventQueue.accept(new Event(t.getDeadline() , serverID, () -> {
 
                     //timeout will only occur if the trans hasn't committed, completed, or aborted
                     if (!t.isCommitted() && !t.isCompleted() && !t.isAborted()) {
@@ -126,7 +149,7 @@ public class TransactionManager {
                         simParams.stats.addTimeout();
                     }
                 }));
-//            }
+            }
 
         if (!(t instanceof CohortTransaction))
             spawnChildren(t);
@@ -154,7 +177,7 @@ public class TransactionManager {
     }
 
     /**
-     * Abort this transactiont
+     * Abort this transaction t
      */
     private void abort(Transaction t) {
         t.incAbortCount();
@@ -184,7 +207,7 @@ public class TransactionManager {
             abortedAndGoingToBeRestartedTransactions.add(t);
 
             t.resetAfterAbort();
-            eventQueue.accept(new Event(timeProvider.get()+50 ,serverID, () -> {
+            eventQueue.accept(new Event(timeProvider.get()+1 ,serverID, () -> {
                 queuedTransactions.add(t);
                 startTransaction(t);
             }));

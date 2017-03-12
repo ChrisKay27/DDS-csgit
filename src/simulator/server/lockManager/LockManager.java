@@ -306,7 +306,7 @@ public class LockManager {
         for (Lock lock : heldLocks.get(pageNum)) {
             if (transID == lock.getTransID()) {
                 if (found)
-                    throw new WTFException(serverID + ": Found multiple locks on page " + pageNum + " for trans " + transID);
+                    throw new WTFException(serverID + ": Found multiple locks on page " + pageNum + " for trans " + transID + " found: " + releasedLock + " and " + lock);
                 releasedLock = lock;
                 found = true;
             }

@@ -116,7 +116,7 @@ public class Output extends JPanel{
                         }
                     }
                     if (sb.length() > 100000) {
-                        sb.append("Too many messages, apply more filters!");
+                        sb.append("<b>     Too many messages to render efficiently, apply more filters!</b>");
                         break;
                     }
                     sb.append(style).append(msg).append(SPAN_BR);//'\n');//

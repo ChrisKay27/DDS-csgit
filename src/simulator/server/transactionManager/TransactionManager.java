@@ -106,7 +106,7 @@ public class TransactionManager {
 
         /*
             If the system is performing very poorly the deadline will be in the past before the transaction is even started.
-            This prevents the transaction from starting, then hitting its deadline
+            This prevents the transaction from starting, then hitting its deadline immediately
         */
         if( t.getDeadline() < timeProvider.get() ){
             if (Log.isLoggingEnabled()) {
@@ -137,13 +137,13 @@ public class TransactionManager {
                     //timeout will only occur if the trans hasn't committed, completed, or aborted
                     if (!t.isCommitted() && !t.isCompleted() && !t.isAborted()) {
                         if (Log.isLoggingEnabled()) {
-                            log.log(t.getID(), "<b>Timeout!</b>");
+                            log.log(t.getID(), "<b>Timeout!");
                             log.log(t.getID(), "Locked read pages: " + t.getLockedReadPages());
                             log.log(t.getID(), "Locked write pages: " + t.getPageNumsToServerIDLocksAcquired());
                             log.log(t.getID(), "Processed pages: " + t.getProcessedPages());
                             log.log(t.getID(), "Ready to commit cohorts: " + t.getReadyToCommitCohorts());
                             log.log(t.getID(), "Committed cohorts: " + t.getCommittedCohorts());
-                            log.log(t.getID(), "Complete cohorts: " + t.getCompletedCohorts());
+                            log.log(t.getID(), "Complete cohorts: " + t.getCompletedCohorts()+"</b>");
                         }
                         abort(t);
                         simParams.stats.addTimeout();
@@ -172,7 +172,7 @@ public class TransactionManager {
             }
         } else {
             if (Log.isLoggingEnabled())
-                log.log(transID, "Told to abort transaction but it has already been aborted.");
+                log.log(transID, "<b><font color=\"red\">Told to abort transaction but it has already been aborted.</font></b>");
         }
     }
 
@@ -181,8 +181,13 @@ public class TransactionManager {
      */
     private void abort(Transaction t) {
         t.incAbortCount();
-        if (Log.isLoggingEnabled())
-            log.log(t, "Aborting for the " + t.getAbortCount() + " time");
+
+        if (Log.isLoggingEnabled()) {
+            if (t instanceof CohortTransaction)
+                log.log(t, "<font color=\"red\">Aborting cohort</font>");
+            else
+                log.log(t, "<font color=\"red\">Aborting for the " + t.getAbortCount() + " time</font>");
+        }
 
 
 
@@ -191,7 +196,7 @@ public class TransactionManager {
             String abortMsg = "A:" + t.getID();
             t.getCohortServerIDS().forEach(serverID -> {
                 if (Log.isLoggingEnabled())
-                    log.log(t, "Sending abort message to server " + serverID);
+                    log.log(t, "<font color=\"red\">Sending abort message to server " + serverID + "</font>");
 
                 NIC.sendMessage(new Message(serverID, ServerProcess.TransactionManager, abortMsg, timeProvider.get()));
             });
@@ -202,12 +207,12 @@ public class TransactionManager {
 
 
         if( true && !(t instanceof CohortTransaction) && t.getDeadline() > simParams.timeProvider.get()+SimParams.predictedTransactionTime ){
-            log.log(t, "Deadline in the future, restarting transaction");
+            log.log(t, "<font color=\"green\">Deadline in the future, restarting transaction</font>");
 
             abortedAndGoingToBeRestartedTransactions.add(t);
 
             t.resetAfterAbort();
-            eventQueue.accept(new Event(timeProvider.get()+1 ,serverID, () -> {
+            eventQueue.accept(new Event(timeProvider.get()+30 ,serverID, () -> {
                 queuedTransactions.add(t);
                 startTransaction(t);
             }));

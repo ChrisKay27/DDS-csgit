@@ -85,6 +85,10 @@ public class Simulation {
         return servers;
     }
 
+    /**
+     *
+     * @return an array with different result values
+     */
     public Object[] start() {
         servers.forEach(Server::start);
 
@@ -119,7 +123,9 @@ public class Simulation {
             if (numberOfLocksHeld != 0) {
                 System.out.println("Server " + server.getID() + " has " + numberOfLocksHeld + " held locks!");
                 for (int i = pageRange.getMin(); i < pageRange.getMax(); i++)
-                    System.out.println("\tPage: " + i + "\t" + heldLocks.get(i));
+                    if(!heldLocks.get(i).isEmpty() )
+                        System.out.println("\tPage: " + i + "\t" + heldLocks.get(i));
+
             }
         });
 

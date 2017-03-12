@@ -15,18 +15,18 @@ public class DBConnection {
 
             PreparedStatement statement = conn.prepareStatement("INSERT INTO results(experimentNumber,pcot,deadlockDetectionProtocol,deadlockResolutionProtocol," +
                     "topology,arrivalRate,priorityProtocol,numPages,detectionInterval,maxActiveTrans,overHeadIncurred,messageOverHeadIncurred,updateRate) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
-            statement.setLong(1, results.getExpNum());
+            statement.setLong  (1, results.getExpNum());
             statement.setDouble(2, results.getPCOT());
             statement.setString(3, results.getDDP());
             statement.setString(4, results.getDRP());
             statement.setString(5, results.getTopology());
-            statement.setInt(6, results.getArrivalRate());
+            statement.setInt   (6, results.getArrivalRate());
             statement.setString(7, results.getPP());
-            statement.setInt(8, results.getNumPages());
-            statement.setInt(9, results.getDetectInterval());
-            statement.setInt(10, results.getMaxActiveTrans());
-            statement.setInt(11, results.getOverheadIncurred());
-            statement.setInt(12, results.getMessageOverheadIncurred());
+            statement.setInt   (8, results.getNumPages());
+            statement.setInt   (9, results.getDetectInterval());
+            statement.setInt   (10, results.getMaxActiveTrans());
+            statement.setInt   (11, results.getOverheadIncurred());
+            statement.setInt   (12, results.getMessageOverheadIncurred());
             statement.setDouble(13, results.getUpdateRate());
 
             statement.execute();

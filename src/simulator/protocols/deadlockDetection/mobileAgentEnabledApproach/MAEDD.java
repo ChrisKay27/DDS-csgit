@@ -93,7 +93,7 @@ public class MAEDD extends WFG_DDP {
         NetworkInterface NIC = server.getNIC();
 
         //Calculate the amount of overhead to incur
-        int size = s_List.size();
+        int size = s_List.size()/100;
         if (size == 0)
             size = 1;
 
@@ -148,7 +148,7 @@ public class MAEDD extends WFG_DDP {
         NetworkInterface NIC = server.getNIC();
 
         //Calculate the amount of overhead to incur
-        int size = localWFG.getNumberOfWaits();
+        int size = localWFG.getNumberOfWaits()/100;
         if (size == 0)
             size = 1;
 

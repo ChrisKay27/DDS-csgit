@@ -144,7 +144,7 @@ public class DeadlockPanel extends JPanel {
     }
 
     public void deadLockResolved(Deadlock deadlock, Integer transID) {
-        System.out.println("Deadlock resolved, dropping " + transID + " in " + deadlock.toLongString());
+//        System.out.println("Deadlock resolved, dropping " + transID + " in " + deadlock.toLongString());
         deadlockResolutions.get(deadlock).add(transID);
     }
 }

@@ -136,7 +136,9 @@ public class SimParams {
 
     public void incurOverhead(int serverID, int overhead) {
         overIncurred += overhead;
-        //overheadIncurer.accept(serverID,overhead);
+//        if( Math.random()<0.01)
+//            System.err.println("Not incuring overhead");
+        overheadIncurer.accept(serverID,overhead);
     }
 
     void setDeadlockListener(Consumer<Deadlock> deadlockListener) {

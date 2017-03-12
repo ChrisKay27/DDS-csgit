@@ -70,6 +70,7 @@ public class Message implements Comparable<Message> {
             System.out.println("Issue! Setting message size(" + size + ") to be larger than bandwidth(" + SimParams.Bandwidth + ")");
             size = SimParams.Bandwidth;
         }
+//        System.out.println("Size: " + size);
         this.size = size;
     }
 

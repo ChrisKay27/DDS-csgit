@@ -99,7 +99,7 @@ public class WFG_DDP extends DeadlockDetectionProtocol {
         NetworkInterface NIC = server.getNIC();
 
         //Calculate the amount of overhead to incur
-        int size = localWFG.getNumberOfWaits();
+        int size = localWFG.getNumberOfWaits()/100;
         if (size == 0)
             size = 1;
 
@@ -255,7 +255,7 @@ public class WFG_DDP extends DeadlockDetectionProtocol {
         if (Log.isLoggingEnabled())
             log.log("Incurring overhead- " + overhead);
 
-        overheadIncurer.accept(overhead);
+        overheadIncurer.accept(overhead/100);
     }
 
     protected void searchGraph(Graph<WFGNode> wfg) {

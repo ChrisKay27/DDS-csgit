@@ -9,6 +9,9 @@ public class Statistics {
     private int completedOnTime, completedLate;
     private int numAborted;
     private int numAbortedAndRestarted;
+    private int deadlocksFound;
+    private int deadlocksResolved;
+
 
     private List<Integer> completedOnTimeTrans = new ArrayList<>();
     private List<Integer> completedLateTrans = new ArrayList<>();
@@ -62,5 +65,23 @@ public class Statistics {
 
     public void setNumAbortedAndRestarted(int numAbortedAndRestarted) {
         this.numAbortedAndRestarted = numAbortedAndRestarted;
+    }
+
+    public int getDeadlocksFound() {
+        return deadlocksFound;
+    }
+
+
+    public int getDeadlocksResolved() {
+        return deadlocksResolved;
+    }
+
+
+    public void addDeadlockFound() {
+        deadlocksFound++;
+    }
+
+    public void addDeadlockResolved() {
+        deadlocksResolved++;
     }
 }

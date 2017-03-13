@@ -14,7 +14,7 @@ import java.util.Random;
 
 public class Simulation {
 
-    private final Random rand;
+    private final Random rand, transGeneratorRand;
     private final int numPages;
     private final EventQueue eventQueue;
     private final List<Server> servers = new ArrayList<>();
@@ -24,15 +24,16 @@ public class Simulation {
     public Simulation(SimSetupParams simSetupParams) {
         //Get parameters from setup param object
         this.rand = new Random(simSetupParams.getSEED());
+        this.transGeneratorRand = new Random(simSetupParams.getSEED()/2);
         this.numPages = simSetupParams.getNumPages();
 
         eventQueue = new EventQueue(simSetupParams.sleepTime, simSetupParams.timeUpdater);
 
 
         //Create simParam object to give to each server, which is given to every component in the simulation
-        simParams = new SimParams(eventQueue::addEvent, rand::nextDouble, eventQueue::getTime, this::getNextTransID,
+        simParams = new SimParams(transGeneratorRand::nextDouble, eventQueue::addEvent, rand::nextDouble, eventQueue::getTime, this::getNextTransID,
                 this::getRandPageNum, simSetupParams.getMaxActiveTrans(), simSetupParams.getArrivalRate(), simSetupParams.getLog(),
-                simSetupParams.getStats(), eventQueue::incurOverhead, simSetupParams.getAgentsHistoryLength(), simSetupParams.getUpdateRate());
+                simSetupParams.getStats(), eventQueue::incurOverhead, simSetupParams.getAgentsHistoryLength(), simSetupParams.getUpdateRate(), numPages);
 
         simParams.DDP = simSetupParams.getDDP();
         simParams.DRP = simSetupParams.getDRP();

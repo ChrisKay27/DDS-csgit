@@ -1,12 +1,12 @@
-LOGGING:true
-SEED:653
+LOGGING:false
+SEED:127440
 Topology:HyperCube
 NumPages:1000
-ArrivalRate:2000
+ArrivalRate:3000
 DDP:AgentDeadlockDetectionProtocol,TimeoutDeadlockDetection
 DRP:FirstDeadlockResolution
 PP:EarliestDeadlineFirst
-DetectionInterval:100
+DetectionInterval:1000
 MaxActiveTransactions:30
 AgentsHistoryLength:3
-UpdateRate:1
+UpdateRate:0.3

@@ -8,11 +8,11 @@ import simulator.server.transactionManager.TransInfo;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PriorityDeadlockresolution implements DeadlockResolutionProtocol {
+public class PriorityDeadlockResolution implements DeadlockResolutionProtocol {
     private final Server server;
     private final SimParams simParams;
 
-    public PriorityDeadlockresolution(Server server) {
+    public PriorityDeadlockResolution(Server server) {
         this.server = server;
         this.simParams = server.getSimParams();
     }

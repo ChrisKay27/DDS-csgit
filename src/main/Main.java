@@ -203,7 +203,7 @@ public class Main {
                                                         sb.append("<html>--------------").append("<br>");
                                                         sb.append("<b>Parameters:</b><br>");
                                                         sb.append("SEED:").append(SEED).append("<br>NumPages:").append(numPages).append("<br>Max active trans:").append(maxActiveTrans).append("<br>servers:")
-                                                                .append(8).append("<br>arrival rate:").append(arrivalRate).append("<br>").append(DDP).append("<br>").append(DRP).append("<br>")
+                                                                .append(8).append("<br>arrival rate:").append(arrivalRate).append("<br>").append("<font color=\"red\">"+DDP+"</font>").append("<br>").append(DRP).append("<br>")
                                                                 .append(PP).append("<br>Detection interval:").append(detectInterval).append("<br>Update Rate: ").append(updateRate).append("<br>");
 
                                                         sb.append("Total Transactions: " + servers.size() * s.getSimParams().getNumTransPerServer()).append("<br><br>");
@@ -220,9 +220,13 @@ public class Main {
                                                         sb.append("Timeouts: " + stats.getTimeouts()).append("<br><br>");
 
                                                         sb.append("Overhead (ticks): ").append(overheadIncurred).append("<br>");
-                                                        sb.append("Total Message Size: ").append(messageOverheadIncurred).append("<br>");
+                                                        sb.append("Total Message Size: ").append(messageOverheadIncurred).append("<br><br>");
 
-                                                        sb.append("<b>PCOT: " + PCOT).append("<br></b>");
+                                                        sb.append("Deadlocks found: ").append(stats.getDeadlocksFound()).append("<br>");
+                                                        sb.append("Deadlocks resolved: ").append(stats.getDeadlocksResolved()).append("<br><br>");
+
+
+                                                        sb.append("<b><font color=\"red\">PCOT: " + PCOT).append("</font><br></b></html>");
 
 
 

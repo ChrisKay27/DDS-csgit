@@ -11,7 +11,7 @@ import java.util.function.Supplier;
 public class TransactionGenerator {
     private int remainingTransactions;
 
-    private final Supplier<Double> rand;
+    private final Supplier<Double> transGeneratorRand;
     private final Supplier<Integer> timeProvider;
     private final Supplier<Integer> IDProvider;
     private final Supplier<Integer> pageNumProvider;
@@ -30,10 +30,10 @@ public class TransactionGenerator {
         if (remainingTransactions-- == 0)
             return;
 
-        int nextTransArriveTime = timeProvider.get() + getPoisson(simParams.arrivalRateMean, simParams.rand);
+        int nextTransArriveTime = timeProvider.get() + getPoisson(simParams.arrivalRateMean, transGeneratorRand);
 
-        int numReadPages = (int) ((8 * rand.get() + 2) * (1 - simParams.getUpdateRate()));
-        int numWritePages = (int) ((8 * rand.get() + 2) * simParams.getUpdateRate());
+        int numReadPages = (int) ((8 * transGeneratorRand.get() + 2) * (1 - simParams.getUpdateRate()));
+        int numWritePages = (int) ((8 * transGeneratorRand.get() + 2) * simParams.getUpdateRate());
 
         // Write pages have to be read AND written to disk. So they have 2*disk read write time
         // Read pages have to be only read from disk then processed.
@@ -41,7 +41,7 @@ public class TransactionGenerator {
         int execTime = (numReadPages * 4 * (SimParams.processTime + SimParams.diskReadWriteTime)) + (numWritePages * 4 * (SimParams.processTime + (2 * SimParams.diskReadWriteTime)));
 
         // MANI: CHANGE!!!
-        int SLACKTIME_COEFF = 30;
+        int SLACKTIME_COEFF = 300;
         int slackTime = execTime * SLACKTIME_COEFF;
         int deadline = timeProvider.get() + execTime + slackTime;
 
@@ -87,10 +87,10 @@ public class TransactionGenerator {
     public TransactionGenerator(Server server, SimParams simParams, Consumer<Transaction> transactionConsumer) {
         this.server = server;
         this.eventQueue = simParams.eventQueue;
-        this.rand = simParams.rand;
+        this.transGeneratorRand = simParams.getTransactionGeneratorRand();
         this.timeProvider = simParams.timeProvider;
         IDProvider = simParams.IDProvider;
-        this.pageNumProvider = simParams.pageNumProvider;
+        this.pageNumProvider = () -> (int) (simParams.getNumPages()*transGeneratorRand.get());
         this.simParams = simParams;
         this.transConsumer = transactionConsumer;
 

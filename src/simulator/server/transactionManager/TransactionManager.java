@@ -34,7 +34,7 @@ public class TransactionManager {
     private final List<Transaction> activeTransactions = new ArrayList<>();
     private final List<Transaction> completedTransactions = new ArrayList<>();
     private final List<Transaction> abortedTransactions = new ArrayList<>();
-    private final List<Transaction> allTransactions = new ArrayList<>();
+    private final List<Transaction> allMasterTransactions = new ArrayList<>();
     private final List<Transaction> abortedAndGoingToBeRestartedTransactions = new ArrayList<>();
 
     public TransactionManager(Server server, SimParams simParams) {
@@ -50,7 +50,9 @@ public class TransactionManager {
     }
 
     private void acceptTrans(Transaction t) {
-        allTransactions.add(t);
+        if(Log.isLoggingEnabled())
+            log.log(t,"Transaction generated: " + t.fullToString());
+        allMasterTransactions.add(t);
         queuedTransactions.add(t);
 
         eventQueue.accept(new Event(timeProvider.get() + 1, serverID, this::checkToStartTrans));
@@ -98,7 +100,7 @@ public class TransactionManager {
 
     private void startTransaction(Transaction t) {
         if (Log.isLoggingEnabled())
-            log.log(t, "Starting " + t.fullToString());
+            log.log(t, "Starting " + t);
 
         boolean abortedAndRestarted = abortedAndGoingToBeRestartedTransactions.remove(t);
         queuedTransactions.remove(t);
@@ -110,20 +112,22 @@ public class TransactionManager {
         */
         if( t.getDeadline() < timeProvider.get() ){
             if (Log.isLoggingEnabled()) {
-                log.log(t, "Transaction's deadline is in the past! (This happens in very low performing runs) :(");
-                log.log(t, "Not starting transaction");
+                log.log(t, "<b>Transaction's deadline is in the past! (This happens in very low performing runs) :(</b>");
+                log.log(t, "<b>Not starting transaction</b>");
             }
 
             t.setCompletedTime(Integer.MAX_VALUE);
             t.setAborted(true);
             abortedTransactions.add(t);
 
-            if( !(t instanceof CohortTransaction) )
+            if( !(t instanceof CohortTransaction) ) {
+                simParams.stats.addTimeout();
                 simParams.stats.addNumAborted();
+            }
+            eventQueue.accept(new Event(timeProvider.get() + 1, serverID, this::checkToStartTrans));
             return;
         }
         //*/
-
 
         activeTransactions.add(t);
 
@@ -148,6 +152,7 @@ public class TransactionManager {
                         abort(t);
                         simParams.stats.addTimeout();
                     }
+                    eventQueue.accept(new Event(timeProvider.get() + 1, serverID, this::checkToStartTrans));
                 }));
             }
 
@@ -204,7 +209,7 @@ public class TransactionManager {
 
         server.abort(t);
         activeTransactions.remove(t);
-
+        eventQueue.accept(new Event(timeProvider.get() + 1, serverID, this::checkToStartTrans));
 
         if( true && !(t instanceof CohortTransaction) && t.getDeadline() > simParams.timeProvider.get()+SimParams.predictedTransactionTime ){
             log.log(t, "<font color=\"green\">Deadline in the future, restarting transaction</font>");
@@ -212,6 +217,7 @@ public class TransactionManager {
             abortedAndGoingToBeRestartedTransactions.add(t);
 
             t.resetAfterAbort();
+            // We post this event slightly in the future so the cohorts can be aborted before they receive a message to start the cohort again.
             eventQueue.accept(new Event(timeProvider.get()+30 ,serverID, () -> {
                 queuedTransactions.add(t);
                 startTransaction(t);
@@ -583,9 +589,13 @@ public class TransactionManager {
         int time = simParams.getTime();
         boolean completedOnTime = t.getDeadline() >= time;
 
-        if (Log.isLoggingEnabled())
-            log.log(t, (t instanceof CohortTransaction ? "Cohort " : "") + "Transaction completed " + (completedOnTime ? "on time! :)" : "late! :("));
+        if (Log.isLoggingEnabled()) {
+            if( completedOnTime )
+                log.log(t, "<font color=\"green\">" + (t instanceof CohortTransaction ? "Cohort " : "") + "Transaction completed on time! :)" + "</font>");
+            else
+                log.log(t, "<font color=\"red\">" + (t instanceof CohortTransaction ? "Cohort " : "") + "Transaction completed late! :(" + "</font>");
 
+        }
         t.setCompleted(true);
         t.setCompletedTime(time);
 
@@ -766,7 +776,7 @@ public class TransactionManager {
             if (t.getID() == transID)
                 return t;
 //
-        for (Transaction t : allTransactions)
+        for (Transaction t : allMasterTransactions)
             if (t.getID() == transID)
                 return t;
 
@@ -832,8 +842,8 @@ public class TransactionManager {
         return false;
     }
 
-    public List<Transaction> getAllTransactions() {
-        return allTransactions;
+    public List<Transaction> getAllMasterTransactions() {
+        return allMasterTransactions;
     }
 
     public TransactionGenerator getTG() {

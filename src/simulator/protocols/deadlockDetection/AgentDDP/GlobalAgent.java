@@ -161,6 +161,8 @@ public class GlobalAgent {
 
         checkHistory(deadlocksList.size());
 
+        simParams.stats.addDeadlockFound();
+
         //Resolve the deadlocks
         addp.getResolver().accept(deadlocksList);
     }

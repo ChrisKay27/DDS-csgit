@@ -195,6 +195,8 @@ public class MobileAgent {
         if (Log.isLoggingEnabled())
             log.log("Mobile Agent - Found deadlocks - " + deadlocksTransInfo);
 
+        simParams.stats.addDeadlockFound();
+
         //Resolve the deadlocks
         maedd.getResolver().accept(deadlocksList);
     }

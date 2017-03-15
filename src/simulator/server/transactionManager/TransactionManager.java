@@ -36,6 +36,8 @@ public class TransactionManager {
     private final List<Transaction> abortedTransactions = new ArrayList<>();
     private final List<Transaction> allMasterTransactions = new ArrayList<>();
     private final List<Transaction> abortedAndGoingToBeRestartedTransactions = new ArrayList<>();
+    
+    private final Supplier<Double> transManagerRand;
 
     public TransactionManager(Server server, SimParams simParams) {
         this.server = server;
@@ -47,6 +49,8 @@ public class TransactionManager {
         timeProvider = simParams.timeProvider;
         TG = new TransactionGenerator(server, simParams, this::acceptTrans);
         this.simParams = simParams;
+        
+        transManagerRand = simParams.getTransManagerRand();
     }
 
     private void acceptTrans(Transaction t) {
@@ -643,7 +647,7 @@ public class TransactionManager {
             if (servsWithPage.contains(server.getID()))
                 return;
 
-            int serverID = servsWithPage.get((int) (simParams.rand.get() * servsWithPage.size()));
+            int serverID = servsWithPage.get((int) (transManagerRand.get() * servsWithPage.size()));
 
             if (!serversToPages.containsKey(serverID))
                 serversToPages.put(serverID, new ArrayList<>());
@@ -658,7 +662,7 @@ public class TransactionManager {
             if (servsWithPage.contains(server.getID()))
                 return;
 
-            int serverID = servsWithPage.get((int) (simParams.rand.get() * servsWithPage.size()));
+            int serverID = servsWithPage.get((int) (transManagerRand.get() * servsWithPage.size()));
 
             if (!serversToPages.containsKey(serverID))
                 serversToPages.put(serverID, new ArrayList<>());
@@ -668,7 +672,7 @@ public class TransactionManager {
 
         //This is to prevent children from being send to 0 and 4 since they have the same pages
         if (serversToPages.containsKey(0) && serversToPages.containsKey(4)) {
-            if (simParams.rand.get() < 0.5) {
+            if (transManagerRand.get() < 0.5) {
                 serversToPages.get(0).addAll(serversToPages.remove(4));
             } else {
                 serversToPages.get(4).addAll(serversToPages.remove(0));
@@ -677,7 +681,7 @@ public class TransactionManager {
 
         //This is to prevent children from being send to 1 and 5 since they have the same pages
         if (serversToPages.containsKey(1) && serversToPages.containsKey(5)) {
-            if (simParams.rand.get() < 0.5) {
+            if (transManagerRand.get() < 0.5) {
                 serversToPages.get(1).addAll(serversToPages.remove(5));
             } else {
                 serversToPages.get(5).addAll(serversToPages.remove(1));
@@ -686,7 +690,7 @@ public class TransactionManager {
 
         //This is to prevent children from being send to 2 and 6 since they have the same pages
         if (serversToPages.containsKey(2) && serversToPages.containsKey(6)) {
-            if (simParams.rand.get() < 0.5) {
+            if (transManagerRand.get() < 0.5) {
                 serversToPages.get(2).addAll(serversToPages.remove(6));
             } else {
                 serversToPages.get(6).addAll(serversToPages.remove(2));
@@ -695,7 +699,7 @@ public class TransactionManager {
 
         //This is to prevent children from being send to 3 and 7 since they have the same pages
         if (serversToPages.containsKey(3) && serversToPages.containsKey(7)) {
-            if (simParams.rand.get() < 0.5) {
+            if (transManagerRand.get() < 0.5) {
                 serversToPages.get(3).addAll(serversToPages.remove(7));
             } else {
                 serversToPages.get(7).addAll(serversToPages.remove(3));

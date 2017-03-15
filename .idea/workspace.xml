@@ -2,35 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ccedab0e-c551-476f-865b-f80f2a4de36f" name="Default" comment="">
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/simulator/protocols/deadlockResolution/PriorityDeadlockresolution.java" afterPath="$PROJECT_DIR$/src/simulator/protocols/deadlockResolution/PriorityDeadlockResolution.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/main/Main.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/main/Main.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/SimParams.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/SimParams.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/Simulation.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/Simulation.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/protocols/deadlockDetection/AgentDDP/GlobalAgent.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/protocols/deadlockDetection/AgentDDP/GlobalAgent.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/protocols/deadlockDetection/AgentDDP/LocalAgent.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/protocols/deadlockDetection/AgentDDP/LocalAgent.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/protocols/deadlockDetection/ChandyMisraHaas/ChandyMisraHaasDDP.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/protocols/deadlockDetection/ChandyMisraHaas/ChandyMisraHaasDDP.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/protocols/deadlockDetection/mobileAgentEnabledApproach/MobileAgent.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/protocols/deadlockDetection/mobileAgentEnabledApproach/MobileAgent.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/protocols/deadlockResolution/DeadlockResolutionProtocol.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/protocols/deadlockResolution/DeadlockResolutionProtocol.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/protocols/deadlockResolution/PriorityDeadlockresolution.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/protocols/deadlockResolution/PriorityDeadlockresolution.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/server/transactionManager/TransactionGenerator.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/server/transactionManager/TransactionGenerator.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/server/transactionManager/TransactionManager.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/server/transactionManager/TransactionManager.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/stats/Statistics.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/stats/Statistics.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/ui/Output.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/ui/Output.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Time.txt" afterPath="$PROJECT_DIR$/Time.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/params.txt" afterPath="$PROJECT_DIR$/params.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/Main.java" afterPath="$PROJECT_DIR$/src/main/Main.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/simulator/SimParams.java" afterPath="$PROJECT_DIR$/src/simulator/SimParams.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/simulator/Simulation.java" afterPath="$PROJECT_DIR$/src/simulator/Simulation.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/AgentDDP/GlobalAgent.java" afterPath="$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/AgentDDP/GlobalAgent.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/AgentDDP/LocalAgent.java" afterPath="$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/AgentDDP/LocalAgent.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/ChandyMisraHaas/ChandyMisraHaasDDP.java" afterPath="$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/ChandyMisraHaas/ChandyMisraHaasDDP.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/mobileAgentEnabledApproach/MobileAgent.java" afterPath="$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/mobileAgentEnabledApproach/MobileAgent.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/simulator/protocols/deadlockResolution/DeadlockResolutionProtocol.java" afterPath="$PROJECT_DIR$/src/simulator/protocols/deadlockResolution/DeadlockResolutionProtocol.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/simulator/server/transactionManager/TransactionGenerator.java" afterPath="$PROJECT_DIR$/src/simulator/server/transactionManager/TransactionGenerator.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/simulator/server/transactionManager/TransactionManager.java" afterPath="$PROJECT_DIR$/src/simulator/server/transactionManager/TransactionManager.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/stats/Statistics.java" afterPath="$PROJECT_DIR$/src/stats/Statistics.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ui/Output.java" afterPath="$PROJECT_DIR$/src/ui/Output.java" />
     </list>
     <ignored path="DDS-csgit.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -65,28 +42,31 @@
       <file leaf-file-name="params.txt" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/params.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="4" column="16" lean-forward="false" selection-start-line="4" selection-start-column="16" selection-end-line="4" selection-end-column="16" />
+            <state relative-caret-position="85">
+              <caret line="5" column="74" lean-forward="true" selection-start-line="5" selection-start-column="74" selection-end-line="5" selection-end-column="74" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Time.txt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Time.txt">
+      <file leaf-file-name="SimParams.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/simulator/SimParams.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="34">
-              <caret line="2" column="24" lean-forward="true" selection-start-line="2" selection-start-column="24" selection-end-line="2" selection-end-column="24" />
-              <folding />
+            <state relative-caret-position="180">
+              <caret line="39" column="10" lean-forward="false" selection-start-line="39" selection-start-column="4" selection-end-line="39" selection-end-column="10" />
+              <folding>
+                <element signature="e#9084#9085#0" expanded="true" />
+                <element signature="e#9123#9124#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="PriorityDeadlockResolution.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/simulator/protocols/deadlockResolution/PriorityDeadlockResolution.java">
+      <file leaf-file-name="Simulation.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/simulator/Simulation.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-238">
-              <caret line="10" column="13" lean-forward="false" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
+            <state relative-caret-position="283">
+              <caret line="33" column="66" lean-forward="false" selection-start-line="33" selection-start-column="66" selection-end-line="33" selection-end-column="66" />
               <folding />
             </state>
           </provider>
@@ -95,50 +75,28 @@
       <file leaf-file-name="FirstDeadlockResolution.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/simulator/protocols/deadlockResolution/FirstDeadlockResolution.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="26">
-              <caret line="11" column="36" lean-forward="false" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="36" />
+            <state relative-caret-position="391">
+              <caret line="30" column="19" lean-forward="true" selection-start-line="30" selection-start-column="19" selection-end-line="30" selection-end-column="19" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="EventQueue.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/simulator/eventQueue/EventQueue.java">
+      <file leaf-file-name="LockManager.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/simulator/server/lockManager/LockManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="141">
-              <caret line="28" column="0" lean-forward="false" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
+            <state relative-caret-position="225">
+              <caret line="194" column="0" lean-forward="false" selection-start-line="194" selection-start-column="0" selection-end-line="194" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="WFG_DDP.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/WFG_DDP.java">
+      <file leaf-file-name="TransactionGenerator.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/simulator/server/transactionManager/TransactionGenerator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="294">
-              <caret line="257" column="8" lean-forward="false" selection-start-line="257" selection-start-column="8" selection-end-line="257" selection-end-column="8" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Server.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/simulator/server/Server.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="135" column="0" lean-forward="false" selection-start-line="135" selection-start-column="0" selection-end-line="135" selection-end-column="0" />
-              <folding>
-                <element signature="e#3804#3805#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SimParams.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/simulator/SimParams.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="124">
-              <caret line="144" column="8" lean-forward="false" selection-start-line="143" selection-start-column="6" selection-end-line="144" selection-end-column="8" />
+            <state relative-caret-position="481">
+              <caret line="55" column="42" lean-forward="true" selection-start-line="55" selection-start-column="42" selection-end-line="55" selection-end-column="42" />
               <folding />
             </state>
           </provider>
@@ -147,8 +105,28 @@
       <file leaf-file-name="TransactionManager.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/simulator/server/transactionManager/TransactionManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="138" column="0" lean-forward="false" selection-start-line="138" selection-start-column="0" selection-end-line="138" selection-end-column="0" />
+            <state relative-caret-position="295">
+              <caret line="648" column="0" lean-forward="true" selection-start-line="648" selection-start-column="0" selection-end-line="648" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AgentDeadlockDetectionProtocol.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/AgentDDP/AgentDeadlockDetectionProtocol.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="375">
+              <caret line="94" column="52" lean-forward="true" selection-start-line="94" selection-start-column="52" selection-end-line="94" selection-end-column="52" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GlobalAgent.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/AgentDDP/GlobalAgent.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="225">
+              <caret line="166" column="49" lean-forward="true" selection-start-line="166" selection-start-column="49" selection-end-line="166" selection-end-column="49" />
               <folding />
             </state>
           </provider>
@@ -184,9 +162,12 @@
       <find>T</find>
       <find>incur</find>
       <find>rand</find>
+      <find>.rand</find>
+      <find>simParams.rand</find>
     </findStrings>
     <replaceStrings>
       <replace>log.log(&quot;Mobile Agent</replace>
+      <replace>transManagerRand</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -249,15 +230,15 @@
         <option value="$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/mobileAgentEnabledApproach/MobileAgent.java" />
         <option value="$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/AgentDDP/GlobalAgent.java" />
         <option value="$PROJECT_DIR$/src/ui/Output.java" />
-        <option value="$PROJECT_DIR$/src/simulator/Simulation.java" />
         <option value="$PROJECT_DIR$/src/main/Main.java" />
         <option value="$PROJECT_DIR$/src/stats/Statistics.java" />
         <option value="$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/ChandyMisraHaas/ChandyMisraHaasDDP.java" />
-        <option value="$PROJECT_DIR$/src/simulator/server/transactionManager/TransactionManager.java" />
         <option value="$PROJECT_DIR$/src/simulator/protocols/deadlockResolution/DeadlockResolutionProtocol.java" />
         <option value="$PROJECT_DIR$/src/simulator/server/transactionManager/TransactionGenerator.java" />
-        <option value="$PROJECT_DIR$/src/simulator/SimParams.java" />
         <option value="$PROJECT_DIR$/params.txt" />
+        <option value="$PROJECT_DIR$/src/simulator/Simulation.java" />
+        <option value="$PROJECT_DIR$/src/simulator/SimParams.java" />
+        <option value="$PROJECT_DIR$/src/simulator/server/transactionManager/TransactionManager.java" />
         <option value="$PROJECT_DIR$/Time.txt" />
       </list>
     </option>
@@ -272,7 +253,7 @@
     <option name="x" value="55" />
     <option name="y" value="-8" />
     <option name="width" value="1873" />
-    <option name="height" value="1096" />
+    <option name="height" value="1092" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
@@ -290,6 +271,8 @@
     </navigator>
     <panes>
       <pane id="Scratches" />
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -312,90 +295,8 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="DDS-csgit" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="DDS-csgit" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="DDS-csgit" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="DDS-csgit" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="simulator" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="DDS-csgit" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="DDS-csgit" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="simulator" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="protocols" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="DDS-csgit" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="DDS-csgit" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="simulator" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="protocols" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="deadlockResolution" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -405,7 +306,7 @@
     <property name="aspect.path.notification.shown" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="ChangesBrowser.SHOW_FLATTEN" value="true" />
-    <property name="SearchEverywhereHistoryKey" value="Main&#9;FILE&#9;file://C:/Users/Chris/IdeaProjects/DDS-csgit/src/main/Main.java&#10;event&#9;FILE&#9;file://C:/Users/Chris/IdeaProjects/DDS-csgit/src/simulator/eventQueue/EventQueue.java&#10;Tr&#9;FILE&#9;file://C:/Users/Chris/IdeaProjects/DDS-csgit/src/simulator/server/transactionManager/TransactionManager.java&#10;Chand&#9;FILE&#9;file://C:/Users/Chris/IdeaProjects/DDS-csgit/src/simulator/protocols/deadlockDetection/ChandyMisraHaas/ChandyMisraHaasDDP.java&#10;tg&#9;FILE&#9;file://C:/Users/Chris/IdeaProjects/DDS-csgit/src/simulator/server/transactionManager/TransactionGenerator.java&#10;Outp&#9;FILE&#9;file://C:/Users/Chris/IdeaProjects/DDS-csgit/src/ui/Output.java&#10;params&#9;FILE&#9;file://C:/Users/Chris/IdeaProjects/DDS-csgit/params.txt&#10;Cha&#9;FILE&#9;file://C:/Users/Chris/IdeaProjects/DDS-csgit/src/simulator/protocols/deadlockDetection/ChandyMisraHaas/ChandyMisraHaasDDP.java&#10;ddp&#9;FILE&#9;file://C:/Users/Chris/IdeaProjects/DDS-csgit/src/simulator/protocols/deadlockDetection/DeadlockDetectionProtocol.java&#10;Simul&#9;FILE&#9;file://C:/Users/Chris/IdeaProjects/DDS-csgit/src/simulator/Simulation.java&#10;Stat&#9;FILE&#9;file://C:/Users/Chris/IdeaProjects/DDS-csgit/src/stats/Statistics.java&#10;Simp&#9;FILE&#9;file://C:/Users/Chris/IdeaProjects/DDS-csgit/src/simulator/SimParams.java&#10;outpu&#9;PSI&#9;JAVA://ui.Output&#10;Mess&#9;FILE&#9;file://C:/Users/Chris/IdeaProjects/DDS-csgit/src/simulator/server/network/Message.java&#10;tm&#9;FILE&#9;file://C:/Users/Chris/IdeaProjects/DDS-csgit/src/simulator/server/transactionManager/TransactionManager.java&#10;sp&#9;FILE&#9;file://C:/Users/msamani/IdeaProjects/DDS-csgit/src/simulator/SimParams.java&#10;wfg&#9;FILE&#9;file://C:/Users/msamani/IdeaProjects/DDS-csgit/src/simulator/protocols/deadlockDetection/WFG_DDP.java&#10;Trans&#9;FILE&#9;file://C:/Users/msamani/IdeaProjects/DDS-csgit/src/simulator/server/transactionManager/Transaction.java&#10;sim&#9;FILE&#9;file://C:/Users/msamani/IdeaProjects/DDS-csgit/src/simulator/SimParams.java&#10;para&#9;FILE&#9;file://C:/Users/msamani/IdeaProjects/DDS-csgit/params.txt&#10;Precon&#9;PSI&#9;JAVA://simulator.protocols.deadlockDetection.WFG.assertion.Preconditions&#10;timeUpdater&#9;PSI&#9;JAVA://simulator.SimSetupParams#timeUpdater&#10;Chris&#9;null&#9;null" />
+    <property name="SearchEverywhereHistoryKey" value="tm&#9;FILE&#9;file://C:/Users/Chris/IdeaProjects/DDS-csgit/src/simulator/server/transactionManager/TransactionManager.java&#10;tg&#9;FILE&#9;file://C:/Users/Chris/IdeaProjects/DDS-csgit/src/simulator/server/transactionManager/TransactionGenerator.java&#10;Main&#9;FILE&#9;file://C:/Users/Chris/IdeaProjects/DDS-csgit/src/main/Main.java&#10;event&#9;FILE&#9;file://C:/Users/Chris/IdeaProjects/DDS-csgit/src/simulator/eventQueue/EventQueue.java&#10;Tr&#9;FILE&#9;file://C:/Users/Chris/IdeaProjects/DDS-csgit/src/simulator/server/transactionManager/TransactionManager.java&#10;Chand&#9;FILE&#9;file://C:/Users/Chris/IdeaProjects/DDS-csgit/src/simulator/protocols/deadlockDetection/ChandyMisraHaas/ChandyMisraHaasDDP.java&#10;Outp&#9;FILE&#9;file://C:/Users/Chris/IdeaProjects/DDS-csgit/src/ui/Output.java&#10;params&#9;FILE&#9;file://C:/Users/Chris/IdeaProjects/DDS-csgit/params.txt&#10;Cha&#9;FILE&#9;file://C:/Users/Chris/IdeaProjects/DDS-csgit/src/simulator/protocols/deadlockDetection/ChandyMisraHaas/ChandyMisraHaasDDP.java&#10;ddp&#9;FILE&#9;file://C:/Users/Chris/IdeaProjects/DDS-csgit/src/simulator/protocols/deadlockDetection/DeadlockDetectionProtocol.java&#10;Simul&#9;FILE&#9;file://C:/Users/Chris/IdeaProjects/DDS-csgit/src/simulator/Simulation.java&#10;Stat&#9;FILE&#9;file://C:/Users/Chris/IdeaProjects/DDS-csgit/src/stats/Statistics.java&#10;Simp&#9;FILE&#9;file://C:/Users/Chris/IdeaProjects/DDS-csgit/src/simulator/SimParams.java&#10;outpu&#9;PSI&#9;JAVA://ui.Output&#10;Mess&#9;FILE&#9;file://C:/Users/Chris/IdeaProjects/DDS-csgit/src/simulator/server/network/Message.java&#10;sp&#9;FILE&#9;file://C:/Users/msamani/IdeaProjects/DDS-csgit/src/simulator/SimParams.java&#10;wfg&#9;FILE&#9;file://C:/Users/msamani/IdeaProjects/DDS-csgit/src/simulator/protocols/deadlockDetection/WFG_DDP.java&#10;Trans&#9;FILE&#9;file://C:/Users/msamani/IdeaProjects/DDS-csgit/src/simulator/server/transactionManager/Transaction.java&#10;sim&#9;FILE&#9;file://C:/Users/msamani/IdeaProjects/DDS-csgit/src/simulator/SimParams.java&#10;para&#9;FILE&#9;file://C:/Users/msamani/IdeaProjects/DDS-csgit/params.txt&#10;Precon&#9;PSI&#9;JAVA://simulator.protocols.deadlockDetection.WFG.assertion.Preconditions&#10;timeUpdater&#9;PSI&#9;JAVA://simulator.SimSetupParams#timeUpdater&#10;Chris&#9;null&#9;null" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -715,7 +616,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="55" y="-8" width="1873" height="1096" extended-state="6" />
+    <frame x="55" y="-8" width="1873" height="1092" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -726,16 +627,17 @@
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32917964" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3281412" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26791278" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26694474" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18643133" sideWeight="0.8068536" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18863761" sideWeight="0.8068536" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run with VisualVM" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Statistic" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32917964" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.27868852" sideWeight="0.495" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.1279647" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.09492635" sideWeight="0.19314642" order="6" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.5025961" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4452555" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Debug with VisualVM" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -751,7 +653,6 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3296875" sideWeight="0.5" order="10" side_tool="true" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.27868852" sideWeight="0.495" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
@@ -809,7 +710,8 @@
     <MESSAGE value="Made it so transactions restart after being aborted if they have time to complete.&#10;Also made the WFG view a bit better" />
     <MESSAGE value="Made the predicted transaction period a parameter in simParams" />
     <MESSAGE value="Made the timeout time the trans' deadline time.&#10;Added in a results summarizer.&#10;Investigated DDP protocols not producing good results." />
-    <option name="LAST_COMMIT_MESSAGE" value="Made the timeout time the trans' deadline time.&#10;Added in a results summarizer.&#10;Investigated DDP protocols not producing good results." />
+    <MESSAGE value="Fixed a couple things. Added some extra logging of deadlocks detected and resolved.&#10;Does not work very well in its current state. Seems to be having performance issues" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed a couple things. Added some extra logging of deadlocks detected and resolved.&#10;Does not work very well in its current state. Seems to be having performance issues" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -846,7 +748,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/simulator/server/transactionManager/TransactionManager.java</url>
-          <line>782</line>
+          <line>786</line>
           <properties />
           <option name="timeStamp" value="124" />
         </line-breakpoint>
@@ -906,7 +808,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="310">
           <caret line="146" column="27" lean-forward="false" selection-start-line="146" selection-start-column="8" selection-end-line="146" selection-end-column="27" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -914,7 +815,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1649">
           <caret line="107" column="23" lean-forward="false" selection-start-line="107" selection-start-column="23" selection-end-line="107" selection-end-column="23" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -936,39 +836,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
           <caret line="7" column="13" lean-forward="false" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#846#847#0" expanded="false" />
-            <element signature="e#879#880#0" expanded="false" />
-            <element signature="e#935#936#0" expanded="false" />
-            <element signature="e#978#979#0" expanded="false" />
-            <element signature="e#1313#1314#0" expanded="false" />
-            <element signature="e#1352#1353#0" expanded="false" />
-            <element signature="e#1389#1390#0" expanded="false" />
-            <element signature="e#1425#1426#0" expanded="false" />
-            <element signature="e#1457#1458#0" expanded="false" />
-            <element signature="e#1488#1489#0" expanded="false" />
-            <element signature="e#1545#1546#0" expanded="false" />
-            <element signature="e#1597#1598#0" expanded="false" />
-            <element signature="e#1635#1636#0" expanded="false" />
-            <element signature="e#1672#1673#0" expanded="false" />
-            <element signature="e#1715#1716#0" expanded="false" />
-            <element signature="e#1754#1755#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/simulator/server/lockManager/LockManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5899">
-          <caret line="356" column="52" lean-forward="false" selection-start-line="356" selection-start-column="52" selection-end-line="356" selection-end-column="52" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#14030#14031#0" expanded="false" />
-            <element signature="e#14062#14063#0" expanded="false" />
-            <element signature="e#14119#14120#0" expanded="false" />
-            <element signature="e#14154#14155#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -976,14 +843,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="17">
           <caret line="1" column="68" lean-forward="true" selection-start-line="1" selection-start-column="68" selection-end-line="1" selection-end-column="68" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/AgentDDP/AgentDeadlockDetectionProtocol.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="353">
-          <caret line="91" column="29" lean-forward="false" selection-start-line="91" selection-start-column="29" selection-end-line="91" selection-end-column="29" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1031,7 +890,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-63">
           <caret line="5" column="13" lean-forward="false" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1063,7 +921,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
           <caret line="4" column="13" lean-forward="false" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1090,26 +947,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="154">
           <caret line="10" column="0" lean-forward="false" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/simulator/protocols/deadlockResolution/AgentDeadlockResolutionProtocol.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="91" column="20" lean-forward="false" selection-start-line="91" selection-start-column="20" selection-end-line="91" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/DeadlockDetectionProtocol.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="362">
-          <caret line="108" column="48" lean-forward="false" selection-start-line="108" selection-start-column="18" selection-end-line="108" selection-end-column="48" />
-          <folding>
-            <element signature="e#3334#3335#0" expanded="true" />
-            <element signature="e#3365#3366#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1141,37 +978,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="252">
           <caret line="17" column="0" lean-forward="true" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
-          <folding>
-            <element signature="e#1752#1753#0" expanded="true" />
-            <element signature="e#1787#1788#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/simulator/Simulation.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="22" column="0" lean-forward="true" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
-          <folding>
-            <element signature="e#3337#3338#0" expanded="true" />
-            <element signature="e#3396#3397#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/simulator/server/transactionManager/TransactionGenerator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="277">
-          <caret line="43" column="34" lean-forward="true" selection-start-line="43" selection-start-column="34" selection-end-line="43" selection-end-column="34" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/AgentDDP/GlobalAgent.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="237">
-          <caret line="138" column="0" lean-forward="false" selection-start-line="138" selection-start-column="0" selection-end-line="138" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1179,7 +985,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="237">
           <caret line="524" column="0" lean-forward="false" selection-start-line="524" selection-start-column="0" selection-end-line="524" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1195,7 +1000,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="229">
           <caret line="1248" column="0" lean-forward="false" selection-start-line="1248" selection-start-column="0" selection-end-line="1248" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1217,16 +1021,37 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/simulator/protocols/deadlockResolution/PriorityDeadlockResolution.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-238">
+        <state relative-caret-position="68">
           <caret line="10" column="13" lean-forward="false" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#1908#1909#0" expanded="false" />
+            <element signature="e#1957#1958#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/simulator/protocols/deadlockResolution/FirstDeadlockResolution.java">
+    <entry file="file://$PROJECT_DIR$/src/simulator/server/Server.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="26">
-          <caret line="11" column="36" lean-forward="false" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="36" />
+        <state relative-caret-position="1802">
+          <caret line="135" column="0" lean-forward="false" selection-start-line="135" selection-start-column="0" selection-end-line="135" selection-end-column="0" />
+          <folding>
+            <element signature="e#3804#3805#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_91/jre/lib/rt.jar!/sun/misc/Unsafe.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="237">
+          <caret line="354" column="23" lean-forward="false" selection-start-line="354" selection-start-column="23" selection-end-line="354" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/WFG_DDP.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="294">
+          <caret line="257" column="8" lean-forward="false" selection-start-line="257" selection-start-column="8" selection-end-line="257" selection-end-column="8" />
           <folding />
         </state>
       </provider>
@@ -1239,60 +1064,101 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/WFG_DDP.java">
+    <entry file="file://$PROJECT_DIR$/src/simulator/protocols/deadlockResolution/AgentDeadlockResolutionProtocol.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="294">
-          <caret line="257" column="8" lean-forward="false" selection-start-line="257" selection-start-column="8" selection-end-line="257" selection-end-column="8" />
+        <state relative-caret-position="221">
+          <caret line="91" column="20" lean-forward="false" selection-start-line="91" selection-start-column="20" selection-end-line="91" selection-end-column="20" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/simulator/server/Server.java">
+    <entry file="file://$PROJECT_DIR$/src/simulator/server/lockManager/LockManager.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="135" column="0" lean-forward="false" selection-start-line="135" selection-start-column="0" selection-end-line="135" selection-end-column="0" />
-          <folding>
-            <element signature="e#3804#3805#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="225">
+          <caret line="194" column="0" lean-forward="false" selection-start-line="194" selection-start-column="0" selection-end-line="194" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/DeadlockDetectionProtocol.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="454">
+          <caret line="112" column="36" lean-forward="false" selection-start-line="112" selection-start-column="18" selection-end-line="112" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/simulator/server/transactionManager/TransactionGenerator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="481">
+          <caret line="55" column="42" lean-forward="true" selection-start-line="55" selection-start-column="42" selection-end-line="55" selection-end-column="42" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/simulator/SimParams.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="124">
-          <caret line="144" column="8" lean-forward="false" selection-start-line="143" selection-start-column="6" selection-end-line="144" selection-end-column="8" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_91/jre/lib/rt.jar!/sun/misc/Unsafe.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="237">
-          <caret line="354" column="23" lean-forward="false" selection-start-line="354" selection-start-column="23" selection-end-line="354" selection-end-column="23" />
-          <folding />
+        <state relative-caret-position="180">
+          <caret line="39" column="10" lean-forward="false" selection-start-line="39" selection-start-column="4" selection-end-line="39" selection-end-column="10" />
+          <folding>
+            <element signature="e#9084#9085#0" expanded="true" />
+            <element signature="e#9123#9124#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/simulator/server/transactionManager/TransactionManager.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="138" column="0" lean-forward="false" selection-start-line="138" selection-start-column="0" selection-end-line="138" selection-end-column="0" />
+        <state relative-caret-position="295">
+          <caret line="648" column="0" lean-forward="true" selection-start-line="648" selection-start-column="0" selection-end-line="648" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/AgentDDP/AgentDeadlockDetectionProtocol.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="375">
+          <caret line="94" column="52" lean-forward="true" selection-start-line="94" selection-start-column="52" selection-end-line="94" selection-end-column="52" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/AgentDDP/GlobalAgent.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="166" column="49" lean-forward="true" selection-start-line="166" selection-start-column="49" selection-end-line="166" selection-end-column="49" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/simulator/Simulation.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="283">
+          <caret line="33" column="66" lean-forward="false" selection-start-line="33" selection-start-column="66" selection-end-line="33" selection-end-column="66" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/simulator/protocols/deadlockResolution/FirstDeadlockResolution.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="30" column="19" lean-forward="true" selection-start-line="30" selection-start-column="19" selection-end-line="30" selection-end-column="19" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Time.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="24" lean-forward="true" selection-start-line="2" selection-start-column="24" selection-end-line="2" selection-end-column="24" />
+        <state relative-caret-position="51">
+          <caret line="3" column="26" lean-forward="true" selection-start-line="3" selection-start-column="26" selection-end-line="3" selection-end-column="26" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/params.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="16" lean-forward="false" selection-start-line="4" selection-start-column="16" selection-end-line="4" selection-end-column="16" />
+        <state relative-caret-position="85">
+          <caret line="5" column="74" lean-forward="true" selection-start-line="5" selection-start-column="74" selection-end-line="5" selection-end-column="74" />
           <folding />
         </state>
       </provider>

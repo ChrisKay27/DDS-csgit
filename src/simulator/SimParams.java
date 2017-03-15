@@ -33,12 +33,13 @@ public class SimParams {
     public static int latency = 5;
     public final int arrivalRateMean;
     public final int maxActiveTrans;
-    private int numTransPerServer = 500;
+    private int numTransPerServer = 1;
     private final double updateRate;
     private final int numPages;
     public String DRP;
     public String DDP;
     private Supplier<Double> transGeneratorRand;
+    private Supplier<Double> transManagerRand;
 
     public int getNumberOfServers() {
         return numberOfServers;
@@ -96,10 +97,11 @@ public class SimParams {
      * @param agentsHistoryLength
      * @param numPages
      */
-    public SimParams(Supplier<Double> transGeneratorRand, Consumer<Event> eventQueue, Supplier<Double> rand, Supplier<Integer> timeProvider, Supplier<Integer> IDProvider,
+    public SimParams(Supplier<Double> transGeneratorRand,Supplier<Double> transManagerRand, Consumer<Event> eventQueue, Supplier<Double> rand, Supplier<Integer> timeProvider, Supplier<Integer> IDProvider,
                      Supplier<Integer> pageNumProvider, int maxActiveTrans, int arrivalRate, Consumer<String> log, Statistics stats,
                      BiConsumer<Integer, Integer> incurOverhead, int agentsHistoryLength, double updateRate, int numPages) {
         this.transGeneratorRand = transGeneratorRand;
+        this.transManagerRand = transManagerRand;
         this.eventQueue = eventQueue;
         this.rand = rand;
         this.timeProvider = timeProvider;
@@ -271,5 +273,9 @@ public class SimParams {
 
     public int getNumPages() {
         return numPages;
+    }
+
+    public Supplier<Double> getTransManagerRand() {
+        return transManagerRand;
     }
 }

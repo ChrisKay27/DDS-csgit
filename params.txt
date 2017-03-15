@@ -1,9 +1,9 @@
-LOGGING:false
+LOGGING:true
 SEED:127440
 Topology:HyperCube
-NumPages:1000
-ArrivalRate:3000
-DDP:AgentDeadlockDetectionProtocol,TimeoutDeadlockDetection
+NumPages:80
+ArrivalRate:5
+DDP:AgentDeadlockDetectionProtocol,TimeoutDeadlockDetection,ChandyMisraHaasDDP
 DRP:FirstDeadlockResolution
 PP:EarliestDeadlineFirst
 DetectionInterval:1000

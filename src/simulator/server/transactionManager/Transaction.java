@@ -50,6 +50,7 @@ public class Transaction {
     private int completedTime = -1;
 
     private boolean aborted;
+    private int abortCount;
 
     public Transaction(int ID, int serverID, int deadLine) {
         this.ID = ID;
@@ -285,5 +286,34 @@ public class Transaction {
 
     public void setSlackTime(int slackTime) {
         this.slackTime = slackTime;
+    }
+
+    public void resetAfterAbort(){
+
+        cohortServers.clear();
+
+        readPageNums.clear();
+        readPageNums.addAll(allReadPageNums);
+
+        writePageNums.clear();
+        writePageNums.addAll(allWritePageNums);
+
+        lockedReadPages.clear();
+        processedPages.clear();
+        pagesWritten.clear();
+        readyToCommitCohorts.clear();
+        committedCohorts.clear();
+        completedCohorts.clear();
+
+        pageNumsToServerIDLocksAcquired.clear();
+        writePageNumsToServersWithPage.clear();
+    }
+
+    public void incAbortCount() {
+        abortCount++;
+    }
+
+    public int getAbortCount() {
+        return abortCount;
     }
 }

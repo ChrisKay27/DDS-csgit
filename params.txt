@@ -1,9 +1,9 @@
-LOGGING:true
-SEED:65
+LOGGING:false
+SEED:35121
 Topology:HyperCube
-NumPages:1000
+NumPages:400
 ArrivalRate:300
-DDP:MAEDD,AgentDeadlockDetectionProtocol
+DDP:AgentDeadlockDetectionProtocol,TimeoutDeadlockDetection,ChandyMisraHaasDDP,MAEDD
 DRP:FirstDeadlockResolution
 PP:EarliestDeadlineFirst
 DetectionInterval:100

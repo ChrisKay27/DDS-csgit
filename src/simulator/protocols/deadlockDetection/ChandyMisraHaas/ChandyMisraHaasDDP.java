@@ -96,6 +96,9 @@ public class ChandyMisraHaasDDP extends DeadlockDetectionProtocol {
                 if (Log.isLoggingEnabled())
                     log.log(probeMessage.getInitiator(), "Probe has reached initiator! Trans " + probeMessage.getInitiator());
 
+                simParams.stats.addDeadlockFound();
+                simParams.stats.addDeadlockResolved();
+
                 server.getNIC().sendMessage(
                         new Message(aborted.serverID, ServerProcess.TransactionManager, "A:" + aborted.transID, msg.getDeadline()));
 
@@ -107,7 +110,7 @@ public class ChandyMisraHaasDDP extends DeadlockDetectionProtocol {
                     return;
 
                 if (Log.isLoggingEnabled())
-                    log.log(probeMessage.getInitiator(), "Probe has reached " + probeMessage.getRecipient());
+                    log.log(probeMessage.getInitiator(), "Probe has reached Trans " + probeMessage.getRecipient());
 
                 //So now we get all the waiting locks this transaction has, to see if it is waiting on anything
                 List<Lock> waitingLocks = server.getLM().getAllWaitingLocksFor(probeMessage.getRecipient());
@@ -126,7 +129,7 @@ public class ChandyMisraHaasDDP extends DeadlockDetectionProtocol {
                     //For each of the held locks (held by other transactions)
                     heldLocksList.forEach(lock1 -> {
                         if (Log.isLoggingEnabled())
-                            log.log(probeMessage.getInitiator(), "Sending probe to " + lock1.getTransID());
+                            log.log(probeMessage.getInitiator(), "Sending probe to Trans " + lock1.getTransID());
 
                         //Send the probe to those transactions
                         server.getNIC().sendMessage(

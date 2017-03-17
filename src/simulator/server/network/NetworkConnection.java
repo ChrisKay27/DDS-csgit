@@ -60,6 +60,7 @@ public class NetworkConnection {
     }
 
     private void checkForRoomForMessage() {
+
         if (!queue.isEmpty() && (bandwidth - sizeOnTheWire) >= queue.peek().getSize()) {
             Message msg = queue.remove();
             onTheWire.add(msg);

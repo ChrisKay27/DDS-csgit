@@ -161,6 +161,8 @@ public class GlobalAgent {
 
         checkHistory(deadlocksList.size());
 
+        simParams.stats.addDeadlockFound();
+
         //Resolve the deadlocks
         addp.getResolver().accept(deadlocksList);
     }
@@ -247,7 +249,6 @@ public class GlobalAgent {
     }
 
     /* For debugging purposes
-
     public static void main(String[] args) {
         List<Integer> agentsHistory = Arrays.asList(1, 2, 3);
         boolean increasing = areDeadlocksIncreasing(agentsHistory);
@@ -255,28 +256,24 @@ public class GlobalAgent {
             System.out.println("Passed for " + agentsHistory);
         else
             System.out.println("Failed for " + agentsHistory);
-
         agentsHistory = Arrays.asList(1, 2, 4);
         increasing = areDeadlocksIncreasing(agentsHistory);
         if (increasing)
             System.out.println("Passed for " + agentsHistory);
         else
             System.out.println("Failed for " + agentsHistory);
-
         agentsHistory = Arrays.asList(1, 2, 0);
         increasing = areDeadlocksIncreasing(agentsHistory);
         if (!increasing)
             System.out.println("Passed for " + agentsHistory);
         else
             System.out.println("Failed for " + agentsHistory);
-
         agentsHistory = Arrays.asList(1, 2, 452345);
         increasing = areDeadlocksIncreasing(agentsHistory);
         if (increasing)
             System.out.println("Passed for " + agentsHistory);
         else
             System.out.println("Failed for " + agentsHistory);
-
         agentsHistory = Arrays.asList(5464, 2, 452345);
         increasing = areDeadlocksIncreasing(agentsHistory);
         if (!increasing)

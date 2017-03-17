@@ -81,7 +81,7 @@ public class AgentDeadlockDetectionProtocol extends WFG_DDP {
         NetworkInterface NIC = server.getNIC();
 
         //Calculate the amount of overhead to incur
-        int size = localWFG.getNumberOfWaits();
+        int size = localWFG.getNumberOfWaits()/100;
         if (size == 0)
             size = 1;
 
@@ -126,17 +126,13 @@ public class AgentDeadlockDetectionProtocol extends WFG_DDP {
 
 
     /* For debugging purposes
-
     public static void main(String[] args) {
         System.out.println("Testing Example Case");
         boolean passed = testExampleCase();
-
         System.out.println("\nTesting Second Case");
         passed &= testSecondCase();
-
         System.out.println("\nTesting Third Case");
         passed &= testThirdCase();
-
         System.out.println("\nTests Passed? " + passed);
     }
     */

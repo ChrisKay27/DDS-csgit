@@ -10,6 +10,8 @@ public class Output extends JPanel{
 
     public static final String COLON = ":";
     private static final String ALL = "All";
+    public static final String EMPTY = "";
+    public static final String SPAN_BR = "</span><br>";
     private final JTextPane txtArea;
 
     private final java.util.List<String> allMessages = new ArrayList<>();
@@ -17,10 +19,27 @@ public class Output extends JPanel{
     private final Map<String, java.util.List<String>> serverIDToMessages = new HashMap<>();
     private final Map<String, java.util.List<String>> processToMessages = new HashMap<>();
 
+    private String[] backgroundColorsForServers;
+
+
     public Output() throws HeadlessException {
         super(new BorderLayout());
         txtArea = new JTextPane();
         txtArea.setEditable(false);
+
+        backgroundColorsForServers = new String[8];
+        backgroundColorsForServers[0] = "<span style=\"background-color:lightred\">";
+        backgroundColorsForServers[1] = "<span style=\"background-color:lightblue\">";
+        backgroundColorsForServers[2] = "<span style=\"background-color:lightorange\">";
+        backgroundColorsForServers[3] = "<span style=\"background-color:lightyellow\">";
+        backgroundColorsForServers[4] = "<span style=\"background-color:lightgreen\">";
+        backgroundColorsForServers[5] = "<span style=\"background-color:lightpurple\">";
+        backgroundColorsForServers[6] = "<span style=\"background-color:beige\">";
+        backgroundColorsForServers[7] = "<span>";
+
+
+
+
         //txtArea.setContentType("text/html");
 //        JPanel txtAreaPanel = new JPanel();
 //        txtAreaPanel.add(txtArea);
@@ -59,13 +78,14 @@ public class Output extends JPanel{
         JTextField containsField = new JTextField("",15);
 
         ActionListener listener = e->{
-
+            txtArea.setContentType("text/html");
             System.out.println("There are " + allMessages.size() + " log messages");
 
-            txtArea.setText("");//<html>");
+            txtArea.setText("<html>");
             StringBuilder sb = new StringBuilder();
             synchronized (allMessages) {
                 for (String msg : allMessages) {
+                    String style = EMPTY;
 
                     String[] split = msg.split(COLON);
                     if (split.length > 4) {
@@ -73,7 +93,9 @@ public class Output extends JPanel{
                         if (!ALL.equals(selectedServer)) {
                             if (!split[1].equals(selectedServer))
                                 continue;
+
                         }
+                        style = getBackgroundColorForServer(split[1]);
 
                         String selectedProcess = (String) processSelector.getSelectedItem();
                         if (!ALL.equals(selectedProcess)) {
@@ -93,14 +115,14 @@ public class Output extends JPanel{
                                 continue;
                         }
                     }
-                    if (sb.length() > 500000) {
-                        sb.append("Too many messages, apply more filters!");
+                    if (sb.length() > 200000) {
+                        sb.append("<b>     Too many messages to render efficiently, apply more filters!</b>");
                         break;
                     }
-                    sb.append(msg).append('\n');//"<br>");
+                    sb.append(style).append(msg).append(SPAN_BR);//'\n');//
                 }
             }
-            txtArea.setText(sb.toString());//+"</html>");
+            txtArea.setText("<html>" + sb.toString());//+"</html>");
         };
 
         serverSelector.addActionListener(listener);
@@ -130,6 +152,16 @@ public class Output extends JPanel{
 
         add(topPanel,BorderLayout.NORTH);
 
+    }
+
+    private String getBackgroundColorForServer(String serverID) {
+        try{
+            return backgroundColorsForServers[Integer.parseInt(serverID)];
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        return "<span>";
     }
 
     public void log(String s){

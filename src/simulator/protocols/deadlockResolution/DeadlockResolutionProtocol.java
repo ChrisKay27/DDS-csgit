@@ -15,7 +15,7 @@ public interface DeadlockResolutionProtocol {
         switch (drp){
             case "AgentDeadlockResolutionProtocol": return new AgentDeadlockResolutionProtocol(server);
             case "FirstDeadlockResolution": return new FirstDeadlockResolution(server);
-            case "PriorityDeadlockresolution": return new PriorityDeadlockresolution(server);
+            case "PriorityDeadlockResolution": return new PriorityDeadlockResolution(server);
         }
 
         throw new WTFException("Deadlock Resolution Protocol has not been registered! add it here in the DeadlockResolutionProtocol class!");

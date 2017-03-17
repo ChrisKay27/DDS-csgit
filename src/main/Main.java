@@ -82,6 +82,17 @@ public class Main {
         System.out.println("Running " + numberOfSims + " simulations. This Test Number is " + simNumber);
 
 
+        /*
+         * Results summarizer
+         */
+        JFrame resultsSummerizer = new JFrame("Results Summarizer");
+        {
+            JPanel content = new JPanel();
+            resultsSummerizer.setContentPane(content);
+        }
+
+
+
         //These nested loops are to loop through all the different parameter combinations
 
         for (String SEEDStr : SEEDs.split(",")) {
@@ -186,19 +197,47 @@ public class Main {
                                                                 arrivalRate, PP, numPages, detectInterval, overheadIncurred, messageOverheadIncurred, updateRate);
                                                         DBConnection.insertResults(expResults);
 
-                                                        System.out.println("--------------");
-                                                        System.out.println(SEED + ":" + numPages + ":" + maxActiveTrans + ":" + 8 + ":" + arrivalRate + ":" + DDP + ":" + DRP + ":" + PP + ":" + detectInterval + ":" + updateRate);
-                                                        System.out.println("PCOT: " + PCOT);
-                                                        System.out.println("Completed On Time: " + stats.getCompletedOnTime());
-                                                        System.out.println("Completed Late: " + stats.getCompletedLate());
-                                                        System.out.println("Aborted: " + stats.getNumAborted());
-                                                        if (stats.getCompletedOnTime() + stats.getCompletedLate() + stats.getNumAborted() != servers.size() * s.getSimParams().getNumTransPerServer())
-                                                            System.out.println("ERROR: Completed + Late + Aborted != Total Num of Transactions!");
-                                                        System.out.println("Timeouts: " + stats.getTimeouts());
 
+                                                        StringBuilder sb = new StringBuilder();
+
+                                                        sb.append("<html>--------------").append("<br>");
+                                                        sb.append("<b>Parameters:</b><br>");
+                                                        sb.append("SEED:").append(SEED).append("<br>NumPages:").append(numPages).append("<br>Max active trans:").append(maxActiveTrans).append("<br>servers:")
+                                                                .append(8).append("<br>arrival rate:").append(arrivalRate).append("<br>").append("<font color=\"red\">"+DDP+"</font>").append("<br>").append(DRP).append("<br>")
+                                                                .append(PP).append("<br>Detection interval:").append(detectInterval).append("<br>Update Rate: ").append(updateRate).append("<br>");
+
+                                                        sb.append("Total Transactions: " + servers.size() * s.getSimParams().getNumTransPerServer()).append("<br><br>");
+
+                                                        sb.append("<b>Results:</b><br>");
+                                                        sb.append("Completed On Time: ").append(stats.getCompletedOnTime()).append("<br>");
+                                                        sb.append("Completed Late: " + stats.getCompletedLate()).append("<br>");
+                                                        sb.append("Aborted: " + stats.getNumAborted()).append("<br>");
+                                                        sb.append("Aborted and restarted: " + stats.getNumAbortedAndRestarted()).append("<br>");
+
+
+                                                        if (stats.getCompletedOnTime() + stats.getCompletedLate() + stats.getNumAborted() != servers.size() * s.getSimParams().getNumTransPerServer())
+                                                            sb.append("ERROR: Completed + Late + Aborted != Total Num of Transactions!").append("<br>");
+                                                        sb.append("Timeouts: " + stats.getTimeouts()).append("<br><br>");
+
+                                                        sb.append("Overhead (ticks): ").append(overheadIncurred).append("<br>");
+                                                        sb.append("Total Message Size: ").append(messageOverheadIncurred).append("<br><br>");
+
+                                                        sb.append("Deadlocks found: ").append(stats.getDeadlocksFound()).append("<br>");
+                                                        sb.append("Deadlocks resolved: ").append(stats.getDeadlocksResolved()).append("<br><br>");
+
+
+                                                        sb.append("<b><font color=\"red\">PCOT: " + PCOT).append("</font><br></b></html>");
+
+
+
+                                                        JLabel label = new JLabel(sb.toString());
+                                                        resultsSummerizer.getContentPane().add(label);
+                                                        resultsSummerizer.setTitle("Results Summarizer - Experiment Number: "+ simNumber);
+                                                        resultsSummerizer.pack();
+                                                        resultsSummerizer.setVisible(true);
                                                         //simsRanSoFar++;
                                                         //if (simsRanSoFar == numberOfSims) {
-                                                            //System.exit(0);
+                                                        //System.exit(0);
                                                         //}
                                                     };
 

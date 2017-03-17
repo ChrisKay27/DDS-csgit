@@ -78,7 +78,7 @@ public class Graph<T> {
     public String toString() {
         return "Graph{" +
                 "ID=" + ID +
-                ", tasks=" + tasks +
+                ", num tasks=" + tasks.size() +
                 ", serverID=" + serverID +
                 '}';
     }

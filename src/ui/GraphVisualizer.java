@@ -22,6 +22,7 @@ public class GraphVisualizer extends JPanel {
     private final HashMap<String, Object> edgeStyle, nodeStyle;
     private final JLabel timeField;
     private final List<Integer> onlyShowTheseTransIDs = new ArrayList<>();
+    private final DefaultComboBoxModel<Graph<WFGNode>> model;
 
     {
         edgeStyle = new HashMap<>();
@@ -49,15 +50,28 @@ public class GraphVisualizer extends JPanel {
 
         add(top,BorderLayout.NORTH);
 
-        JTextField graphNumField = new JTextField("Enter Graph Number here", 20);
-        graphNumField.addActionListener(e->{
-            int graphNum = Integer.parseInt(graphNumField.getText());
-            int graphsSize = graphs.size();
-            if( graphNum >= graphsSize){
-                graphNum = graphsSize-1;
-                graphNumField.setText(""+graphNum);
+
+        JComboBox<Graph<WFGNode>> graphNumField = new JComboBox<>();
+        model = new DefaultComboBoxModel<>();
+        graphNumField.setModel(model);
+        graphNumField.addItemListener(e->{
+            Graph<WFGNode> graph = (Graph<WFGNode>) graphNumField.getSelectedItem();
+
+//            int graphsSize = graphs.size();
+//            if( graphNum >= graphsSize){
+//                graphNum = graphsSize-1;
+//                graphNumField.setText(""+graphNum);
+//            }
+
+
+            Pair<Graph<WFGNode>, Integer> graphPair = null;
+            for (Pair<Graph<WFGNode>, Integer> graphIntegerPair : graphs) {
+                if( graphIntegerPair.getKey() == graph ){
+                    graphPair = graphIntegerPair;
+                    break;
+                }
             }
-            showGraph(graphs.get(graphNum));
+            showGraph(graphPair);
 
         });
         top.add(graphNumField);
@@ -83,13 +97,21 @@ public class GraphVisualizer extends JPanel {
                 onlyShowTheseTrans.setText("Bad format, please do: TransID,TransID,TransID (etc ...)");
             }
 
-            int graphNum = Integer.parseInt(graphNumField.getText());
-            int graphsSize = graphs.size();
-            if( graphNum >= graphsSize){
-                graphNum = graphsSize-1;
-                graphNumField.setText(""+graphNum);
+            Graph<WFGNode> graph = (Graph<WFGNode>) graphNumField.getSelectedItem();
+//            int graphNum = Integer.parseInt();
+//            int graphsSize = graphs.size();
+//            if( graphNum >= graphsSize){
+//                graphNum = graphsSize-1;
+//                graphNumField.setText(""+graphNum);
+//            }
+            Pair<Graph<WFGNode>, Integer> graphPair = null;
+            for (Pair<Graph<WFGNode>, Integer> graphIntegerPair : graphs) {
+                if( graphIntegerPair.getKey() == graph ){
+                    graphPair = graphIntegerPair;
+                    break;
+                }
             }
-            showGraph(graphs.get(graphNum));
+            showGraph(graphPair);
         });
         top.add(onlyShowTheseTransLabel);
         top.add(onlyShowTheseTrans);
@@ -201,5 +223,7 @@ public class GraphVisualizer extends JPanel {
 
     public void drawGraph(Graph<WFGNode> wfGraph, int time){
         graphs.add(new Pair<>(wfGraph,time));
+        model.addElement(wfGraph);
+
     }
 }

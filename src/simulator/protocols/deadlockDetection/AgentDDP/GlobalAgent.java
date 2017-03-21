@@ -181,7 +181,7 @@ public class GlobalAgent {
 
                 deadlocks.add(deadlockPath);
                 if (Log.isLoggingEnabled())
-                    log.log("Global Agent - Found deadlock - " + deadlockPath);
+                    log.log("Global Agent " + serverID + " - Found deadlock - " + deadlockPath);
 
                 path.remove(edge);
             } else if ((edge.getID() > lookingFor.getID() && !path.contains(edge))) {

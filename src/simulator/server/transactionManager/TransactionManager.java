@@ -155,6 +155,8 @@ public class TransactionManager {
                         }
                         abort(t);
                         simParams.stats.addTimeout();
+
+                        System.out.println("++++++ Transaction: " + t.getID() + "\t deadline: " + t.getDeadline() + "\t time: " + timeProvider.get() + "| execution time: " + t.getExecutionTime());
                     }
                     eventQueue.accept(new Event(timeProvider.get() + 1, serverID, this::checkToStartTrans));
                 }));
@@ -198,8 +200,6 @@ public class TransactionManager {
                 log.log(t, "<font color=\"red\">Aborting for the " + t.getAbortCount() + " time</font>");
         }
 
-
-
         if (!(t instanceof CohortTransaction)) {
             NetworkInterface NIC = server.getNIC();
             String abortMsg = "A:" + t.getID();
@@ -215,8 +215,10 @@ public class TransactionManager {
         activeTransactions.remove(t);
         eventQueue.accept(new Event(timeProvider.get() + 1, serverID, this::checkToStartTrans));
 
-        if( true && !(t instanceof CohortTransaction) && t.getDeadline() > simParams.timeProvider.get()+SimParams.predictedTransactionTime ){
-            log.log(t, "<font color=\"green\">Deadline in the future, restarting transaction</font>");
+        if(!(t instanceof CohortTransaction) && t.getDeadline() > simParams.timeProvider.get()+ t.getExecutionTime() ){
+        //if(!(t instanceof CohortTransaction) && t.getDeadline() > simParams.timeProvider.get()+SimParams.predictedTransactionTime ){
+            if(Log.isLoggingEnabled())
+                log.log(t, "<font color=\"green\">Deadline in the future, restarting transaction</font>");
 
             abortedAndGoingToBeRestartedTransactions.add(t);
 
@@ -228,6 +230,9 @@ public class TransactionManager {
             }));
 
             simParams.stats.addNumAbortedAndRestarted();
+
+
+            System.out.println("******* Transaction: " + t.getID() + "\t deadline: " + t.getDeadline() + "\t time: " + simParams.timeProvider.get() + "| execution time: " + t.getExecutionTime());
         }
         else {
             t.setCompletedTime(Integer.MAX_VALUE);
@@ -237,10 +242,7 @@ public class TransactionManager {
             if( !(t instanceof CohortTransaction) )
                 simParams.stats.addNumAborted();
         }
-
-
     }
-
 
     /**
      * Protocol Message:
@@ -531,8 +533,16 @@ public class TransactionManager {
                     });
             }
         } else {
-            if (Log.isLoggingEnabled())
-                log.log(t, "Tried to commit, not ready yet");
+            if (Log.isLoggingEnabled()) {
+                boolean allProcessingDone = t.getProcessedPages().containsAll(t.getReadPageNums()) && t.getProcessedPages().containsAll(t.getWritePageNums());
+
+                boolean allLocksAcquired = t.allLocksAcquired();
+
+                boolean allCohortsAreReadyToCommit = t.allCohortsAreReadyToCommit();
+
+                log.log(t, "Tried to commit, not ready yet allProcessingDone=" + allProcessingDone + " allLocksAcquire="+allLocksAcquired + " allCohortsAreReadyToCommit=" + allCohortsAreReadyToCommit);
+
+            }
         }
     }
 
@@ -595,9 +605,9 @@ public class TransactionManager {
 
         if (Log.isLoggingEnabled()) {
             if( completedOnTime )
-                log.log(t, "<font color=\"green\">" + (t instanceof CohortTransaction ? "Cohort " : "") + "Transaction completed on time! :)" + "</font>");
+                log.log(t, "<font color=\"green\">" + (t instanceof CohortTransaction ? "Cohort " : "The ") + "transaction completed on time! :)" + "</font>");
             else
-                log.log(t, "<font color=\"red\">" + (t instanceof CohortTransaction ? "Cohort " : "") + "Transaction completed late! :(" + "</font>");
+                log.log(t, "<font color=\"red\">" + (t instanceof CohortTransaction ? "Cohort " : "The ") + "transaction completed late! :(" + "</font>");
 
         }
         t.setCompleted(true);

@@ -8,7 +8,6 @@ import simulator.server.network.Message;
 import simulator.server.transactionManager.TransInfo;
 import ui.Log;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class FirstDeadlockResolution implements DeadlockResolutionProtocol {
@@ -31,8 +30,10 @@ public class FirstDeadlockResolution implements DeadlockResolutionProtocol {
         List<TransInfo> transactionsInDeadlock = deadlock.getTransactionsInvolved();
         TransInfo firstTrans = transactionsInDeadlock.get(0);
 
-        if (Log.isLoggingEnabled())
-            log.log("====== firstTrans = " + firstTrans.serverID + " and server ID = " + server.getID());
+        if (simParams.agentBased) {
+            server.getNIC().sendMessage(new Message(firstTrans.serverID, ServerProcess.DRP, "A:" + firstTrans.getID() + ":" + server.getID(), deadlock, firstTrans.getDeadline()));
+            return;
+        }
 
         if (firstTrans.serverID != server.getID())
             return;
@@ -49,6 +50,16 @@ public class FirstDeadlockResolution implements DeadlockResolutionProtocol {
 
     @Override
     public void receiveMessage(Message msg) {
+        String message = msg.getContents();
+        String[] components = message.split(":");
+        int transID = Integer.parseInt(components[1]);
+        Deadlock deadlock = (Deadlock) msg.getObject();
 
+        if (Log.isLoggingEnabled())
+            log.log("FirstDeadlockResolution - Server " + components[2] + " told to abort transaction " + transID);
+
+        deadlock.setResolutionTime(simParams.getTime());
+        simParams.getDeadlockResolutionListener().accept(deadlock, transID);
+        server.getTM().abort(transID);
     }
 }

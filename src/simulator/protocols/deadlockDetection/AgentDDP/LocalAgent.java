@@ -84,6 +84,8 @@ public class LocalAgent {
 
                 deadlocksList.add(new Deadlock(deadlockTransInfo, server.getID(), simParams.getTime(), false));
             }
+
+            simParams.stats.addDeadlockFound();
         });
 
         if (deadlocksList.isEmpty()) {
@@ -96,8 +98,6 @@ public class LocalAgent {
         deadlocksList.forEach(addp.getDeadlockListener());
         if (Log.isLoggingEnabled())
             log.log("Found local deadlocks - " + deadlocksTransInfo + " on server " + server.getID());
-
-        simParams.stats.addDeadlockFound();
 
         //Resolve the deadlocks
         addp.getResolver().accept(deadlocksList);

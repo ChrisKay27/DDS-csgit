@@ -24,7 +24,7 @@ public class LeastSlackFirst implements PriorityProtocol {
 
     @Override
     public int getTransPriority(List<TransInfo> transactions, int transID) {
-        Object[] sortedArray = transactions.stream().sorted((t1, t2) -> Integer.compare(t1.getSlackTime(), t2.getSlackTime())).toArray();
+        Object[] sortedArray = transactions.stream().sorted((t1, t2) -> Integer.compare(t2.getSlackTime(), t1.getSlackTime())).toArray();
         List sortedList = Arrays.asList(sortedArray);
 
         for (TransInfo ti : transactions)

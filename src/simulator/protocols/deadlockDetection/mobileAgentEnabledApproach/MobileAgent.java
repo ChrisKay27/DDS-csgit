@@ -120,7 +120,6 @@ public class MobileAgent {
         involvedServers.removeAll(forward);
         List<Integer> backward = new ArrayList<>(involvedServers);
 
-//        System.out.println("************");
         log.log("Forward: " + forward);
         log.log("Backward: " + backward);
 
@@ -172,7 +171,11 @@ public class MobileAgent {
         List<List<TransInfo>> deadlocksTransInfo = new ArrayList<>();
         List<Deadlock> deadlocksList = new ArrayList<>();
 
-        deadlocks.forEach(deadlock -> {
+        if(!deadlocks.isEmpty()){
+            Random rnd = new Random();
+
+            List<WFGNode> deadlock = deadlocks.get(rnd.nextInt(deadlocks.size()));
+
             List<TransInfo> deadlockTransInfo = new ArrayList<>();
             deadlock.forEach(wfgNode -> deadlockTransInfo.add((TransInfo) wfgNode));
 
@@ -182,7 +185,9 @@ public class MobileAgent {
 
                 deadlocksList.add(new Deadlock(deadlockTransInfo, server.getID(), simParams.getTime(), true));
             }
-        });
+
+            simParams.stats.addDeadlockFound();
+        }
 
         if (deadlocksList.isEmpty()) {
             if (Log.isLoggingEnabled())
@@ -194,8 +199,6 @@ public class MobileAgent {
         deadlocksList.forEach(maedd.getDeadlockListener());
         if (Log.isLoggingEnabled())
             log.log("Mobile Agent - Found deadlocks - " + deadlocksTransInfo);
-
-        simParams.stats.addDeadlockFound();
 
         //Resolve the deadlocks
         maedd.getResolver().accept(deadlocksList);

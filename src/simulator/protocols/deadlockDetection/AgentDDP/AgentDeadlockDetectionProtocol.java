@@ -34,6 +34,7 @@ public class AgentDeadlockDetectionProtocol extends WFG_DDP {
     public AgentDeadlockDetectionProtocol(Server server, SimParams simParams, Consumer<List<Deadlock>> resolver, Consumer<Integer> overheadIncurer, Consumer<Deadlock> deadlockListener) {
         super(server, simParams, resolver, overheadIncurer, deadlockListener);
         simParams.usesWFG = true;
+        simParams.agentBased = true;
         log = new Log(ServerProcess.DDP, server.getID(), simParams.timeProvider, simParams.log);
 
         localAgent = new LocalAgent(this, server);

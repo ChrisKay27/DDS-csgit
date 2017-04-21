@@ -86,14 +86,15 @@ public class Transaction {
 
         boolean allCohortsAreReadyToCommit = allCohortsAreReadyToCommit();
 
+        System.out.println(getID() + ": " + allProcessingDone + " " + allLocksAcquired + " " + allCohortsAreReadyToCommit);
         return allProcessingDone && allLocksAcquired && allCohortsAreReadyToCommit;
     }
 
-    private boolean allCohortsAreReadyToCommit() {
+    public boolean allCohortsAreReadyToCommit() {
         return readyToCommitCohorts.containsAll(cohortServers);
     }
 
-    private boolean allLocksAcquired() {
+    public boolean allLocksAcquired() {
         boolean allFound = true;
 
         for (int writePageNum : writePageNums) {

@@ -41,11 +41,12 @@ public class TransactionGenerator {
         int execTime = (numReadPages * 4 * (SimParams.processTime + SimParams.diskReadWriteTime)) + (numWritePages * 4 * (SimParams.processTime + (2 * SimParams.diskReadWriteTime)));
 
         // MANI: CHANGE!!!
-        int SLACKTIME_COEFF = 300;
+        int SLACKTIME_COEFF = 2;
         int slackTime = execTime * SLACKTIME_COEFF;
         int deadline = timeProvider.get() + execTime + slackTime;
 
         Transaction t = new Transaction(IDProvider.get(), server.getID(), deadline);
+        t.setSlackTime(slackTime);
 
         List<Integer> allReadPageNums = t.getAllReadPageNums();
         List<Integer> readPageNums = t.getReadPageNums();

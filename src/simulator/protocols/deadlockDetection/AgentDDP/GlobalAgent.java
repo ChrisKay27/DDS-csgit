@@ -146,6 +146,8 @@ public class GlobalAgent {
 
                 deadlocksList.add(new Deadlock(deadlockTransInfo, server.getID(), simParams.getTime(), true));
             }
+
+            simParams.stats.addDeadlockFound();
         });
 
         if (deadlocksList.isEmpty()) {
@@ -160,8 +162,6 @@ public class GlobalAgent {
             log.log("Global Agent - Found deadlocks - " + deadlocksTransInfo);
 
         checkHistory(deadlocksList.size());
-
-        simParams.stats.addDeadlockFound();
 
         //Resolve the deadlocks
         addp.getResolver().accept(deadlocksList);

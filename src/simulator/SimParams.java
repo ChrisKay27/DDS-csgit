@@ -38,6 +38,8 @@ public class SimParams {
     private final int numPages;
     public String DRP;
     public String DDP;
+
+    public boolean agentBased = false;
     private Supplier<Double> transGeneratorRand;
     private Supplier<Double> transManagerRand;
 

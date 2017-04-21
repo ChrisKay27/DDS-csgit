@@ -23,7 +23,7 @@ public class FirstComeFirstServe implements PriorityProtocol {
 
     @Override
     public int getTransPriority(List<TransInfo> transactions, int transID) {
-        Object[] sortedArray = transactions.stream().sorted((t1, t2) -> Integer.compare(t1.getID(), t2.getID())).toArray();
+        Object[] sortedArray = transactions.stream().sorted((t1, t2) -> Integer.compare(t2.getID(), t1.getID())).toArray();
         List sortedList = Arrays.asList(sortedArray);
 
         for (TransInfo ti : transactions)

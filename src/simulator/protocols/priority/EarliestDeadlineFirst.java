@@ -24,7 +24,7 @@ public class EarliestDeadlineFirst implements PriorityProtocol {
 
     @Override
     public int getTransPriority(List<TransInfo> transactions, int transID) {
-        Object[] sortedArray = transactions.stream().sorted((t1, t2) -> Integer.compare(t1.getDeadline(), t2.getDeadline())).toArray();
+        Object[] sortedArray = transactions.stream().sorted((t1, t2) -> Integer.compare(t2.getDeadline(), t1.getDeadline())).toArray();
         List sortedList = Arrays.asList(sortedArray);
 
         for (TransInfo ti : transactions)

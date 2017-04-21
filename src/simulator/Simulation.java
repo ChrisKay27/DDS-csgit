@@ -98,7 +98,6 @@ public class Simulation {
 
         System.out.println("Sim Done");
 
-
         //Consistency Checks
         servers.forEach(server -> {
             //Check for still active transactions

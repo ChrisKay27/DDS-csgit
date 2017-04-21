@@ -36,7 +36,11 @@ public class TransactionManager {
     private final List<Transaction> abortedTransactions = new ArrayList<>();
     private final List<Transaction> allMasterTransactions = new ArrayList<>();
     private final List<Transaction> abortedAndGoingToBeRestartedTransactions = new ArrayList<>();
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> github/master
     private final Supplier<Double> transManagerRand;
 
     public TransactionManager(Server server, SimParams simParams) {
@@ -49,7 +53,11 @@ public class TransactionManager {
         timeProvider = simParams.timeProvider;
         TG = new TransactionGenerator(server, simParams, this::acceptTrans);
         this.simParams = simParams;
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> github/master
         transManagerRand = simParams.getTransManagerRand();
     }
 
@@ -155,8 +163,11 @@ public class TransactionManager {
                         }
                         abort(t);
                         simParams.stats.addTimeout();
+<<<<<<< HEAD
 
                         System.out.println("++++++ Transaction: " + t.getID() + "\t deadline: " + t.getDeadline() + "\t time: " + timeProvider.get() + "| execution time: " + t.getExecutionTime());
+=======
+>>>>>>> github/master
                     }
                     eventQueue.accept(new Event(timeProvider.get() + 1, serverID, this::checkToStartTrans));
                 }));
@@ -199,6 +210,11 @@ public class TransactionManager {
             else
                 log.log(t, "<font color=\"red\">Aborting for the " + t.getAbortCount() + " time</font>");
         }
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> github/master
 
         if (!(t instanceof CohortTransaction)) {
             NetworkInterface NIC = server.getNIC();
@@ -215,10 +231,38 @@ public class TransactionManager {
         activeTransactions.remove(t);
         eventQueue.accept(new Event(timeProvider.get() + 1, serverID, this::checkToStartTrans));
 
+<<<<<<< HEAD
         if(!(t instanceof CohortTransaction) && t.getDeadline() > simParams.timeProvider.get()+ t.getExecutionTime() ){
         //if(!(t instanceof CohortTransaction) && t.getDeadline() > simParams.timeProvider.get()+SimParams.predictedTransactionTime ){
             if(Log.isLoggingEnabled())
                 log.log(t, "<font color=\"green\">Deadline in the future, restarting transaction</font>");
+=======
+        if( true && !(t instanceof CohortTransaction) && t.getDeadline() > simParams.timeProvider.get()+SimParams.predictedTransactionTime ){
+            log.log(t, "<font color=\"green\">Deadline in the future, restarting transaction</font>");
+
+            abortedAndGoingToBeRestartedTransactions.add(t);
+
+            t.resetAfterAbort();
+            // We post this event slightly in the future so the cohorts can be aborted before they receive a message to start the cohort again.
+            eventQueue.accept(new Event(timeProvider.get()+30 ,serverID, () -> {
+                queuedTransactions.add(t);
+                startTransaction(t);
+            }));
+
+            simParams.stats.addNumAbortedAndRestarted();
+        }
+        else {
+            t.setCompletedTime(Integer.MAX_VALUE);
+            t.setAborted(true);
+            abortedTransactions.add(t);
+
+            if( !(t instanceof CohortTransaction) )
+                simParams.stats.addNumAborted();
+        }
+
+
+    }
+>>>>>>> github/master
 
             abortedAndGoingToBeRestartedTransactions.add(t);
 
@@ -605,9 +649,15 @@ public class TransactionManager {
 
         if (Log.isLoggingEnabled()) {
             if( completedOnTime )
+<<<<<<< HEAD
                 log.log(t, "<font color=\"green\">" + (t instanceof CohortTransaction ? "Cohort " : "The ") + "transaction completed on time! :)" + "</font>");
             else
                 log.log(t, "<font color=\"red\">" + (t instanceof CohortTransaction ? "Cohort " : "The ") + "transaction completed late! :(" + "</font>");
+=======
+                log.log(t, "<font color=\"green\">" + (t instanceof CohortTransaction ? "Cohort " : "") + "Transaction completed on time! :)" + "</font>");
+            else
+                log.log(t, "<font color=\"red\">" + (t instanceof CohortTransaction ? "Cohort " : "") + "Transaction completed late! :(" + "</font>");
+>>>>>>> github/master
 
         }
         t.setCompleted(true);

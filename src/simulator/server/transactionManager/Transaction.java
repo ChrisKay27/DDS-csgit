@@ -289,7 +289,7 @@ public class Transaction {
         this.slackTime = slackTime;
     }
 
-    public void resetAfterAbort(){
+    public void resetAfterAbort() {
 
         cohortServers.clear();
 
@@ -317,4 +317,5 @@ public class Transaction {
     public int getAbortCount() {
         return abortCount;
     }
+
 }

@@ -99,6 +99,8 @@ public class LocalAgent {
         if (Log.isLoggingEnabled())
             log.log("Found local deadlocks - " + deadlocksTransInfo + " on server " + server.getID());
 
+        simParams.stats.addDeadlockFound();
+
         //Resolve the deadlocks
         addp.getResolver().accept(deadlocksList);
     }

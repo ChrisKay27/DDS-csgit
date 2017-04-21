@@ -120,6 +120,10 @@ public class MobileAgent {
         involvedServers.removeAll(forward);
         List<Integer> backward = new ArrayList<>(involvedServers);
 
+<<<<<<< HEAD
+=======
+//        System.out.println("************");
+>>>>>>> github/master
         log.log("Forward: " + forward);
         log.log("Backward: " + backward);
 
@@ -199,6 +203,8 @@ public class MobileAgent {
         deadlocksList.forEach(maedd.getDeadlockListener());
         if (Log.isLoggingEnabled())
             log.log("Mobile Agent - Found deadlocks - " + deadlocksTransInfo);
+
+        simParams.stats.addDeadlockFound();
 
         //Resolve the deadlocks
         maedd.getResolver().accept(deadlocksList);

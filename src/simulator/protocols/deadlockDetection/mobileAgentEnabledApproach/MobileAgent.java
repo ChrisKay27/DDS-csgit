@@ -120,10 +120,6 @@ public class MobileAgent {
         involvedServers.removeAll(forward);
         List<Integer> backward = new ArrayList<>(involvedServers);
 
-<<<<<<< HEAD
-=======
-//        System.out.println("************");
->>>>>>> github/master
         log.log("Forward: " + forward);
         log.log("Backward: " + backward);
 

@@ -36,11 +36,7 @@ public class TransactionManager {
     private final List<Transaction> abortedTransactions = new ArrayList<>();
     private final List<Transaction> allMasterTransactions = new ArrayList<>();
     private final List<Transaction> abortedAndGoingToBeRestartedTransactions = new ArrayList<>();
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> github/master
     private final Supplier<Double> transManagerRand;
 
     public TransactionManager(Server server, SimParams simParams) {
@@ -53,11 +49,7 @@ public class TransactionManager {
         timeProvider = simParams.timeProvider;
         TG = new TransactionGenerator(server, simParams, this::acceptTrans);
         this.simParams = simParams;
-<<<<<<< HEAD
 
-=======
-        
->>>>>>> github/master
         transManagerRand = simParams.getTransManagerRand();
     }
 
@@ -163,11 +155,10 @@ public class TransactionManager {
                         }
                         abort(t);
                         simParams.stats.addTimeout();
-<<<<<<< HEAD
+
 
                         System.out.println("++++++ Transaction: " + t.getID() + "\t deadline: " + t.getDeadline() + "\t time: " + timeProvider.get() + "| execution time: " + t.getExecutionTime());
-=======
->>>>>>> github/master
+
                     }
                     eventQueue.accept(new Event(timeProvider.get() + 1, serverID, this::checkToStartTrans));
                 }));
@@ -210,11 +201,6 @@ public class TransactionManager {
             else
                 log.log(t, "<font color=\"red\">Aborting for the " + t.getAbortCount() + " time</font>");
         }
-<<<<<<< HEAD
-=======
-
-
->>>>>>> github/master
 
         if (!(t instanceof CohortTransaction)) {
             NetworkInterface NIC = server.getNIC();
@@ -231,14 +217,12 @@ public class TransactionManager {
         activeTransactions.remove(t);
         eventQueue.accept(new Event(timeProvider.get() + 1, serverID, this::checkToStartTrans));
 
-<<<<<<< HEAD
+
         if(!(t instanceof CohortTransaction) && t.getDeadline() > simParams.timeProvider.get()+ t.getExecutionTime() ){
         //if(!(t instanceof CohortTransaction) && t.getDeadline() > simParams.timeProvider.get()+SimParams.predictedTransactionTime ){
             if(Log.isLoggingEnabled())
                 log.log(t, "<font color=\"green\">Deadline in the future, restarting transaction</font>");
-=======
-        if( true && !(t instanceof CohortTransaction) && t.getDeadline() > simParams.timeProvider.get()+SimParams.predictedTransactionTime ){
-            log.log(t, "<font color=\"green\">Deadline in the future, restarting transaction</font>");
+
 
             abortedAndGoingToBeRestartedTransactions.add(t);
 
@@ -250,33 +234,8 @@ public class TransactionManager {
             }));
 
             simParams.stats.addNumAbortedAndRestarted();
-        }
-        else {
-            t.setCompletedTime(Integer.MAX_VALUE);
-            t.setAborted(true);
-            abortedTransactions.add(t);
-
-            if( !(t instanceof CohortTransaction) )
-                simParams.stats.addNumAborted();
-        }
-
-
-    }
->>>>>>> github/master
-
-            abortedAndGoingToBeRestartedTransactions.add(t);
-
-            t.resetAfterAbort();
-            // We post this event slightly in the future so the cohorts can be aborted before they receive a message to start the cohort again.
-            eventQueue.accept(new Event(timeProvider.get()+30 ,serverID, () -> {
-                queuedTransactions.add(t);
-                startTransaction(t);
-            }));
-
-            simParams.stats.addNumAbortedAndRestarted();
-
-
             System.out.println("******* Transaction: " + t.getID() + "\t deadline: " + t.getDeadline() + "\t time: " + simParams.timeProvider.get() + "| execution time: " + t.getExecutionTime());
+
         }
         else {
             t.setCompletedTime(Integer.MAX_VALUE);
@@ -327,7 +286,7 @@ public class TransactionManager {
             case "A": {
 
                 if (Log.isLoggingEnabled())
-                    log.log(transID, "Abort message received");
+                    log.log(transID, "<font color=\"red\">Abort message received"+"</font>");
 
                 if (isOnThisServer(transID))
                     abort(getActiveTransaction(transID));
@@ -374,15 +333,26 @@ public class TransactionManager {
                 int pageNum = Integer.parseInt(components[2]);
                 int serverID = Integer.parseInt(components[3]);
 
-                activeTransactions.stream().filter(t -> t.getID() == transID).forEachOrdered(t -> {
-                    t.lockAcquired(pageNum, serverID);
-                });
+                boolean foundTrans = false;
+                for (Transaction activeTransaction : activeTransactions) {
+                    if( activeTransaction.getID() == transID ){
+                        foundTrans = true;
+                        activeTransaction.lockAcquired(pageNum, serverID);
+                    }
+                }
+
+                if(!foundTrans && Log.isLoggingEnabled())
+                    log.log(transID, "<font color=\"red\">Did not find transaction for this lock!"+"</font>");
+
+//                activeTransactions.stream().filter(t -> t.getID() == transID).forEachOrdered(t -> {
+//                    t.lockAcquired(pageNum, serverID);
+//                });
 
                 break;
             }
             case "CT": {
                 if (Log.isLoggingEnabled())
-                    log.log(transID, "Received message to commit: " + msg);
+                    log.log(transID, "<font color=\"green\">Received message to commit: " + msg+"</font>");
 
                 Transaction t = getActiveTransaction(transID);
 
@@ -392,11 +362,11 @@ public class TransactionManager {
             }
             case "RTC": {
                 if (Log.isLoggingEnabled())
-                    log.log(transID, "Received ready to commit message: " + msg);
+                    log.log(transID, "<font color=\"green\">Received ready to commit message: " + msg+"</font>");
 
                 if (hasBeenAborted(transID) || hasBeenAbortedAndGoingToBeRestarted(transID)) {
                     if (Log.isLoggingEnabled())
-                        log.log(transID, "Have already aborted though.");
+                        log.log(transID, "<font color=\"orange\">Have already aborted though."+"</font>");
 
                     break;
                 }
@@ -439,7 +409,7 @@ public class TransactionManager {
             }
 
             default:
-                throw new WTFException("Do not understand message! " + msg);
+                throw new WTFException("<font color=\"red\">Do not understand message! " + msg+"</font>");
         }
     }
 
@@ -484,10 +454,18 @@ public class TransactionManager {
         if (Log.isLoggingEnabled())
             log.log(transID, "Lock acquired for page " + pageNum + " on server " + serverID);
 
-        if (!hasBeenAborted(transID) && !hasBeenAbortedAndGoingToBeRestarted(transID)) {
+
+        boolean hasNotBeenAborted = !hasBeenAborted(transID);
+        boolean hasNotBeenAbortedAndIsGoingToBeRestarted = !hasBeenAbortedAndGoingToBeRestarted(transID);
+        
+        if (hasNotBeenAborted && hasNotBeenAbortedAndIsGoingToBeRestarted) {
             Transaction t = getActiveTransaction(transID);
             t.lockAcquired(pageNum, serverID);
             tryToCommit(t);
+        }
+        else{
+            if (Log.isLoggingEnabled())
+                log.log(transID, "<font color=\"orange\">"+(hasNotBeenAborted?"":"has Been Aborted") + " " + (hasNotBeenAbortedAndIsGoingToBeRestarted?"":"has Been Aborted And Is Going To Be Restarted")+"</font>");
         }
     }
 
@@ -649,15 +627,9 @@ public class TransactionManager {
 
         if (Log.isLoggingEnabled()) {
             if( completedOnTime )
-<<<<<<< HEAD
                 log.log(t, "<font color=\"green\">" + (t instanceof CohortTransaction ? "Cohort " : "The ") + "transaction completed on time! :)" + "</font>");
             else
                 log.log(t, "<font color=\"red\">" + (t instanceof CohortTransaction ? "Cohort " : "The ") + "transaction completed late! :(" + "</font>");
-=======
-                log.log(t, "<font color=\"green\">" + (t instanceof CohortTransaction ? "Cohort " : "") + "Transaction completed on time! :)" + "</font>");
-            else
-                log.log(t, "<font color=\"red\">" + (t instanceof CohortTransaction ? "Cohort " : "") + "Transaction completed late! :(" + "</font>");
->>>>>>> github/master
 
         }
         t.setCompleted(true);

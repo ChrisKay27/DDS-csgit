@@ -84,8 +84,4 @@ public class Statistics {
     public void addDeadlockResolved() {
         deadlocksResolved++;
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> github/master

@@ -417,7 +417,8 @@ public class TransactionManager {
      * Used when the LM on this server has acquired a lock
      */
     public void lockAcquired(int transID, int pageNum) {
-        if (!hasBeenAborted(transID) && !hasBeenAbortedAndGoingToBeRestarted(transID))
+
+        if ( !hasBeenAbortedAndGoingToBeRestarted(transID)) //!hasBeenAborted(transID) &&
             lockAcquired(getActiveTransaction(transID), pageNum, server.getID());
     }
 
@@ -455,17 +456,17 @@ public class TransactionManager {
             log.log(transID, "Lock acquired for page " + pageNum + " on server " + serverID);
 
 
-        boolean hasNotBeenAborted = !hasBeenAborted(transID);
+       // boolean hasNotBeenAborted = !hasBeenAborted(transID);
         boolean hasNotBeenAbortedAndIsGoingToBeRestarted = !hasBeenAbortedAndGoingToBeRestarted(transID);
         
-        if (hasNotBeenAborted && hasNotBeenAbortedAndIsGoingToBeRestarted) {
+        if ( hasNotBeenAbortedAndIsGoingToBeRestarted) { //hasNotBeenAborted &&
             Transaction t = getActiveTransaction(transID);
             t.lockAcquired(pageNum, serverID);
             tryToCommit(t);
         }
         else{
             if (Log.isLoggingEnabled())
-                log.log(transID, "<font color=\"orange\">"+(hasNotBeenAborted?"":"has Been Aborted") + " " + (hasNotBeenAbortedAndIsGoingToBeRestarted?"":"has Been Aborted And Is Going To Be Restarted")+"</font>");
+                log.log(transID, "<font color=\"orange\">"/*+(hasNotBeenAborted?"":"has Been Aborted") + " " */+ (hasNotBeenAbortedAndIsGoingToBeRestarted?"":"has Been Aborted And Is Going To Be Restarted")+"</font>");
         }
     }
 

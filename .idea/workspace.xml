@@ -1,20 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ccedab0e-c551-476f-865b-f80f2a4de36f" name="Default" comment="Added results summarizer">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/SimParams.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/SimParams.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/protocols/deadlockDetection/AgentDDP/GlobalAgent.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/protocols/deadlockDetection/AgentDDP/GlobalAgent.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/protocols/deadlockDetection/AgentDDP/LocalAgent.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/protocols/deadlockDetection/AgentDDP/LocalAgent.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/protocols/deadlockDetection/mobileAgentEnabledApproach/MobileAgent.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/protocols/deadlockDetection/mobileAgentEnabledApproach/MobileAgent.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/server/transactionManager/Transaction.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/server/transactionManager/Transaction.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/server/transactionManager/TransactionGenerator.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/server/transactionManager/TransactionGenerator.class" />
+    <list default="true" id="ccedab0e-c551-476f-865b-f80f2a4de36f" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/params_bkup.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/server/lockManager/LockManager.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/server/lockManager/LockManager.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/server/transactionManager/TransactionManager.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/server/transactionManager/TransactionManager.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/ui/Output.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/ui/Output.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/params.txt" afterPath="$PROJECT_DIR$/params.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/simulator/SimParams.java" afterPath="$PROJECT_DIR$/src/simulator/SimParams.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/mobileAgentEnabledApproach/MobileAgent.java" afterPath="$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/mobileAgentEnabledApproach/MobileAgent.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/simulator/server/lockManager/LockManager.java" afterPath="$PROJECT_DIR$/src/simulator/server/lockManager/LockManager.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/simulator/server/transactionManager/TransactionManager.java" afterPath="$PROJECT_DIR$/src/simulator/server/transactionManager/TransactionManager.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/stats/Statistics.java" afterPath="$PROJECT_DIR$/src/stats/Statistics.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ui/Output.java" afterPath="$PROJECT_DIR$/src/ui/Output.java" />
     </list>
     <ignored path="DDS-csgit.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -49,18 +44,18 @@
       <file leaf-file-name="params.txt" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/params.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
-              <caret line="11" column="15" lean-forward="true" selection-start-line="11" selection-start-column="15" selection-end-line="11" selection-end-column="15" />
+            <state relative-caret-position="17">
+              <caret line="1" column="0" lean-forward="false" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="10" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SimParams.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/simulator/SimParams.java">
+      <file leaf-file-name="params_bkup.txt" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/params_bkup.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="23">
-              <caret line="23" column="0" lean-forward="false" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
+            <state relative-caret-position="17">
+              <caret line="1" column="10" lean-forward="false" selection-start-line="1" selection-start-column="10" selection-end-line="1" selection-end-column="10" />
               <folding />
             </state>
           </provider>
@@ -86,6 +81,26 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="LockManager.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/simulator/server/lockManager/LockManager.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="399">
+              <caret line="86" column="46" lean-forward="false" selection-start-line="86" selection-start-column="46" selection-end-line="86" selection-end-column="46" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Output.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/ui/Output.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-552">
+              <caret line="106" column="63" lean-forward="false" selection-start-line="106" selection-start-column="63" selection-end-line="106" selection-end-column="63" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="TransactionGenerator.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/simulator/server/transactionManager/TransactionGenerator.java">
           <provider selected="true" editor-type-id="text-editor">
@@ -96,14 +111,27 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TransactionManager.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="TransactionManager.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/simulator/server/transactionManager/TransactionManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="307">
-              <caret line="477" column="5" lean-forward="true" selection-start-line="477" selection-start-column="5" selection-end-line="477" selection-end-column="5" />
+            <state relative-caret-position="239">
+              <caret line="419" column="0" lean-forward="false" selection-start-line="419" selection-start-column="0" selection-end-line="419" selection-end-column="0" />
               <folding>
-                <element signature="e#16823#16824#0" expanded="true" />
-                <element signature="e#16879#16880#0" expanded="true" />
+                <element signature="e#16827#16828#0" expanded="true" />
+                <element signature="e#16883#16884#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Server.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/simulator/server/Server.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="247">
+              <caret line="66" column="16" lean-forward="false" selection-start-line="66" selection-start-column="16" selection-end-line="66" selection-end-column="16" />
+              <folding>
+                <element signature="e#2211#2212#0" expanded="true" />
+                <element signature="e#2245#2246#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -114,36 +142,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-825">
               <caret line="121" column="0" lean-forward="false" selection-start-line="121" selection-start-column="0" selection-end-line="121" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Statistics.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/stats/Statistics.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="938">
-              <caret line="86" column="1" lean-forward="true" selection-start-line="86" selection-start-column="1" selection-end-line="86" selection-end-column="1" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/Main.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="169">
-              <caret line="59" column="0" lean-forward="false" selection-start-line="59" selection-start-column="0" selection-end-line="59" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="GlobalAgent.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/AgentDDP/GlobalAgent.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2533">
-              <caret line="168" column="49" lean-forward="false" selection-start-line="168" selection-start-column="49" selection-end-line="168" selection-end-column="49" />
               <folding />
             </state>
           </provider>
@@ -182,6 +180,7 @@
       <find>.rand</find>
       <find>simParams.rand</find>
       <find>&lt;html&gt;</find>
+      <find>Released</find>
     </findStrings>
     <replaceStrings>
       <replace>log.log(&quot;Mobile Agent</replace>
@@ -208,7 +207,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/src/simulator/protocols/priority/PriorityProtocol.java" />
         <option value="$PROJECT_DIR$/src/simulator/protocols/priority/EarliestDeadlineFirst.java" />
         <option value="$PROJECT_DIR$/src/simulator/protocols/priority/FirstComeFirstServe.java" />
@@ -238,7 +236,6 @@
         <option value="$PROJECT_DIR$/src/simulator/server/transactionManager/Transaction.java" />
         <option value="$PROJECT_DIR$/src/ui/GraphVisualizer.java" />
         <option value="$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/WFG/Graph.java" />
-        <option value="$PROJECT_DIR$/src/simulator/server/lockManager/LockManager.java" />
         <option value="$PROJECT_DIR$/src/simulator/Notes" />
         <option value="$PROJECT_DIR$/src/simulator/server/network/Message.java" />
         <option value="$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/AgentDDP/AgentDeadlockDetectionProtocol.java" />
@@ -247,7 +244,6 @@
         <option value="$PROJECT_DIR$/src/simulator/server/network/NetworkConnection.java" />
         <option value="$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/AgentDDP/LocalAgent.java" />
         <option value="$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/AgentDDP/GlobalAgent.java" />
-        <option value="$PROJECT_DIR$/src/ui/Output.java" />
         <option value="$PROJECT_DIR$/src/main/Main.java" />
         <option value="$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/ChandyMisraHaas/ChandyMisraHaasDDP.java" />
         <option value="$PROJECT_DIR$/src/simulator/protocols/deadlockResolution/DeadlockResolutionProtocol.java" />
@@ -258,7 +254,10 @@
         <option value="$PROJECT_DIR$/src/stats/Statistics.java" />
         <option value="$PROJECT_DIR$/params.txt" />
         <option value="$PROJECT_DIR$/src/simulator/SimParams.java" />
+        <option value="$PROJECT_DIR$/src/ui/Output.java" />
+        <option value="$PROJECT_DIR$/src/simulator/server/lockManager/LockManager.java" />
         <option value="$PROJECT_DIR$/src/simulator/server/transactionManager/TransactionManager.java" />
+        <option value="$PROJECT_DIR$/params_bkup.txt" />
       </list>
     </option>
   </component>
@@ -347,6 +346,11 @@
     <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder3" value="3" />
     <property name="js.eslint.eslintPackage" value="" />
     <property name="com.intellij.database.dataSource.DataSourceTemplate" value="MySQL" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Chris\IdeaProjects\DDS-csgit" />
+    </key>
   </component>
   <component name="RestoreUpdateTree" date="Moments ago" ActionInfo="_Update">
     <UpdatedFiles>
@@ -797,11 +801,11 @@
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26694474" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.0" sideWeight="0.8068536" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3296582" sideWeight="0.8068536" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run with VisualVM" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Statistic" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32917964" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.27868852" sideWeight="0.495" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.12789416" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.12789416" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.09492635" sideWeight="0.19314642" order="6" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25233644" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -878,7 +882,8 @@
     <MESSAGE value="Made the timeout time the trans' deadline time.&#10;Added in a results summarizer.&#10;Investigated DDP protocols not producing good results." />
     <MESSAGE value="Fixed a couple things. Added some extra logging of deadlocks detected and resolved.&#10;Does not work very well in its current state. Seems to be having performance issues" />
     <MESSAGE value="Added results summarizer" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added results summarizer" />
+    <MESSAGE value="Merged and added color to some log messages" />
+    <option name="LAST_COMMIT_MESSAGE" value="Merged and added color to some log messages" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -915,7 +920,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/simulator/server/transactionManager/TransactionManager.java</url>
-          <line>818</line>
+          <line>819</line>
           <properties />
           <option name="timeStamp" value="124" />
         </line-breakpoint>
@@ -941,13 +946,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/WFG/WFGNode.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="440">
-          <caret line="20" column="5" lean-forward="false" selection-start-line="20" selection-start-column="5" selection-end-line="20" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_121/src.zip!/java/util/HashSet.java" />
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_121/src.zip!/java/lang/NumberFormatException.java" />
     <entry file="file://$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/mobileAgentEnabledApproach/StaticAgent.java">
@@ -1078,13 +1076,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ui/Output.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
-          <caret line="100" column="59" lean-forward="true" selection-start-line="100" selection-start-column="59" selection-end-line="100" selection-end-column="59" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/simulator/SimSetupParams.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="154">
@@ -1156,13 +1147,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/simulator/server/Server.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1802">
-          <caret line="135" column="0" lean-forward="false" selection-start-line="135" selection-start-column="0" selection-end-line="135" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_91/jre/lib/rt.jar!/sun/misc/Unsafe.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="237">
@@ -1189,20 +1173,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="221">
           <caret line="91" column="20" lean-forward="false" selection-start-line="91" selection-start-column="20" selection-end-line="91" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/simulator/server/lockManager/LockManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3145">
-          <caret line="194" column="0" lean-forward="false" selection-start-line="194" selection-start-column="0" selection-end-line="194" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#14030#14031#0" expanded="false" />
-            <element signature="e#14062#14063#0" expanded="false" />
-            <element signature="e#14119#14120#0" expanded="false" />
-            <element signature="e#14154#14155#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1260,14 +1230,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/params.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="11" column="15" lean-forward="true" selection-start-line="11" selection-start-column="15" selection-end-line="11" selection-end-column="15" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/simulator/SimParams.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="23">
@@ -1316,14 +1278,57 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/simulator/server/Server.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="247">
+          <caret line="66" column="16" lean-forward="false" selection-start-line="66" selection-start-column="16" selection-end-line="66" selection-end-column="16" />
+          <folding>
+            <element signature="e#2211#2212#0" expanded="true" />
+            <element signature="e#2245#2246#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ui/Output.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-552">
+          <caret line="106" column="63" lean-forward="false" selection-start-line="106" selection-start-column="63" selection-end-line="106" selection-end-column="63" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/simulator/server/lockManager/LockManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="399">
+          <caret line="86" column="46" lean-forward="false" selection-start-line="86" selection-start-column="46" selection-end-line="86" selection-end-column="46" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/simulator/server/transactionManager/TransactionManager.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="307">
-          <caret line="477" column="5" lean-forward="true" selection-start-line="477" selection-start-column="5" selection-end-line="477" selection-end-column="5" />
+        <state relative-caret-position="239">
+          <caret line="419" column="0" lean-forward="false" selection-start-line="419" selection-start-column="0" selection-end-line="419" selection-end-column="0" />
           <folding>
-            <element signature="e#16823#16824#0" expanded="true" />
-            <element signature="e#16879#16880#0" expanded="true" />
+            <element signature="e#16827#16828#0" expanded="true" />
+            <element signature="e#16883#16884#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/params.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="0" lean-forward="false" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="10" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/params_bkup.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="10" lean-forward="false" selection-start-line="1" selection-start-column="10" selection-end-line="1" selection-end-column="10" />
+          <folding />
         </state>
       </provider>
     </entry>

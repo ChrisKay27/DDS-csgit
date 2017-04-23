@@ -32,7 +32,7 @@ public class SimParams {
     public static int latency = 5;
     public final int arrivalRateMean;
     public final int maxActiveTrans;
-    private int numTransPerServer = 80;
+    private int numTransPerServer = 500;
     private final double updateRate;
     private final int numPages;
     public String DRP;

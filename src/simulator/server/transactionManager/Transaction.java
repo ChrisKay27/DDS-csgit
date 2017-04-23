@@ -86,6 +86,7 @@ public class Transaction {
 
         boolean allCohortsAreReadyToCommit = allCohortsAreReadyToCommit();
 
+//        System.out.println(getID() + ": " + allProcessingDone + " " + allLocksAcquired + " " + allCohortsAreReadyToCommit);
         return allProcessingDone && allLocksAcquired && allCohortsAreReadyToCommit;
     }
 
@@ -316,5 +317,4 @@ public class Transaction {
     public int getAbortCount() {
         return abortCount;
     }
-
 }

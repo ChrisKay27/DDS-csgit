@@ -54,8 +54,8 @@ public class TransactionManager {
     }
 
     private void acceptTrans(Transaction t) {
-        if(Log.isLoggingEnabled())
-            log.log(t,"Transaction generated: " + t.fullToString());
+        if (Log.isLoggingEnabled())
+            log.log(t, "Transaction generated: " + t.fullToString());
         allMasterTransactions.add(t);
         queuedTransactions.add(t);
 
@@ -215,7 +215,7 @@ public class TransactionManager {
 
 
         if(!(t instanceof CohortTransaction) && t.getDeadline() > simParams.timeProvider.get()+ t.getExecutionTime() ){
-            //if(!(t instanceof CohortTransaction) && t.getDeadline() > simParams.timeProvider.get()+SimParams.predictedTransactionTime ){
+        //if(!(t instanceof CohortTransaction) && t.getDeadline() > simParams.timeProvider.get()+SimParams.predictedTransactionTime ){
             if(Log.isLoggingEnabled())
                 log.log(t, "<font color=\"green\">Deadline in the future, restarting transaction</font>");
 
@@ -280,7 +280,7 @@ public class TransactionManager {
             case "A": {
 
                 if (Log.isLoggingEnabled())
-                    log.log(transID, "<font color=\"red\">Abort message received"+"</font>");
+                    log.log(transID, "<font color=\"red\">Abort message received" + "</font>");
 
                 if (isOnThisServer(transID))
                     abort(getActiveTransaction(transID));
@@ -449,19 +449,27 @@ public class TransactionManager {
         if (Log.isLoggingEnabled())
             log.log(transID, "Lock acquired for page " + pageNum + " on server " + serverID);
 
+//
+//        boolean hasNotBeenAborted = !hasBeenAborted(transID);
+//        boolean hasNotBeenAbortedAndIsGoingToBeRestarted = !hasBeenAbortedAndGoingToBeRestarted(transID);
 
-        // boolean hasNotBeenAborted = !hasBeenAborted(transID);
-        boolean hasNotBeenAbortedAndIsGoingToBeRestarted = !hasBeenAbortedAndGoingToBeRestarted(transID);
-
-        if ( hasNotBeenAbortedAndIsGoingToBeRestarted) { //hasNotBeenAborted &&
+        if ( isActive(transID) ) { //
             Transaction t = getActiveTransaction(transID);
             t.lockAcquired(pageNum, serverID);
             tryToCommit(t);
         }
         else{
             if (Log.isLoggingEnabled())
-                log.log(transID, "<font color=\"orange\">"/*+(hasNotBeenAborted?"":"has Been Aborted") + " " */+ (hasNotBeenAbortedAndIsGoingToBeRestarted?"":"has Been Aborted And Is Going To Be Restarted")+"</font>");
+                log.log(transID, "<font color=\"orange\">Transaction is not active</font>");
         }
+    }
+
+    private boolean isActive(int transID) {
+        for (Transaction t : activeTransactions)
+            if (t.getID() == transID)
+                return true;
+
+        return false;
     }
 
     private boolean hasBeenAborted(int transID) {
@@ -479,7 +487,6 @@ public class TransactionManager {
 
         return false;
     }
-
 
 
     /**
@@ -557,7 +564,7 @@ public class TransactionManager {
 
                 boolean allCohortsAreReadyToCommit = t.allCohortsAreReadyToCommit();
 
-                log.log(t, "Tried to commit, not ready yet allProcessingDone=" + allProcessingDone + " allLocksAcquire="+allLocksAcquired + " allCohortsAreReadyToCommit=" + allCohortsAreReadyToCommit);
+                log.log(t, "Tried to commit, not ready yet allProcessingDone=" + allProcessingDone + " allLocksAcquire=" + allLocksAcquired + " allCohortsAreReadyToCommit=" + allCohortsAreReadyToCommit);
 
             }
         }
@@ -621,7 +628,7 @@ public class TransactionManager {
         boolean completedOnTime = t.getDeadline() >= time;
 
         if (Log.isLoggingEnabled()) {
-            if( completedOnTime )
+            if (completedOnTime)
                 log.log(t, "<font color=\"green\">" + (t instanceof CohortTransaction ? "Cohort " : "The ") + "transaction completed on time! :)" + "</font>");
             else
                 log.log(t, "<font color=\"red\">" + (t instanceof CohortTransaction ? "Cohort " : "The ") + "transaction completed late! :(" + "</font>");

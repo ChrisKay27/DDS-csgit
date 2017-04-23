@@ -2,28 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ccedab0e-c551-476f-865b-f80f2a4de36f" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/protocols/deadlockDetection/mobileAgentEnabledApproach/Notes.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/simulator/Notes" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/mobileAgentEnabledApproach/Notes.txt" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/SimParams.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/SimParams.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/protocols/deadlockDetection/AgentDDP/LocalAgent.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/protocols/deadlockDetection/AgentDDP/LocalAgent.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/protocols/deadlockDetection/mobileAgentEnabledApproach/StaticAgent.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/protocols/deadlockDetection/mobileAgentEnabledApproach/StaticAgent.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/server/lockManager/LockManager.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/server/lockManager/LockManager.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/server/transactionManager/Transaction.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/server/transactionManager/Transaction.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/server/transactionManager/TransactionManager.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/server/transactionManager/TransactionManager.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/stats/Statistics.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/stats/Statistics.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/ui/Output.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/ui/Output.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/DDS-csgit.iml" afterPath="$PROJECT_DIR$/.idea/DDS-csgit.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/simulator/SimParams.java" afterPath="$PROJECT_DIR$/src/simulator/SimParams.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/AgentDDP/LocalAgent.java" afterPath="$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/AgentDDP/LocalAgent.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/mobileAgentEnabledApproach/StaticAgent.java" afterPath="$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/mobileAgentEnabledApproach/StaticAgent.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/simulator/server/lockManager/LockManager.java" afterPath="$PROJECT_DIR$/src/simulator/server/lockManager/LockManager.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/simulator/server/transactionManager/Transaction.java" afterPath="$PROJECT_DIR$/src/simulator/server/transactionManager/Transaction.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/simulator/server/transactionManager/TransactionGenerator.java" afterPath="$PROJECT_DIR$/src/simulator/server/transactionManager/TransactionGenerator.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/simulator/server/transactionManager/TransactionManager.java" afterPath="$PROJECT_DIR$/src/simulator/server/transactionManager/TransactionManager.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/stats/Statistics.java" afterPath="$PROJECT_DIR$/src/stats/Statistics.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ui/Output.java" afterPath="$PROJECT_DIR$/src/ui/Output.java" />
     </list>
     <ignored path="DDS-csgit.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -55,7 +34,7 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
-      <file leaf-file-name="params.txt" pinned="false" current-in-tab="false">
+      <file leaf-file-name="params.txt" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/params.txt">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="242">
@@ -92,6 +71,17 @@
               <caret line="456" column="0" lean-forward="false" selection-start-line="456" selection-start-column="0" selection-end-line="456" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <marker date="1492914057729" expanded="true" signature="27067:27131" ph="//..." />
+                <marker date="1492914057729" expanded="true" signature="31850:32581" ph="{...}" />
+                <marker date="1492914057729" expanded="false" signature="32606:32617" ph=" { " />
+                <marker date="1492914057729" expanded="false" signature="32628:32634" ph=" }" />
+                <marker date="1492914057729" expanded="false" signature="34643:34649" ph=" }" />
+                <marker date="1492914057729" expanded="false" signature="34703:34714" ph=" { " />
+                <marker date="1492914057729" expanded="false" signature="34740:34746" ph=" }" />
+                <marker date="1492914057729" expanded="false" signature="34998:35009" ph=" { " />
+                <marker date="1492914057729" expanded="false" signature="35038:35044" ph=" }" />
+                <marker date="1492914057729" expanded="false" signature="35085:35096" ph=" { " />
+                <marker date="1492914057729" expanded="false" signature="35106:35112" ph=" }" />
               </folding>
             </state>
           </provider>
@@ -117,12 +107,27 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SimParams.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="SimParams.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/simulator/SimParams.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="198">
-              <caret line="37" column="22" lean-forward="false" selection-start-line="37" selection-start-column="22" selection-end-line="37" selection-end-column="22" />
-              <folding />
+            <state relative-caret-position="506">
+              <caret line="53" column="0" lean-forward="true" selection-start-line="53" selection-start-column="0" selection-end-line="53" selection-end-column="0" />
+              <folding>
+                <element signature="e#5831#5832#0" expanded="true" />
+                <element signature="e#5887#5888#0" expanded="true" />
+                <element signature="e#5942#5943#0" expanded="true" />
+                <element signature="e#5981#5982#0" expanded="true" />
+                <element signature="e#6020#6021#0" expanded="true" />
+                <element signature="e#6045#6046#0" expanded="true" />
+                <element signature="e#6091#6092#0" expanded="true" />
+                <element signature="e#6119#6120#0" expanded="true" />
+                <element signature="e#6165#6166#0" expanded="true" />
+                <element signature="e#6202#6203#0" expanded="true" />
+                <element signature="e#6267#6268#0" expanded="true" />
+                <element signature="e#6319#6320#0" expanded="true" />
+                <element signature="e#6395#6396#0" expanded="true" />
+                <element signature="e#6444#6445#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -268,9 +273,9 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-11" />
+    <option name="x" value="-9" />
     <option name="y" value="-9" />
-    <option name="width" value="1932" />
+    <option name="width" value="1938" />
     <option name="height" value="1050" />
   </component>
   <component name="ProjectView">
@@ -825,7 +830,7 @@
       <workItem from="1489017089129" duration="59000" />
       <workItem from="1492816440135" duration="18722000" />
       <workItem from="1492913260663" duration="645000" />
-      <workItem from="1492913950712" duration="12000" />
+      <workItem from="1492913950712" duration="151000" />
     </task>
     <task id="LOCAL-00001" summary="test commit">
       <created>1476486077277</created>
@@ -890,26 +895,34 @@
       <option name="project" value="LOCAL" />
       <updated>1492913882296</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Update&#10;">
+      <created>1492913979534</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1492913979534</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="312236000" />
+    <option name="totallyTimeSpent" value="312375000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-11" y="-9" width="1932" height="1050" extended-state="0" />
+    <frame x="-9" y="-9" width="1938" height="1050" extended-state="6" />
     <editor active="false" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30101466" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3230563" sideWeight="0.505" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32838285" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.259301" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.259301" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -926,7 +939,6 @@
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24961832" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30101466" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3296875" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.27733934" sideWeight="0.495" order="1" side_tool="false" content_ui="tabs" />
@@ -1232,6 +1244,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="216">
           <caret line="87" column="0" lean-forward="false" selection-start-line="87" selection-start-column="0" selection-end-line="87" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1239,6 +1252,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="4114">
           <caret line="191" column="1" lean-forward="false" selection-start-line="191" selection-start-column="1" selection-end-line="191" selection-end-column="1" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1268,6 +1282,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="184">
           <caret line="82" column="39" lean-forward="false" selection-start-line="82" selection-start-column="30" selection-end-line="82" selection-end-column="39" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1275,6 +1290,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="312">
           <caret line="122" column="27" lean-forward="false" selection-start-line="122" selection-start-column="27" selection-end-line="122" selection-end-column="27" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1282,6 +1298,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="184">
           <caret line="101" column="39" lean-forward="false" selection-start-line="101" selection-start-column="30" selection-end-line="101" selection-end-column="39" />
+          <folding>
+            <element signature="e#2202#2203#0" expanded="false" />
+            <element signature="e#2247#2248#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1289,6 +1309,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="400">
           <caret line="233" column="131" lean-forward="false" selection-start-line="233" selection-start-column="131" selection-end-line="233" selection-end-column="131" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1307,26 +1328,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/params-light.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/params-heavy.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/simulator/server/network/NetworkInterface.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="668">
           <caret line="81" column="0" lean-forward="false" selection-start-line="81" selection-start-column="0" selection-end-line="81" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1334,6 +1340,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="166">
           <caret line="100" column="0" lean-forward="false" selection-start-line="100" selection-start-column="0" selection-end-line="100" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1341,6 +1348,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="166">
           <caret line="177" column="0" lean-forward="false" selection-start-line="177" selection-start-column="0" selection-end-line="177" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1356,6 +1364,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="208">
           <caret line="96" column="0" lean-forward="false" selection-start-line="96" selection-start-column="0" selection-end-line="96" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1380,7 +1391,57 @@
           <caret line="456" column="0" lean-forward="false" selection-start-line="456" selection-start-column="0" selection-end-line="456" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
+            <marker date="1492914057729" expanded="true" signature="27067:27131" ph="//..." />
+            <marker date="1492914057729" expanded="true" signature="31850:32581" ph="{...}" />
+            <marker date="1492914057729" expanded="false" signature="32606:32617" ph=" { " />
+            <marker date="1492914057729" expanded="false" signature="32628:32634" ph=" }" />
+            <marker date="1492914057729" expanded="false" signature="34643:34649" ph=" }" />
+            <marker date="1492914057729" expanded="false" signature="34703:34714" ph=" { " />
+            <marker date="1492914057729" expanded="false" signature="34740:34746" ph=" }" />
+            <marker date="1492914057729" expanded="false" signature="34998:35009" ph=" { " />
+            <marker date="1492914057729" expanded="false" signature="35038:35044" ph=" }" />
+            <marker date="1492914057729" expanded="false" signature="35085:35096" ph=" { " />
+            <marker date="1492914057729" expanded="false" signature="35106:35112" ph=" }" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/simulator/SimParams.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="506">
+          <caret line="53" column="0" lean-forward="true" selection-start-line="53" selection-start-column="0" selection-end-line="53" selection-end-column="0" />
+          <folding>
+            <element signature="e#5831#5832#0" expanded="true" />
+            <element signature="e#5887#5888#0" expanded="true" />
+            <element signature="e#5942#5943#0" expanded="true" />
+            <element signature="e#5981#5982#0" expanded="true" />
+            <element signature="e#6020#6021#0" expanded="true" />
+            <element signature="e#6045#6046#0" expanded="true" />
+            <element signature="e#6091#6092#0" expanded="true" />
+            <element signature="e#6119#6120#0" expanded="true" />
+            <element signature="e#6165#6166#0" expanded="true" />
+            <element signature="e#6202#6203#0" expanded="true" />
+            <element signature="e#6267#6268#0" expanded="true" />
+            <element signature="e#6319#6320#0" expanded="true" />
+            <element signature="e#6395#6396#0" expanded="true" />
+            <element signature="e#6444#6445#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/params-light.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/params-heavy.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1388,14 +1449,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="242">
           <caret line="11" column="15" lean-forward="false" selection-start-line="11" selection-start-column="15" selection-end-line="11" selection-end-column="15" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/simulator/SimParams.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="37" column="22" lean-forward="false" selection-start-line="37" selection-start-column="22" selection-end-line="37" selection-end-column="22" />
           <folding />
         </state>
       </provider>

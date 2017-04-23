@@ -1,26 +1,12 @@
-LOGGING:true
-<<<<<<< HEAD
+LOGGING:false
 SEED:35121
 Topology:HyperCube
-NumPages:400
-ArrivalRate:300
-DDP:AgentDeadlockDetectionProtocol
+NumPages:1000
+ArrivalRate:90
+DDP:AgentDeadlockDetectionProtocol,MAEDD
 DRP:PriorityDeadlockResolution
 PP:EarliestDeadlineFirst
 DetectionInterval:100
-MaxActiveTransactions:10
-AgentsHistoryLength:3
-UpdateRate:0.60
-=======
-SEED:127440
-Topology:HyperCube
-NumPages:80
-ArrivalRate:5
-DDP:AgentDeadlockDetectionProtocol,TimeoutDeadlockDetection,ChandyMisraHaasDDP
-DRP:FirstDeadlockResolution
-PP:EarliestDeadlineFirst
-DetectionInterval:1000
 MaxActiveTransactions:30
 AgentsHistoryLength:3
-UpdateRate:0.3
->>>>>>> github/master
+UpdateRate:0.50

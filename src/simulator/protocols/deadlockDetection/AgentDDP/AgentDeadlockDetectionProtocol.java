@@ -23,10 +23,10 @@ import ui.Log;
 public class AgentDeadlockDetectionProtocol extends WFG_DDP {
 
     protected final Log log;
-    protected List<Integer> allServers = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7);
+//    protected List<Integer> allServers = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7);
 
-    private List<List<WFGNode>> deadlocks = new LinkedList<>();
-    private final List<Integer> receivedFromServers = new ArrayList<>();
+//    private List<List<WFGNode>> deadlocks = new LinkedList<>();
+//    private final List<Integer> receivedFromServers = new ArrayList<>();
 
     private final LocalAgent localAgent;
     private GlobalAgent globalAgent;
@@ -82,7 +82,7 @@ public class AgentDeadlockDetectionProtocol extends WFG_DDP {
         NetworkInterface NIC = server.getNIC();
 
         //Calculate the amount of overhead to incur
-        int size = localWFG.getNumberOfWaits()/100;
+        int size = localWFG.getNumberOfWaits();
         if (size == 0)
             size = 1;
 
@@ -93,21 +93,20 @@ public class AgentDeadlockDetectionProtocol extends WFG_DDP {
                 message.setSize(size);
                 message.setReoccuring(true);
                 NIC.sendMessage(message);
-                //simParams.messageOverhead += size;
             }
         }
 
         boolean isAGlobalDetector = serverID < simParams.globalDetectors;
         if (!isAGlobalDetector) {
             //If this isn't a global detector it posts an event to check for deadlocks in the future and clears its WFGBuilder
-            eventQueue.accept(new Event(simParams.getTime() + simParams.getDeadlockDetectInterval() + 100, serverID, this::startDetectionIteration, true));
+            eventQueue.accept(new Event(simParams.getTime() + simParams.getDeadlockDetectInterval(), serverID, this::startDetectionIteration, true));
             return;
         }
 
         updateWFGraph(localWFG, serverID);
     }
 
-    private static void findDeadlocks(List<? extends WFGNode> trans, List<AgentDeadlockDetectionProtocol> addps, Graph<WFGNode> WFG) {
+//    private static void findDeadlocks(List<? extends WFGNode> trans, List<AgentDeadlockDetectionProtocol> addps, Graph<WFGNode> WFG) {
 //        for (int j = 0; j < addps.size(); j++) {
 //            AgentDeadlockDetectionProtocol addp = addps.get(j);
 //
@@ -123,7 +122,7 @@ public class AgentDeadlockDetectionProtocol extends WFG_DDP {
 //                addp.followCycle(WFG, t, WFG.getEdgesFrom(t), new ArrayList<>());
 //            }
 //        }
-    }
+//    }
 
 
     /* For debugging purposes
@@ -295,69 +294,69 @@ public class AgentDeadlockDetectionProtocol extends WFG_DDP {
 
 //        return passed;
 //    }
-    private static void printResults(List<AgentDeadlockDetectionProtocol> addps) {
-        for (int j = 0; j < addps.size(); j++) {
-            AgentDeadlockDetectionProtocol addp = addps.get(j);
+//    private static void printResults(List<AgentDeadlockDetectionProtocol> addps) {
+//        for (int j = 0; j < addps.size(); j++) {
+//            AgentDeadlockDetectionProtocol addp = addps.get(j);
+//
+//            final int J = j;
+//            addp.deadlocks.forEach(deadlock -> {
+//                System.out.print("addp" + J + ".deadlocks = ");
+//                System.out.println("[" + printDeadlocks(deadlock) + "], ");
+//            });
+//        }
+//    }
 
-            final int J = j;
-            addp.deadlocks.forEach(deadlock -> {
-                System.out.print("addp" + J + ".deadlocks = ");
-                System.out.println("[" + printDeadlocks(deadlock) + "], ");
-            });
-        }
-    }
+//    public static String printDeadlocks(List<WFGNode> deadlocks) {
+//        StringBuilder sb = new StringBuilder();
+//
+//        for (WFGNode wfgNode : deadlocks) {
+//            sb.append('t').append(wfgNode.getID()).append(" -> ");
+//        }
+//        sb.append('t').append(deadlocks.get(0).getID());
+//
+//        return sb.toString();
+//    }
 
-    public static String printDeadlocks(List<WFGNode> deadlocks) {
-        StringBuilder sb = new StringBuilder();
+//    private static List<WFGNode> getWFGNodes(int numberOfNodes) {
+//        List<WFGNode> addps = new ArrayList<>();
+//        for (int i = 0; i < numberOfNodes; i++)
+//            addps.add(new WFG_Node(i));
+//        return addps;
+//    }
 
-        for (WFGNode wfgNode : deadlocks) {
-            sb.append('t').append(wfgNode.getID()).append(" -> ");
-        }
-        sb.append('t').append(deadlocks.get(0).getID());
+//    private static List<AgentDeadlockDetectionProtocol> getADDPS(int numberOfAgents) {
+//        List<AgentDeadlockDetectionProtocol> addps = new ArrayList<>();
+//        for (int i = 0; i < numberOfAgents; i++)
+//            addps.add(new AgentDeadlockDetectionProtocol(null, null, l -> {
+//            }, overhead -> {
+//            }, deadlock -> {
+//            }));
+//        return addps;
+//    }
 
-        return sb.toString();
-    }
-
-    private static List<WFGNode> getWFGNodes(int numberOfNodes) {
-        List<WFGNode> addps = new ArrayList<>();
-        for (int i = 0; i < numberOfNodes; i++)
-            addps.add(new WFG_Node(i));
-        return addps;
-    }
-
-    private static List<AgentDeadlockDetectionProtocol> getADDPS(int numberOfAgents) {
-        List<AgentDeadlockDetectionProtocol> addps = new ArrayList<>();
-        for (int i = 0; i < numberOfAgents; i++)
-            addps.add(new AgentDeadlockDetectionProtocol(null, null, l -> {
-            }, overhead -> {
-            }, deadlock -> {
-            }));
-        return addps;
-    }
-
-    public static class WFG_Node implements WFGNode {
-        public WFG_Node(int id) {
-            this.id = id;
-        }
-
-        int id;
-
-        @Override
-        public int getID() {
-            return id;
-        }
-
-        @Override
-        public String toString() {
-            return "[id=" + id + "]";
-        }
-
-        public int compareTo(WFGNode o) {
-            if (id < o.getID())
-                return 1;
-            else if (id > o.getID())
-                return -1;
-            return 0;
-        }
-    }
+//    public static class WFG_Node implements WFGNode {
+//        public WFG_Node(int id) {
+//            this.id = id;
+//        }
+//
+//        int id;
+//
+//        @Override
+//        public int getID() {
+//            return id;
+//        }
+//
+//        @Override
+//        public String toString() {
+//            return "[id=" + id + "]";
+//        }
+//
+//        public int compareTo(WFGNode o) {
+//            if (id < o.getID())
+//                return 1;
+//            else if (id > o.getID())
+//                return -1;
+//            return 0;
+//        }
+//    }
 }

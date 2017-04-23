@@ -22,7 +22,6 @@ import java.util.function.Consumer;
 
 /**
  * t=0 Simulation starts
- * t=300 WFG get sent to all nodes
  * t=x all WFGs have been received, start searching, then periodically clear WFG and start over
  */
 public class WFG_DDP extends DeadlockDetectionProtocol {
@@ -83,13 +82,13 @@ public class WFG_DDP extends DeadlockDetectionProtocol {
         //Search the local graph
         searchGraph(localWFG);
 
+
+        // MANI: potential extra delay
         //post an event to send the local WFG to the global detectors. We wait for this so the local deadlocks can resolve before going global
-        eventQueue.accept(new Event(simParams.getTime() + 100, serverID, this::sendLocalWFGToGlobals, true));
+        eventQueue.accept(new Event(simParams.getTime() + 1, serverID, this::sendLocalWFGToGlobals, true));
     }
 
     public void sendLocalWFGToGlobals() {
-//        System.out.println("sendLocalWFGToGlobals() simParams.globalDetectors=" + simParams.globalDetectors);
-
         //Create the local WFG
         Graph<WFGNode> localWFG = createLocalGraphOfWaits();
 
@@ -99,7 +98,7 @@ public class WFG_DDP extends DeadlockDetectionProtocol {
         NetworkInterface NIC = server.getNIC();
 
         //Calculate the amount of overhead to incur
-        int size = localWFG.getNumberOfWaits()/100;
+        int size = localWFG.getNumberOfWaits();
         if (size == 0)
             size = 1;
 
@@ -110,7 +109,6 @@ public class WFG_DDP extends DeadlockDetectionProtocol {
                 message.setSize(size);
                 message.setReoccuring(true);
                 NIC.sendMessage(message);
-                //simParams.messageOverhead += size;
             }
         }
 

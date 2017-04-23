@@ -35,9 +35,6 @@ public class MobileAgent {
     private List<Graph<WFGNode>> receivedWFGs;
     private Consumer<Event> eventQueue;
 
-    private final String BACKWARD = "BACKWARD";
-    private final String FORWARD = "FORWARD";
-
     /**
      * List of servers for this agent to visit.
      */
@@ -83,18 +80,15 @@ public class MobileAgent {
 
         receivedFromServers.add(server);
 
-        //if (receivedFromServers.containsAll(simParams.allServersList)) {
         if (receivedFromServers.containsAll(getS_List())) {
             BiConsumer<Graph<WFGNode>, Integer> wfGraphConsumer = maedd.getWfGraphConsumer();
             if (wfGraphConsumer != null) {
-                //System.out.println("Graph has " + wfgBuilder.size() + " nodes at time " + simParams.getTime());
                 Graph<WFGNode> copy = wfgBuilder.build();
                 copy.setGlobal(true);
                 wfGraphConsumer.accept(copy, simParams.getTime());
             }
 
             searchGraph(wfgBuilder.build());
-            //eventQueue.accept(new Event(simParams.getTime() + simParams.getDeadlockDetectInterval(), serverID, maedd::startDetectionIteration));
 
             //clear wfgBuilder so we can start fresh next round
             wfgBuilder = new GraphBuilder<>();
@@ -113,24 +107,16 @@ public class MobileAgent {
 
         List<Integer> globalDetectors = maedd.getMobileAgentServers();
 
-// MANI: CHANGE!!!
         List<Integer> involvedServers = new ArrayList<>(getS_List());
         Collections.sort(involvedServers);
         List<Integer> forward = new ArrayList<>(involvedServers.subList(0, involvedServers.size()/2));
         involvedServers.removeAll(forward);
         List<Integer> backward = new ArrayList<>(involvedServers);
 
-<<<<<<< HEAD
-=======
-//        System.out.println("************");
->>>>>>> github/master
-        log.log("Forward: " + forward);
-        log.log("Backward: " + backward);
-
-        //TODO share servers in s_list and hence the transactions between two agents
-        log.log("serverID: "+serverID);
-
-        //int thisNodesIndex = globalDetectors.indexOf(server.getID());
+        if(Log.isLoggingEnabled()) {
+            log.log("Servers that Forward mobile agent cares about: " + forward);
+            log.log("Servers that Backward mobile agent cares about: " + backward);
+        }
 
         List<Task<WFGNode>> allTransactions = new ArrayList<>(build.getTasks());
         List<TransInfo> transThisAgentCaresAbout = new ArrayList<>();
@@ -139,7 +125,6 @@ public class MobileAgent {
         for (int i = 0; i < allTransactions.size(); i++) {
             //if (i % globalDetectors.size() == thisNodesIndex)
             TransInfo transaction = (TransInfo) allTransactions.get(i).getId();
-            log.log("Transaction Server: "+ transaction.serverID);
 
             if(serverID == globalDetectors.get(0)){
                 if (forward.contains(transaction.serverID))
@@ -150,8 +135,6 @@ public class MobileAgent {
                     transThisAgentCaresAbout.add(transaction);
             }
         }
-
-        log.log("Mobile Agent on server " + serverID + " cares about - " + transThisAgentCaresAbout.toString());
 
         if (transThisAgentCaresAbout.isEmpty()) {
             if (Log.isLoggingEnabled())
@@ -204,8 +187,6 @@ public class MobileAgent {
         if (Log.isLoggingEnabled())
             log.log("Mobile Agent - Found deadlocks - " + deadlocksTransInfo);
 
-        simParams.stats.addDeadlockFound();
-
         //Resolve the deadlocks
         maedd.getResolver().accept(deadlocksList);
     }
@@ -243,8 +224,6 @@ public class MobileAgent {
 
         receivedFromServers.add(fromServerId);
 
-        log.log("\t Creating receivedFromServers of mobile agent in server " + serverID + " | adding " + fromServerId + " to " + receivedFromServers);
-
         if (Log.isLoggingEnabled())
             log.log("Creating receivedFromServers. Adding " + fromServerId + " | it is now: " + receivedFromServers);
 
@@ -254,13 +233,7 @@ public class MobileAgent {
             for (Integer s : S_List)
                 NIC.sendMessage(new Message(s, ServerProcess.DDP, serverID + "", "Send LocalWFG to Mobiles", simParams.getTime()));
 
-
-            //eventQueue.accept(new Event(simParams.getTime() + 1, serverID, maedd::sendLocalWFGToGlobals, true));
-
             receivedFromServers.clear();
-
-            if (Log.isLoggingEnabled())
-                log.log("Cleared received from servers list, it is now: " + receivedFromServers);
         }
     }
 

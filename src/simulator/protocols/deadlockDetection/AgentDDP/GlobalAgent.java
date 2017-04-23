@@ -13,7 +13,6 @@ import simulator.server.transactionManager.TransInfo;
 import ui.Log;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -75,7 +74,6 @@ public class GlobalAgent {
         if (receivedFromServers.containsAll(simParams.allServersList)) {
             BiConsumer<Graph<WFGNode>, Integer> wfGraphConsumer = addp.getWfGraphConsumer();
             if (wfGraphConsumer != null) {
-                //System.out.println("Graph has " + wfgBuilder.size() + " nodes at time " + simParams.getTime());
                 Graph<WFGNode> copy = wfgBuilder.build();
                 copy.setGlobal(true);
                 wfGraphConsumer.accept(copy, simParams.getTime());
@@ -162,8 +160,6 @@ public class GlobalAgent {
             log.log("Global Agent - Found deadlocks - " + deadlocksTransInfo);
 
         checkHistory(deadlocksList.size());
-
-        simParams.stats.addDeadlockFound();
 
         //Resolve the deadlocks
         addp.getResolver().accept(deadlocksList);

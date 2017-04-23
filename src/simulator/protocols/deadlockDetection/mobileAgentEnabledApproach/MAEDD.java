@@ -19,7 +19,7 @@ import java.util.function.Consumer;
 public class MAEDD extends WFG_DDP {
 
     protected final Log log;
-    protected List<Integer> allServers = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7);
+    //protected List<Integer> allServers = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7);
 
     protected List<Integer> mobileAgentServers = Arrays.asList(0, 7);
 
@@ -84,7 +84,7 @@ public class MAEDD extends WFG_DDP {
         searchGraph(localWFG);
 
         //post an event to send the S_List to the mobile agents.
-        eventQueue.accept(new Event(simParams.getTime() + 1, serverID, this::sendSListToMobiles, true));
+        eventQueue.accept(new Event(simParams.getTime() + 100, serverID, this::sendSListToMobiles, true));
     }
 
     private void sendSListToMobiles() {
@@ -94,12 +94,12 @@ public class MAEDD extends WFG_DDP {
         NetworkInterface NIC = server.getNIC();
 
         //Calculate the amount of overhead to incur
-        int size = s_List.size()/100;
+        int size = s_List.size();
         if (size == 0)
             size = 1;
 
         if (Log.isLoggingEnabled())
-            log.log("sending S_list from static agent " + serverID + " | list: " + s_List);
+            log.log("Static agent sending S_list list: " + s_List);
 
         //Send our S_List to the mobile agents
         for (int i = 0; i < mobileAgentServers.size(); i++) {
@@ -114,8 +114,8 @@ public class MAEDD extends WFG_DDP {
         if (Log.isLoggingEnabled())
             log.log("Posting event for the next iteration");
 
-        //If this isn't a global detector it posts an event to check for deadlocks in the future and clears its WFGBuilder
-        eventQueue.accept(new Event(simParams.getTime() + simParams.getDeadlockDetectInterval() + 100, serverID, this::startDetectionIteration, true));
+        //Posts an event to check for deadlocks in the future and clears its WFGBuilder
+        eventQueue.accept(new Event(simParams.getTime() + simParams.getDeadlockDetectInterval(), serverID, this::startDetectionIteration, true));
     }
 
     /**
@@ -149,7 +149,7 @@ public class MAEDD extends WFG_DDP {
         NetworkInterface NIC = server.getNIC();
 
         //Calculate the amount of overhead to incur
-        int size = localWFG.getNumberOfWaits()/100;
+        int size = localWFG.getNumberOfWaits();
         if (size == 0)
             size = 1;
 

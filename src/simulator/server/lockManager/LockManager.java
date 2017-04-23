@@ -44,11 +44,14 @@ public class LockManager {
      * Called when a lock is released, checks to see if any waiting locks can move into the held locks list
      */
     private void checkForObtainableLocks() {
+
         waitingLocks.keySet().forEach(pageNum -> {
             List<Lock> wLocks = waitingLocks.get(pageNum);
-            if (wLocks.isEmpty())
+            if (wLocks.isEmpty()) {
+//                if (Log.isLoggingEnabled())
+//                    log.log("No waiting locks to try to acquire for ");
                 return;
-
+            }
             List<Lock> locks = heldLocks.get(pageNum);
             if (locks == null) //Safety check
                 throw new WTFException("Invalid Page Number! Waiting lock for page " + pageNum + " on server " + server.getID());
@@ -77,12 +80,19 @@ public class LockManager {
                 wLocks.removeAll(acquiredLocks);
 
                 acquiredLocks.forEach(lock -> {
+                    if (Log.isLoggingEnabled())
+                        log.log(lock.getTransID(),"Acquired lock " + lock );
+
                     if (lock.getServerID() == server.getID())
                         server.getTM().lockAcquired(lock.getTransID(), lock.getPageNum());
                     else {
                         server.getNIC().sendMessage(new Message(lock.getServerID(), ServerProcess.LockManager, "A:" + lock.getTransID() + ":" + lock.getPageNum() + ":" + server.getID(), lock.getDeadline()));
                     }
                 });
+            }
+            else{
+                if (Log.isLoggingEnabled())
+                    log.log("Cannot acquire any locks. There are still locks for page " + pageNum + " : " + locks);
             }
         });
     }
@@ -175,6 +185,9 @@ public class LockManager {
         int serverID = server.getID();
 
         for (int pageNum : t.getReadPageNums()) {
+            if (Log.isLoggingEnabled())
+                log.log(t, "Attempting to acquire lock on read page " + pageNum);
+
             List<Lock> locks = heldLocks.get(pageNum);
 
             if (locks == null) //Safety check
@@ -185,11 +198,18 @@ public class LockManager {
                 locks.add(new Lock(pageNum, transID, false, t.getDeadline(), serverID));
                 server.getTM().lockAcquired(t, pageNum);
                 //Shared locks do not need to be acquired everywhere
-            } else
+            } else {
+                if (Log.isLoggingEnabled())
+                    log.log(t, "<font color=\"orange\">Tried to acquire lock on read page " + pageNum + " but I am waiting on " + locks + "</font>");
+
                 waitingLocks.get(pageNum).add(new Lock(pageNum, transID, false, t.getDeadline(), serverID));
+            }
         }
 
         for (int pageNum : t.getWritePageNums()) {
+            if (Log.isLoggingEnabled())
+                log.log(t, "Attempting to acquire lock on write page " + pageNum);
+
             List<Lock> locks = heldLocks.get(pageNum);
 
             if (locks.isEmpty()) {
@@ -198,7 +218,7 @@ public class LockManager {
                 server.getTM().lockAcquired(t, pageNum);
             } else {
                 if (Log.isLoggingEnabled())
-                    log.log(t, "Tried to acquire lock on page " + pageNum + " but I am waiting on " + locks);
+                    log.log(t, "<font color=\"orange\">Tried to acquire lock on write page " + pageNum + " but I am waiting on " + locks + "</font>");
 
                 waitingLocks.get(pageNum).add(new Lock(pageNum, transID, true, t.getDeadline(), serverID));
             }

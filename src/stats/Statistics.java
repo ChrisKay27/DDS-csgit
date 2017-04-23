@@ -12,10 +12,8 @@ public class Statistics {
     private int deadlocksFound;
     private int deadlocksResolved;
 
-
     private List<Integer> completedOnTimeTrans = new ArrayList<>();
     private List<Integer> completedLateTrans = new ArrayList<>();
-
 
     public void addCompletedOnTime(int id) {
         completedOnTime++;
@@ -84,8 +82,4 @@ public class Statistics {
     public void addDeadlockResolved() {
         deadlocksResolved++;
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> github/master

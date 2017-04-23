@@ -22,7 +22,6 @@ import java.util.function.Supplier;
  */
 public class SimParams {
 
-    public static int predictedTransactionTime = 1000;
     public final Consumer<String> log;
     public final Statistics stats;
     public final List<Server> allServers = new ArrayList<>();
@@ -33,13 +32,12 @@ public class SimParams {
     public static int latency = 5;
     public final int arrivalRateMean;
     public final int maxActiveTrans;
-    private int numTransPerServer = 1;
+    private int numTransPerServer = 80;
     private final double updateRate;
     private final int numPages;
     public String DRP;
     public String DDP;
-    private Supplier<Double> transGeneratorRand;
-    private Supplier<Double> transManagerRand;
+
 
     public boolean agentBased = false;
     private Supplier<Double> transGeneratorRand;
@@ -101,7 +99,7 @@ public class SimParams {
      * @param agentsHistoryLength
      * @param numPages
      */
-    public SimParams(Supplier<Double> transGeneratorRand,Supplier<Double> transManagerRand, Consumer<Event> eventQueue, Supplier<Double> rand, Supplier<Integer> timeProvider, Supplier<Integer> IDProvider,
+    public SimParams(Supplier<Double> transGeneratorRand, Supplier<Double> transManagerRand, Consumer<Event> eventQueue, Supplier<Double> rand, Supplier<Integer> timeProvider, Supplier<Integer> IDProvider,
                      Supplier<Integer> pageNumProvider, int maxActiveTrans, int arrivalRate, Consumer<String> log, Statistics stats,
                      BiConsumer<Integer, Integer> incurOverhead, int agentsHistoryLength, double updateRate, int numPages) {
         this.transGeneratorRand = transGeneratorRand;
@@ -147,15 +145,11 @@ public class SimParams {
 
     public void incurOverhead(int serverID, int overhead) {
         overIncurred += overhead;
-<<<<<<< HEAD
+
 //        if( Math.random()<0.01)
 //            System.err.println("Not incuring overhead");
-        overheadIncurer.accept(serverID,overhead);
-=======
-        if( Math.random()<0.01)
-            System.err.println("Not incuring overhead");
-//        overheadIncurer.accept(serverID,overhead);
->>>>>>> github/master
+        overheadIncurer.accept(serverID, overhead);
+
     }
 
     void setDeadlockListener(Consumer<Deadlock> deadlockListener) {
@@ -188,15 +182,9 @@ public class SimParams {
 
     public void setDeadlockResolutionListener(BiConsumer<Deadlock, Integer> deadlockResolutionListener) {
         this.deadlockResolutionListener = (deadlock, integer) -> {
-<<<<<<< HEAD
-            deadlockResolutionListener.accept(deadlock,integer);
+            deadlockResolutionListener.accept(deadlock, integer);
             stats.addDeadlockResolved();
         };
-=======
-                deadlockResolutionListener.accept(deadlock,integer);
-                stats.addDeadlockResolved();
-            };
->>>>>>> github/master
     }
 
     public int getTime() {

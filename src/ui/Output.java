@@ -104,7 +104,7 @@ public class Output extends JPanel{
                         }
 
                         String selectedTrans = transIDField.getText();
-                        if (!ALL.equals(selectedTrans)) {
+                        if (!(ALL.equals(selectedTrans)|| EMPTY.equals(selectedTrans))) {
                             if (!split[3].equals(selectedTrans))
                                 continue;
                         }

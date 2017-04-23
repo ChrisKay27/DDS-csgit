@@ -43,10 +43,11 @@ public class StaticAgent {
         //collect all transactions this agent cares about
         for (int i = 0; i < allTransactions.size(); i++) {
             int transactionServer = ((TransInfo) allTransactions.get(i).getId()).serverID;
+
             if( transactionServer == server.getID())
                 transAtThisServer.add((TransInfo) allTransactions.get(i).getId());
-
-            transAtRemoteServer.add(transactionServer);
+            else
+                transAtRemoteServer.add(transactionServer);
 
             S_List.add(transactionServer);
         }

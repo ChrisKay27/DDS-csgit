@@ -31,12 +31,12 @@ public class LocalAgent {
 
     protected void searchGraph(Graph<WFGNode> build) {
         if (Log.isLoggingEnabled())
-            log.log("AgentDDP- Searching graph");
+            log.log("AgentDDP - Searching graph");
 
         addp.calculateAndIncurOverhead(build);
         deadlocks.clear();
 
-        List<Integer> serversInvolved = addp.allServers;
+        //List<Integer> serversInvolved = addp.allServers;
 
         //int thisNodesIndex = serversInvolved.indexOf(server.getID());
 
@@ -62,7 +62,6 @@ public class LocalAgent {
 
         //Get transInfo and start searching through its children
         for (TransInfo t : transThisAgentCaresAbout) {
-
             //Convert the TransInfo list to list of WFGNodes
 
             List<Task<WFGNode>> edgesFrom = build.getEdgesFrom(t);
@@ -99,8 +98,6 @@ public class LocalAgent {
         if (Log.isLoggingEnabled())
             log.log("Found local deadlocks - " + deadlocksTransInfo + " on server " + server.getID());
 
-        simParams.stats.addDeadlockFound();
-
         //Resolve the deadlocks
         addp.getResolver().accept(deadlocksList);
     }
@@ -118,7 +115,7 @@ public class LocalAgent {
                 deadlockPath.addFirst(deadlockPath.removeLast());
                 deadlocks.add(deadlockPath);
                 if (Log.isLoggingEnabled())
-                    log.log("Found local deadlock path- " + deadlockPath);
+                    log.log("Found local deadlock path - " + deadlockPath);
 
                 path.remove(edge);
             } else if ((edge.getID() > lookingFor.getID() && !path.contains(edge))) {

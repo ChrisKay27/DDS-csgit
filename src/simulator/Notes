@@ -1,2 +1,0 @@
-Looks like there is an issue with aborting and restarting transactions.
-on server 5 324 was told to start cohort when it was already started

@@ -215,7 +215,7 @@ public class TransactionManager {
 
 
         if(!(t instanceof CohortTransaction) && t.getDeadline() > simParams.timeProvider.get()+ t.getExecutionTime() ){
-            //if(!(t instanceof CohortTransaction) && t.getDeadline() > simParams.timeProvider.get()+SimParams.predictedTransactionTime ){
+        //if(!(t instanceof CohortTransaction) && t.getDeadline() > simParams.timeProvider.get()+SimParams.predictedTransactionTime ){
             if(Log.isLoggingEnabled())
                 log.log(t, "<font color=\"green\">Deadline in the future, restarting transaction</font>");
 

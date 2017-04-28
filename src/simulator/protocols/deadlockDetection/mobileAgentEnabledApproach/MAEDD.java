@@ -6,6 +6,7 @@ import simulator.eventQueue.Event;
 import simulator.protocols.deadlockDetection.Deadlock;
 import simulator.protocols.deadlockDetection.WFG.Graph;
 import simulator.protocols.deadlockDetection.WFG.GraphBuilder;
+import simulator.protocols.deadlockDetection.WFG.Task;
 import simulator.protocols.deadlockDetection.WFG.WFGNode;
 import simulator.protocols.deadlockDetection.WFG_DDP;
 import simulator.server.Server;
@@ -29,8 +30,6 @@ public class MAEDD extends WFG_DDP {
     private final Server server;
     private final int serverID;
 
-    //TODO occupy network by mobile agent's size
-
     public MAEDD(Server server, SimParams simParams, Consumer<List<Deadlock>> resolver, Consumer<Integer> overheadIncurer, Consumer<Deadlock> deadlockListener) {
         super(server, simParams, resolver, overheadIncurer, deadlockListener);
         simParams.usesWFG = true;
@@ -45,7 +44,7 @@ public class MAEDD extends WFG_DDP {
 
     @Override
     public void start() {
-        eventQueue.accept(new Event(simParams.getTime() + simParams.getDeadlockDetectInterval(), serverID, this::startDetectionIteration));
+        eventQueue.accept(new Event(simParams.getTime() + simParams.getDeadlockDetectInterval()+100, serverID, this::startDetectionIteration));
     }
 
     protected void searchGraph(Graph<WFGNode> build) {
@@ -115,7 +114,7 @@ public class MAEDD extends WFG_DDP {
             log.log("Posting event for the next iteration");
 
         //Posts an event to check for deadlocks in the future and clears its WFGBuilder
-        eventQueue.accept(new Event(simParams.getTime() + simParams.getDeadlockDetectInterval(), serverID, this::startDetectionIteration, true));
+        eventQueue.accept(new Event(simParams.getTime() + simParams.getDeadlockDetectInterval() +100, serverID, this::startDetectionIteration, true));
     }
 
     /**
@@ -176,6 +175,24 @@ public class MAEDD extends WFG_DDP {
         //}
 
         //updateWFGraph(localWFG, serverID);
+    }
+
+    @Override
+    public void calculateAndIncurOverhead(Graph<WFGNode> WFG) {
+        //calc overhead
+        int overhead = 1;
+        for (Task<WFGNode> rt : WFG.getTasks()) {
+            //add one for each vertex
+            overhead++;
+
+            //add one for each edge
+            overhead += rt.getWaitsForTasks().size();
+        }
+
+        if (Log.isLoggingEnabled())
+            log.log("Incurring overhead- " + overhead);
+
+        overheadIncurer.accept(overhead/5);
     }
 
     public List<Integer> getMobileAgentServers() {

@@ -9,7 +9,6 @@ import simulator.eventQueue.Event;
 import simulator.protocols.deadlockDetection.Deadlock;
 import simulator.protocols.deadlockDetection.WFG.Graph;
 import simulator.protocols.deadlockDetection.WFG.GraphBuilder;
-import simulator.protocols.deadlockDetection.WFG.Task;
 import simulator.protocols.deadlockDetection.WFG.WFGNode;
 import simulator.protocols.deadlockDetection.WFG_DDP;
 import simulator.server.Server;
@@ -82,7 +81,7 @@ public class AgentDeadlockDetectionProtocol extends WFG_DDP {
         NetworkInterface NIC = server.getNIC();
 
         //Calculate the amount of overhead to incur
-        int size = localWFG.getNumberOfWaits();
+        int size = localWFG.getNumberOfWaits()/2;
         if (size == 0)
             size = 1;
 

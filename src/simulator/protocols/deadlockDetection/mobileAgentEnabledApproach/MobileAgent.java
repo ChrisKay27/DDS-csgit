@@ -230,8 +230,15 @@ public class MobileAgent {
         if (receivedFromServers.containsAll(simParams.allServersList)) {
             NetworkInterface NIC = server.getNIC();
 
-            for (Integer s : S_List)
-                NIC.sendMessage(new Message(s, ServerProcess.DDP, serverID + "", "Send LocalWFG to Mobiles", simParams.getTime()));
+            int size = S_List.size();
+            if (size == 0)
+                size = 1;
+
+            for (Integer s : S_List) {
+                Message message = new Message(s, ServerProcess.DDP, serverID + "", "Send LocalWFG to Mobiles", simParams.getTime());
+                message.setSize(size);
+                NIC.sendMessage(message);
+            }
 
             receivedFromServers.clear();
         }

@@ -62,7 +62,6 @@ public class Agent {
         dropability = (EXTRATIME_COEFF * extraTime) / ((PRIORITY_COEFF * priority) + (WORKLOAD_COEFF * workload));
 
         if (simParams.getTime() + trans.getExecutionTime()> trans.getDeadline()) {
-            //System.out.println("####### HELP AGENT " + myTrans.getID() + " ##########");
             dropability = Integer.MAX_VALUE;
         }
 

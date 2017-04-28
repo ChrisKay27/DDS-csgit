@@ -85,6 +85,8 @@ public class AgentDeadlockResolutionProtocol implements DeadlockResolutionProtoc
         List<Integer> sentToAlready = new ArrayList<>();
 
         for (TransInfo ti : transactionsInDeadlock) {
+            numberOfResolvedDeadlocks++;
+
             int serverID = ti.serverID;
 
             if (server.getID() == serverID) {
@@ -105,8 +107,6 @@ public class AgentDeadlockResolutionProtocol implements DeadlockResolutionProtoc
                 sentToAlready.add(serverID);
             }
         }
-
-        numberOfResolvedDeadlocks++;
 
         return null;
     }

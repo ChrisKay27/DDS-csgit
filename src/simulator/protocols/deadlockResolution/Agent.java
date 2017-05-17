@@ -61,9 +61,10 @@ public class Agent {
 
         dropability = (EXTRATIME_COEFF * extraTime) / ((PRIORITY_COEFF * priority) + (WORKLOAD_COEFF * workload));
 
-        if (simParams.getTime() + trans.getExecutionTime()> trans.getDeadline()) {
-            dropability = Integer.MAX_VALUE;
-        }
+//        if (simParams.getTime() + trans.getExecutionTime()> trans.getDeadline()) {
+//            //System.out.println("####### HELP AGENT " + myTrans.getID() + " ##########");
+//            dropability = Integer.MAX_VALUE;
+//        }
 
 //        System.out.println("*******************************");
 //        System.out.print("AgentInfo: " + agentID + "; dropability = " + dropability);
@@ -108,7 +109,7 @@ public class Agent {
 //                    }
 //                }
                 if (Log.isLoggingEnabled())
-                    log.log(agentID, deadlockID + ": Agents determined that " + agentID + "  should be dropped.");
+                    log.log(agentID, deadlockID + ": Agents determined that " + agentID + " should be dropped.");
 
                 deadlock.setResolutionTime(simParams.getTime());
                 simParams.getDeadlockResolutionListener().accept(deadlock, agentID);

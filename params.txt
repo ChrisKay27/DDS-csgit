@@ -1,12 +1,15 @@
-LOGGING:false
-SEED:3111,14331,1
-Topology:HyperCube
-NumPages:80
-ArrivalRate:600
+LOGGING:false //you
+SEED:3121,14331,1,43,9876 //can
+Topology:HyperCube //add
+NumPages:40,160,280 //comments
+ArrivalRate:300,500,800 //now :>
 DDP:AgentDeadlockDetectionProtocol
-DRP:AgentDeadlockResolutionProtocol,FirstDeadlockResolution,PriorityDeadlockResolution
+DRP:AgentDeadlockResolutionProtocol//,FirstDeadlockResolution,PriorityDeadlockResolution
 PP:EarliestDeadlineFirst
 DetectionInterval:100
 MaxActiveTransactions:30
 AgentsHistoryLength:3
 UpdateRate:0.5
+
+
+You can write whatever you want down here too

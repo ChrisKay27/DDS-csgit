@@ -43,6 +43,10 @@ public class TransInfo implements WFGNode {
         return slackTime;
     }
 
+    public int getworkload() {
+        return workload;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == this)

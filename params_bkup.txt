@@ -2,7 +2,7 @@ LOGGING:false
 SEED:3111,14331,1
 Topology:HyperCube
 NumPages:80
-ArrivalRate:600
+ArrivalRate:500
 DDP:AgentDeadlockDetectionProtocol,MAEDD,ChandyMisraHaasDDP,TimeoutDeadlockDetection
 DRP:PriorityDeadlockResolution
 PP:EarliestDeadlineFirst

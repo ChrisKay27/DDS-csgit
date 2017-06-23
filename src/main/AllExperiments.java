@@ -150,17 +150,19 @@ class AllExperiments
         //These nested loops are to loop through all the different parameter combinations
 
         java.util.stream.Stream.of(new ExperimentBuilder())
-          .flatMap(eB -> Arrays.stream(SEEDs).map(eB::setSeed))
-          .flatMap(eB -> Arrays.stream(topologies).map(eB::setTopology))
-          .flatMap(eB -> Arrays.stream(numPagesList).map(eB::setNumPages))
-          .flatMap(eB -> Arrays.stream(arrivalRates).map(eB::setArrivalRate))
-          .flatMap(eB -> Arrays.stream(DDPs).map(eB::setDeadlockDetectionProtocol))
-          .flatMap(eB -> Arrays.stream(DRPs).map(eB::setDeadlockResolutionProtocol))
-          .flatMap(eB -> Arrays.stream(PPs).map(eB::setPriorityProtocol))
-          .flatMap(eB -> Arrays.stream(detectIntervals).map(eB::setDetectionInterval))
-          .flatMap(eB -> Arrays.stream(maxActiveTrans).map(eB::setMaxActiveTransferRate))
-          .flatMap(eB -> Arrays.stream(agentsHistoryLengths).map(eB::setAgentsHistoryLength))
-          .flatMap(eB -> Arrays.stream(updateRates).map(eB::setUpdateRate))
+          .flatMap(combineWith(SEEDs,         ExperimentBuilder::setSeed))
+          .flatMap(combineWith(topologies,    ExperimentBuilder::setTopology))
+          .flatMap(combineWith(numPagesList,  ExperimentBuilder::setNumPages))
+          .flatMap(combineWith(arrivalRates,  ExperimentBuilder::setArrivalRate))
+          .flatMap(combineWith(DDPs,          ExperimentBuilder::setDeadlockDetectionProtocol))
+          .flatMap(combineWith(DRPs,          ExperimentBuilder::setDeadlockResolutionProtocol))
+          .flatMap(combineWith(PPs,           ExperimentBuilder::setPriorityProtocol))
+          .flatMap(combineWith(detectIntervals,
+                                              ExperimentBuilder::setDetectionInterval))
+          .flatMap(combineWith(maxActiveTrans,ExperimentBuilder::setMaxActiveTransferRate))
+          .flatMap(combineWith(agentsHistoryLengths,
+                                              ExperimentBuilder::setAgentsHistoryLength))
+          .flatMap(combineWith(updateRates,   ExperimentBuilder::setUpdateRate))
           .map(eB -> eB.build())
           .map(e -> e.setViewer(viewer()))
           .map(e -> e.setSimulationNumber(simNumber))
@@ -168,18 +170,18 @@ class AllExperiments
         }
 
     private static <D>
-    java.util.function.UnaryOperator<java.util.stream.Stream<ExperimentBuilder>>
+    java.util.function.Function<ExperimentBuilder,java.util.stream.Stream<ExperimentBuilder>>
     combineWith(D [] data,
                 java.util.function.BiFunction<ExperimentBuilder,D,ExperimentBuilder>
                 fred)
         {
         Function<D,UnaryOperator<ExperimentBuilder>> curried
           = d -> e -> fred.apply(e,d) ;
-        java.util.function.BiFunction<Stream<ExperimentBuilder>,
-          Stream<UnaryOperator<ExperimentBuilder>>,
-          Stream<ExperimentBuilder>> qf =
-          (str,strFs) -> str.flatMap(e -> strFs.map(f -> f.apply(e))) ;
-        return (stream -> qf.apply(stream, Arrays.stream(data).map(curried))) ;
+        Function<Stream<UnaryOperator<ExperimentBuilder>>,
+                 Function<ExperimentBuilder,Stream<ExperimentBuilder>>>
+              qf =
+          strFs -> eB -> strFs.map(f -> f.apply(eB)) ;
+        return qf.apply(Arrays.stream(data).map(curried)) ;
         }
 
     private Consumer<String> viewer()

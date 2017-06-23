@@ -16,6 +16,10 @@ public class GUI extends JFrame{
 
         top.add(timeLabel);
 
+        JLabel sleepTimeLabel = new JLabel("     Sleep time between events (ms):");
+
+        top.add(sleepTimeLabel);
+
         JTextField sleepTimeField = new JTextField(""+sleepTime, 10);
         sleepTimeField.addActionListener(e->{
             sleepTime = Long.parseLong(sleepTimeField.getText());

@@ -16,6 +16,9 @@ import ui.*;
 import javax.swing.*;
 import java.io.*;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -56,18 +59,19 @@ public class Main {
 
         try (BufferedReader br = new BufferedReader(new FileReader(paramFile))) {
 
-            Log.setLoggingEnabled(Boolean.parseBoolean(br.readLine().split(":")[1]));
-            SEEDs = br.readLine().split(":")[1];
-            topologyStr = br.readLine().split(":")[1];
-            numPagesStr = br.readLine().split(":")[1];
-            arrivalRateStr = br.readLine().split(":")[1];
-            DDPs = br.readLine().split(":")[1];
-            DRPs = br.readLine().split(":")[1];
-            PPs = br.readLine().split(":")[1];
-            DetectIntervals = br.readLine().split(":")[1];
-            maxActiveTransStr = br.readLine().split(":")[1];
-            agentsHistoryLengthStr = br.readLine().split(":")[1];
-            updateRateStr = br.readLine().split(":")[1];
+            String loggingEnabledLine = br.readLine();
+            Log.setLoggingEnabled(Boolean.parseBoolean(loggingEnabledLine.split("//")[0].split(":")[1].trim()));
+            SEEDs = br.readLine().split("//")[0].split(":")[1].trim();
+            topologyStr = br.readLine().split("//")[0].split(":")[1].trim();
+            numPagesStr = br.readLine().split("//")[0].split(":")[1].trim();
+            arrivalRateStr = br.readLine().split("//")[0].split(":")[1].trim();
+            DDPs = br.readLine().split("//")[0].split(":")[1].trim();
+            DRPs = br.readLine().split("//")[0].split(":")[1].trim();
+            PPs = br.readLine().split("//")[0].split(":")[1].trim();
+            DetectIntervals = br.readLine().split("//")[0].split(":")[1].trim();
+            maxActiveTransStr = br.readLine().split("//")[0].split(":")[1].trim();
+            agentsHistoryLengthStr = br.readLine().split("//")[0].split(":")[1].trim();
+            updateRateStr = br.readLine().split("//")[0].split(":")[1].trim();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -90,6 +94,13 @@ public class Main {
             JPanel content = new JPanel();
             resultsSummerizer.setContentPane(content);
         }
+
+
+
+        /*
+            Thread pool that allows for 8 simulations to run concurrently
+         */
+        ExecutorService executorService = Executors.newFixedThreadPool(8);
 
 
 
@@ -202,9 +213,12 @@ public class Main {
 
                                                         sb.append("<html>--------------").append("<br>");
                                                         sb.append("<b>Parameters:</b><br>");
-                                                        sb.append("SEED:").append(SEED).append("<br>NumPages:").append(numPages).append("<br>Max active trans:").append(maxActiveTrans).append("<br>servers:")
-                                                                .append(8).append("<br>arrival rate:").append(arrivalRate).append("<br>").append("<font color=\"red\">"+DDP+"</font>").append("<br>").append(DRP).append("<br>")
-                                                                .append(PP).append("<br>Detection interval:").append(detectInterval).append("<br>Update Rate: ").append(updateRate).append("<br>");
+                                                        sb.append("SEED:").append(SEED).append("<br>NumPages:").append(numPages)
+                                                                .append("<br>Max active trans:").append(maxActiveTrans).append("<br>servers:")
+                                                                .append(8).append("<br>arrival rate:").append(arrivalRate).append("<br>")
+                                                                .append("<br><font color=\"red\">"+DDP+"</font>").append("<br><br>").append("<font color=\"blue\">"+DRP+"</font><br>")
+                                                                .append("<br>").append(PP).append("<br>Detection interval:").append(detectInterval)
+                                                                .append("<br>Update Rate: ").append(updateRate).append("<br>");
 
                                                         sb.append("Total Transactions: " + servers.size() * s.getSimParams().getNumTransPerServer()).append("<br><br>");
 
@@ -223,7 +237,7 @@ public class Main {
                                                         sb.append("Total Message Size: ").append(messageOverheadIncurred).append("<br><br>");
 
                                                         sb.append("Deadlocks found: ").append(stats.getDeadlocksFound()).append("<br>");
-                                                        sb.append("Deadlocks resolved: ").append(stats.getDeadlocksResolved()).append("<br><br>");
+                                                        sb.append("Transactions aborted by DRP: ").append(stats.getDeadlocksResolved()).append("<br><br>");
 
 
                                                         sb.append("<b><font color=\"red\">PCOT: " + PCOT).append("</font><br></b></html>");
@@ -242,7 +256,8 @@ public class Main {
                                                     };
 
                                                     //Run this simulation in a new thread
-                                                    new Thread(r).start();
+                                                    executorService.submit(r);
+//                                                    new Thread(r).start();
                                                 }
                                             }
                                         }

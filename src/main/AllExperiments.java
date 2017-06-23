@@ -10,18 +10,6 @@ import simulator.enums.Topology;
 
 class AllExperiments
 {
-    private static class Stage01 {} ;
-    private static class Stage02 {} ;
-    private static class Stage03 {} ;
-    private static class Stage04 {} ;
-    private static class Stage05 {} ;
-    private static class Stage06 {} ;
-    private static class Stage07 {} ;
-    private static class Stage08 {} ;
-    private static class Stage09 {} ;
-    private static class Stage10 {} ;
-    private static class Stage11 {} ;
-    
     private final long simNumber ;
     private int simsRanSoFar = 0;
     private JFrame resultsSummarizer ;

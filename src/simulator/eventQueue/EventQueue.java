@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -14,6 +15,7 @@ public class EventQueue {
     private volatile boolean stop;
     private final Supplier<Long> sleepTime;
     private Consumer<Integer> timeUpdater;
+    private long simulationTimeoutTime;
 
     public EventQueue(Supplier<Long> sleepTime, Consumer<Integer> timeUpdater) {
         this.sleepTime = sleepTime;
@@ -41,10 +43,16 @@ public class EventQueue {
 
     private boolean sleptThisTick = false;
 
-    public void start() {
+    public void start() throws TimeoutException {
         System.out.println("** Simulation Starting **");
 
+        simulationTimeoutTime = System.currentTimeMillis() + 5*1000*60;
+
         while (!queue.isEmpty() && !stop && notOnlyRecurringEventsRemain()) {
+
+            if( simulationTimeoutTime < System.currentTimeMillis() )
+                throw new TimeoutException("<br>Simulation taking too long!");
+
             Event e = queue.remove(0);
             if (e.isAborted())
                 continue;

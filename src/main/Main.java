@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeoutException;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -100,7 +101,7 @@ public class Main {
         /*
             Thread pool that allows for 8 simulations to run concurrently
          */
-        ExecutorService executorService = Executors.newFixedThreadPool(8);
+        ExecutorService executorService = Executors.newFixedThreadPool(2);
 
 
 
@@ -197,52 +198,68 @@ public class Main {
                                                             HyperCube.setup(servers);
 
 
-                                                        //Run the simulation
-                                                        Object[] results = s.start();
-                                                        double PCOT = (double) results[0];
-                                                        int overheadIncurred = (int) results[1];
-                                                        int messageOverheadIncurred = (int) results[2];
-
-                                                        //Output results to the database
-                                                        ExperimentResults expResults = new ExperimentResults(simNumber, PCOT, DDP, DRP, topStr, maxActiveTrans,
-                                                                arrivalRate, PP, numPages, detectInterval, overheadIncurred, messageOverheadIncurred, updateRate);
-                                                        DBConnection.insertResults(expResults);
-
 
                                                         StringBuilder sb = new StringBuilder();
 
-                                                        sb.append("<html>--------------").append("<br>");
-                                                        sb.append("<b>Parameters:</b><br>");
-                                                        sb.append("SEED:").append(SEED).append("<br>NumPages:").append(numPages)
-                                                                .append("<br>Max active trans:").append(maxActiveTrans).append("<br>servers:")
-                                                                .append(8).append("<br>arrival rate:").append(arrivalRate).append("<br>")
-                                                                .append("<br><font color=\"red\">"+DDP+"</font>").append("<br><br>").append("<font color=\"blue\">"+DRP+"</font><br>")
-                                                                .append("<br>").append(PP).append("<br>Detection interval:").append(detectInterval)
-                                                                .append("<br>Update Rate: ").append(updateRate).append("<br>");
+                                                        // Write the simulation params
+                                                        {
+                                                            sb.append("<html>--------------").append("<br>");
+                                                            sb.append("<b>Parameters:</b><br>");
+                                                            sb.append("SEED:").append(SEED).append("<br>NumPages:").append(numPages)
+                                                                    .append("<br>Max active trans:").append(maxActiveTrans).append("<br>servers:")
+                                                                    .append(8).append("<br>arrival rate:").append(arrivalRate).append("<br>")
+                                                                    .append("<br><font color=\"red\">" + DDP + "</font>").append("<br><br>").append("<font color=\"blue\">" + DRP + "</font><br>")
+                                                                    .append("<br>").append(PP).append("<br>Detection interval:").append(detectInterval)
+                                                                    .append("<br>Update Rate: ").append(updateRate).append("<br>");
 
-                                                        sb.append("Total Transactions: " + servers.size() * s.getSimParams().getNumTransPerServer()).append("<br><br>");
+                                                            sb.append("Total Transactions: " + servers.size() * s.getSimParams().getNumTransPerServer()).append("<br><br>");
 
-                                                        sb.append("<b>Results:</b><br>");
-                                                        sb.append("Completed On Time: ").append(stats.getCompletedOnTime()).append("<br>");
-                                                        sb.append("Completed Late: " + stats.getCompletedLate()).append("<br>");
-                                                        sb.append("Aborted: " + stats.getNumAborted()).append("<br>");
-                                                        sb.append("Aborted and restarted: " + stats.getNumAbortedAndRestarted()).append("<br>");
-
-
-                                                        if (stats.getCompletedOnTime() + stats.getCompletedLate() + stats.getNumAborted() != servers.size() * s.getSimParams().getNumTransPerServer())
-                                                            sb.append("ERROR: Completed + Late + Aborted != Total Num of Transactions!").append("<br>");
-                                                        sb.append("Timeouts: " + stats.getTimeouts()).append("<br><br>");
-
-                                                        sb.append("Overhead (ticks): ").append(overheadIncurred).append("<br>");
-                                                        sb.append("Total Message Size: ").append(messageOverheadIncurred).append("<br><br>");
-
-                                                        sb.append("Deadlocks found: ").append(stats.getDeadlocksFound()).append("<br>");
-                                                        sb.append("Transactions aborted by DRP: ").append(stats.getDeadlocksResolved()).append("<br><br>");
+                                                            sb.append("<b>Results:</b><br>");
+                                                        }
 
 
-                                                        sb.append("<b><font color=\"red\">PCOT: " + PCOT).append("</font><br></b></html>");
+                                                        double PCOT = 0;
+                                                        int overheadIncurred = Integer.MAX_VALUE;
+                                                        int messageOverheadIncurred = Integer.MAX_VALUE;
+
+                                                        //Run the simulation
+                                                        try {
+                                                            Object[] results = s.start();
+
+                                                            PCOT = (double) results[0];
+                                                            overheadIncurred = (int) results[1];
+                                                            messageOverheadIncurred = (int) results[2];
+
+                                                            //Output results to the database
+                                                            ExperimentResults expResults = new ExperimentResults(simNumber, PCOT, DDP, DRP, topStr, maxActiveTrans,
+                                                                    arrivalRate, PP, numPages, detectInterval, overheadIncurred, messageOverheadIncurred, updateRate);
+                                                            DBConnection.insertResults(expResults);
 
 
+                                                            sb.append("Completed On Time: ").append(stats.getCompletedOnTime()).append("<br>");
+                                                            sb.append("Completed Late: " + stats.getCompletedLate()).append("<br>");
+                                                            sb.append("Aborted: " + stats.getNumAborted()).append("<br>");
+                                                            sb.append("Aborted and restarted: " + stats.getNumAbortedAndRestarted()).append("<br>");
+
+
+                                                            if (stats.getCompletedOnTime() + stats.getCompletedLate() + stats.getNumAborted() != servers.size() * s.getSimParams().getNumTransPerServer())
+                                                                sb.append("ERROR: Completed + Late + Aborted != Total Num of Transactions!").append("<br>");
+                                                            sb.append("Timeouts: " + stats.getTimeouts()).append("<br><br>");
+
+                                                            sb.append("Overhead (ticks): ").append(overheadIncurred).append("<br>");
+                                                            sb.append("Total Message Size: ").append(messageOverheadIncurred).append("<br><br>");
+
+                                                            sb.append("Deadlocks found: ").append(stats.getDeadlocksFound()).append("<br>");
+                                                            sb.append("Transactions aborted by DRP: ").append(stats.getDeadlocksResolved()).append("<br><br>");
+
+
+                                                            sb.append("<b><font color=\"red\">PCOT: " + PCOT).append("</font><br></b></html>");
+                                                        }
+                                                        catch(TimeoutException ex){
+                                                            //ex.printStackTrace();
+
+                                                            sb.append(ex.toString());
+                                                        }
 
                                                         JLabel label = new JLabel(sb.toString());
                                                         resultsSummerizer.getContentPane().add(label);

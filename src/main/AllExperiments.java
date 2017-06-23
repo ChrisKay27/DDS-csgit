@@ -148,7 +148,6 @@ class AllExperiments
         //These nested loops are to loop through all the different parameter combinations
 
         ExperimentBuilder expBuilder = new ExperimentBuilder() ;
-        doStage01(expBuilder) ;
         Arrays.stream(SEEDs).map(expBuilder::setSeed)
           .flatMap(eB -> Arrays.stream(topologies).map(t -> eB.setTopology(t)))
           .flatMap(eB -> Arrays.stream(numPagesList).map(n -> eB.setNumPages(n)))
@@ -159,19 +158,16 @@ class AllExperiments
           .flatMap(eB -> Arrays.stream(detectIntervals).map(di -> eB.setDetectionInterval(di)))
           .flatMap(eB -> Arrays.stream(maxActiveTrans).map(ma -> eB.setMaxActiveTransferRate(ma)))
           .flatMap(eB -> Arrays.stream(agentsHistoryLengths).map(ahl -> eB.setAgentsHistoryLength(ahl)))
-          .forEach(this::doStage11) ;
+          .flatMap(eB -> Arrays.stream(updateRates).map(r -> eB.setUpdateRate(r)))
+          .map(eb -> eb.build())
+          .forEach(this::doAnExperiment) ;
         }
 
-    public void doStage11(ExperimentBuilder expBuilder)
+    public void doAnExperiment(Experiment e)
         {
-        for (double updateRate : updateRates)
-            {
-            expBuilder.setUpdateRate (updateRate);
-            Experiment e = expBuilder.build() ;
-            e.setViewer (viewer()) ;
-            e.setSimulationNumber(simNumber) ;
-            e.doAnExperiment();
-            }
+        e.setViewer (viewer()) ;
+        e.setSimulationNumber(simNumber) ;
+        e.doAnExperiment();
         }
 
     private Consumer<String> viewer()

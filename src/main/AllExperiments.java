@@ -134,26 +134,6 @@ class AllExperiments
         }
 
 
-    private void openSimExperimentNumberWindow() {
-        JFrame frame = new JFrame("Experiment Number");
-
-        frame.setContentPane(new JTextField("Experiment Number is " + simNumber));
-        frame.pack();
-        frame.setSize(400, 100);
-
-        frame.setVisible(true);
-        frame.setLocationRelativeTo(null);
-    }
-
-    public int numberOfSimulations()
-        {
-        return
-          SEEDs.length * topologies.length * numPagesList.length
-          * arrivalRates.length * DDPs.length * DRPs.length * PPs.length
-          * detectIntervals.length * maxActiveTrans.length * updateRates.length
-          ;
-        }
-
     public void doAllExperiments()
         {
         openSimExperimentNumberWindow();
@@ -169,10 +149,6 @@ class AllExperiments
 
         ExperimentBuilder expBuilder = new ExperimentBuilder() ;
         doStage01(expBuilder) ;
-        }
-
-    public void doStage01(ExperimentBuilder expBuilder)
-        {
         Arrays.stream(SEEDs).map(expBuilder::setSeed)
           .flatMap(eB -> Arrays.stream(topologies).map(t -> eB.setTopology(t)))
           .flatMap(eB -> Arrays.stream(numPagesList).map(n -> eB.setNumPages(n)))
@@ -184,124 +160,6 @@ class AllExperiments
           .flatMap(eB -> Arrays.stream(maxActiveTrans).map(ma -> eB.setMaxActiveTransferRate(ma)))
           .flatMap(eB -> Arrays.stream(agentsHistoryLengths).map(ahl -> eB.setAgentsHistoryLength(ahl)))
           .forEach(this::doStage11) ;
-        /*
-        for (long SEED : SEEDs)
-            {
-            expBuilder.setSeed(SEED) ;
-            doStage02(expBuilder) ;
-            }
-        */
-        }
-
-    public void doStage02(ExperimentBuilder expBuilder)
-        {
-        Arrays.stream(topologies).map(expBuilder::setTopology).
-          forEach(this::doStage03) ;
-        /*
-        for (Topology topology : topologies)
-            {
-            expBuilder.setTopology(topology) ;
-            doStage03(expBuilder) ;
-            }
-        */
-        }
-    
-
-    public void doStage03(ExperimentBuilder expBuilder)
-        {
-        Arrays.stream(numPagesList).map(expBuilder::setNumPages).
-          forEach(this::doStage04) ;
-        /*
-        for (int numPages : numPagesList)
-            {
-            expBuilder.setNumPages(numPages) ;
-            doStage04(expBuilder) ;
-            }
-        */
-        }
-
-    public void doStage04(ExperimentBuilder expBuilder)
-        {
-        Arrays.stream(arrivalRates).map(expBuilder::setArrivalRate).
-          forEach(this::doStage05) ;
-        for (int arrivalRate : arrivalRates)
-            {
-            expBuilder.setArrivalRate(arrivalRate) ;
-            doStage05(expBuilder) ;
-            }
-        }
-
-    public void doStage05(ExperimentBuilder expBuilder)
-        {
-        Arrays.stream(DDPs).map(expBuilder::setDeadlockDetectionProtocol).forEach(this::doStage06) ;
-        /*
-        for (String DDP : DDPs)
-            {
-            expBuilder.setDeadlockDetectionProtocol(DDP) ;
-            doStage06(expBuilder) ;
-            }
-        */
-        }
-
-    public void doStage06(ExperimentBuilder expBuilder)
-        {
-        Arrays.stream(DRPs).map(expBuilder::setDeadlockResolutionProtocol).
-          forEach(this::doStage07) ;
-        /*
-        for (String DRP : DRPs)
-            {
-            expBuilder.setDeadlockResolutionProtocol(DRP) ;
-            doStage07(expBuilder) ;
-            }
-        */
-        }
-
-    public void doStage07(ExperimentBuilder expBuilder)
-        {
-        Arrays.stream(PPs).map(expBuilder::setPriorityProtocol).forEach(this::doStage08) ;
-        /*
-        for (String PP : PPs)
-            {
-            expBuilder.setPriorityProtocol(PP) ;
-            doStage08(expBuilder) ;
-            }
-        */
-        }
-
-    public void doStage08(ExperimentBuilder expBuilder)
-        {
-        Arrays.stream(detectIntervals).map(expBuilder::setDetectionInterval).forEach(this::doStage09) ;
-        /*
-        for (int detectInterval : detectIntervals)
-            {
-            expBuilder.setDetectionInterval(detectInterval) ;
-            doStage09(expBuilder) ;
-            }
-        */
-        }
-
-    public void doStage09(ExperimentBuilder expBuilder)
-        {
-        Arrays.stream(maxActiveTrans).map(expBuilder::setMaxActiveTransferRate).forEach(this::doStage10) ;
-        /*
-        for (int maxActiveTrans_ : maxActiveTrans)
-            {
-            expBuilder.setMaxActiveTransferRate(maxActiveTrans_) ;
-            doStage10(expBuilder) ;
-            }
-        */
-        }
-
-    public void doStage10(ExperimentBuilder expBuilder)
-        {
-        Arrays.stream(agentsHistoryLengths).map(expBuilder::setAgentsHistoryLength).forEach(this::doStage11) ;
-        /*
-        for (int agentsHistoryLength : agentsHistoryLengths)
-            {
-            expBuilder.setAgentsHistoryLength(agentsHistoryLength) ;
-            doStage11(expBuilder) ;
-            }
-        */
         }
 
     public void doStage11(ExperimentBuilder expBuilder)
@@ -328,6 +186,26 @@ class AllExperiments
             resultsSummarizer.setVisible(true);
             } ;
         }
+
+    public int numberOfSimulations()
+        {
+        return
+          SEEDs.length * topologies.length * numPagesList.length
+          * arrivalRates.length * DDPs.length * DRPs.length * PPs.length
+          * detectIntervals.length * maxActiveTrans.length * updateRates.length
+          ;
+        }
+
+    private void openSimExperimentNumberWindow() {
+        JFrame frame = new JFrame("Experiment Number");
+
+        frame.setContentPane(new JTextField("Experiment Number is " + simNumber));
+        frame.pack();
+        frame.setSize(400, 100);
+
+        frame.setVisible(true);
+        frame.setLocationRelativeTo(null);
+    }
 
     private static <E,F> E [] map(F [] in, Function<F,E> converter)
         {

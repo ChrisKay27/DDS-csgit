@@ -159,15 +159,10 @@ class AllExperiments
           .flatMap(eB -> Arrays.stream(maxActiveTrans).map(ma -> eB.setMaxActiveTransferRate(ma)))
           .flatMap(eB -> Arrays.stream(agentsHistoryLengths).map(ahl -> eB.setAgentsHistoryLength(ahl)))
           .flatMap(eB -> Arrays.stream(updateRates).map(r -> eB.setUpdateRate(r)))
-          .map(eb -> eb.build())
-          .forEach(this::doAnExperiment) ;
-        }
-
-    public void doAnExperiment(Experiment e)
-        {
-        e.setViewer (viewer()) ;
-        e.setSimulationNumber(simNumber) ;
-        e.doAnExperiment();
+          .map(eB -> eB.build())
+          .map(e -> e.setViewer(viewer()))
+          .map(e -> e.setSimulationNumber(simNumber))
+          .forEach(e -> e.doAnExperiment()) ;
         }
 
     private Consumer<String> viewer()

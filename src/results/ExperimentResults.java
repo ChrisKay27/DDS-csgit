@@ -15,10 +15,11 @@ public class ExperimentResults {
     private final int overheadIncurred;
     private final int messageOverheadIncurred;
     private final double updateRate;
+    private final double SEED;
 
     public ExperimentResults(long expNum, double pcot, String ddp, String drp, String topology, int maxActiveTrans,
                              int arrivalRate, String PP, int numPages, int detectInterval, int overheadIncurred, int messageOverheadIncurred,
-                             double updateRate) {
+                             double updateRate, double SEED) {
         this.expNum = expNum;
         PCOT = pcot;
         DDP = ddp;
@@ -32,6 +33,7 @@ public class ExperimentResults {
         this.overheadIncurred = overheadIncurred;
         this.messageOverheadIncurred = messageOverheadIncurred;
         this.updateRate = updateRate;
+        this.SEED = SEED;
     }
 
     public long getExpNum() {
@@ -83,4 +85,6 @@ public class ExperimentResults {
     }
 
     public double getUpdateRate() { return updateRate; }
+
+    public double getSEED() { return SEED; }
 }

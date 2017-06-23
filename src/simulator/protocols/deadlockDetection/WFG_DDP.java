@@ -253,7 +253,7 @@ public class WFG_DDP extends DeadlockDetectionProtocol {
         if (Log.isLoggingEnabled())
             log.log("Incurring overhead- " + overhead);
 
-        overheadIncurer.accept(overhead/100);
+        overheadIncurer.accept(overhead/simParams.getDeadlockDetectInterval());
     }
 
     protected void searchGraph(Graph<WFGNode> wfg) {

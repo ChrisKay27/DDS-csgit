@@ -13,9 +13,15 @@ import simulator.server.Server;
 import simulator.server.network.HyperCube;
 import stats.Statistics;
 import ui.*;
+
 import javax.swing.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -36,7 +42,8 @@ public class Main {
         // This is the simulation number associated with ALL the variations in the parameter file. It is used to compare results of an experiment*
         // *an experiment is a combination of parameters
         long simNumber = System.currentTimeMillis();
-        openSimExperimentNumberWindow(simNumber);
+        // FIXME Uncomment
+        //openSimExperimentNumberWindow(simNumber);
 
         // Read the parameters from the param.txt file
 
@@ -74,6 +81,9 @@ public class Main {
             e.printStackTrace();
         }
 
+        if(SEEDs.equals(""))
+            SEEDs = simNumber + "";
+
         //This is just to tell you how many simulations will be run with the parameters chosen
 
         int numberOfSims = SEEDs.split(",").length * topologyStr.split(",").length * numPagesStr.split(",").length
@@ -84,15 +94,17 @@ public class Main {
 
 
         /*
+         * FIXME Uncomment
          * Results summarizer
          */
-        JFrame resultsSummerizer = new JFrame("Results Summarizer");
-        {
-            JPanel content = new JPanel();
-            resultsSummerizer.setContentPane(content);
-        }
+//        JFrame resultsSummerizer = new JFrame("Results Summarizer");
+//        {
+//            JPanel content = new JPanel();
+//            resultsSummerizer.setContentPane(content);
+//        }
 
 
+        ExecutorService executorService = Executors.newFixedThreadPool(8);
 
         //These nested loops are to loop through all the different parameter combinations
 
@@ -195,7 +207,7 @@ public class Main {
 
                                                         //Output results to the database
                                                         ExperimentResults expResults = new ExperimentResults(simNumber, PCOT, DDP, DRP, topStr, maxActiveTrans,
-                                                                arrivalRate, PP, numPages, detectInterval, overheadIncurred, messageOverheadIncurred, updateRate);
+                                                                arrivalRate, PP, numPages, detectInterval, overheadIncurred, messageOverheadIncurred, updateRate, SEED);
                                                         DBConnection.insertResults(expResults);
 
 
@@ -227,18 +239,19 @@ public class Main {
                                                         sb.append("Total Message Size: ").append(messageOverheadIncurred).append("<br><br>");
 
                                                         sb.append("Deadlocks found: ").append(stats.getDeadlocksFound()).append("<br>");
-                                                        sb.append("Deadlocks resolved: ").append(stats.getDeadlocksResolved()).append("<br><br>");
+                                                        sb.append("Transactions aborted by DRP ").append(stats.getDeadlocksResolved()).append("<br><br>");
 
 
                                                         sb.append("<b><font color=\"red\">PCOT: " + PCOT).append("</font><br></b></html>");
 
 
+                                                        // FIXME Uncomment
+//                                                        JLabel label = new JLabel(sb.toString());
+//                                                        resultsSummerizer.getContentPane().add(label);
+//                                                        resultsSummerizer.setTitle("Results Summarizer - Experiment Number: "+ simNumber);
+//                                                        resultsSummerizer.pack();
+//                                                        resultsSummerizer.setVisible(true);
 
-                                                        JLabel label = new JLabel(sb.toString());
-                                                        resultsSummerizer.getContentPane().add(label);
-                                                        resultsSummerizer.setTitle("Results Summarizer - Experiment Number: "+ simNumber);
-                                                        resultsSummerizer.pack();
-                                                        resultsSummerizer.setVisible(true);
                                                         //simsRanSoFar++;
                                                         //if (simsRanSoFar == numberOfSims) {
                                                         //System.exit(0);
@@ -246,8 +259,8 @@ public class Main {
                                                     };
 
                                                     //Run this simulation in a new thread
-                                                    new Thread(r).start();
-                                                }
+                                                    //new Thread(r).start();
+                                                    executorService.submit(r);                                               }
                                             }
                                         }
                                     }

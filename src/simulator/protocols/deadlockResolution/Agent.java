@@ -20,9 +20,8 @@ import java.util.stream.Collectors;
  */
 public class Agent {
     // MANI: Change!
-    private static final long WORKLOAD_COEFF = 5;
-    private static final long PRIORITY_COEFF = 10;
-    private static final long EXTRATIME_COEFF = 1;
+    private static final long CRITICAL_COEFF = 1;
+    private static final long URGENT_COEFF = 1;
 
     private final Log log;
     private final Server server;
@@ -59,12 +58,20 @@ public class Agent {
         long priority = trans.getPriority(transactionsInDeadlock, simParams.getPp());
         long workload = trans.getWorkload();
 
-        dropability = (EXTRATIME_COEFF * extraTime) / ((PRIORITY_COEFF * priority) + (WORKLOAD_COEFF * workload));
+        long urg = extraTime - trans.getExecutionTime();
 
-//        if (simParams.getTime() + trans.getExecutionTime()> trans.getDeadline()) {
-//            //System.out.println("####### HELP AGENT " + myTrans.getID() + " ##########");
-//            dropability = Integer.MAX_VALUE;
-//        }
+        long execRemain = (1 - ((server.getSimParams().timeProvider.get() - (trans.getDeadline() - trans.getSlackTime() - trans.getExecutionTime())) / trans.getExecutionTime())) * workload * 100;
+
+        if(execRemain == 0)
+            execRemain = 1;
+        long cri = priority / execRemain;
+        if(cri == 0)
+            cri = 1;
+
+        dropability = (URGENT_COEFF * urg) / (CRITICAL_COEFF * cri);
+
+        if(urg < 0)
+            dropability = 0;
 
 //        System.out.println("*******************************");
 //        System.out.print("AgentInfo: " + agentID + "; dropability = " + dropability);
@@ -109,7 +116,7 @@ public class Agent {
 //                    }
 //                }
                 if (Log.isLoggingEnabled())
-                    log.log(agentID, deadlockID + ": Agents determined that " + agentID + " should be dropped.");
+                    log.log(agentID, deadlockID + ": Agents determined that " + agentID + "  should be dropped.");
 
                 deadlock.setResolutionTime(simParams.getTime());
                 simParams.getDeadlockResolutionListener().accept(deadlock, agentID);

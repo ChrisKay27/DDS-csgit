@@ -16,6 +16,8 @@ public interface DeadlockResolutionProtocol {
             case "AgentDeadlockResolutionProtocol": return new AgentDeadlockResolutionProtocol(server);
             case "FirstDeadlockResolution": return new FirstDeadlockResolution(server);
             case "PriorityDeadlockResolution": return new PriorityDeadlockResolution(server);
+            case "WorkloadDeadlockResolution": return new WorkloadDeadlockResolution(server);
+            case "ExtratimeDeadlockResolution": return new ExtratimeDeadlockResolution(server);
         }
 
         throw new WTFException("Deadlock Resolution Protocol has not been registered! add it here in the DeadlockResolutionProtocol class!");

@@ -1,8 +1,5 @@
 package simulator.protocols.deadlockDetection.AgentDDP;
 
-import java.util.*;
-import java.util.function.Consumer;
-
 import simulator.SimParams;
 import simulator.enums.ServerProcess;
 import simulator.eventQueue.Event;
@@ -15,6 +12,9 @@ import simulator.server.Server;
 import simulator.server.network.Message;
 import simulator.server.network.NetworkInterface;
 import ui.Log;
+
+import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * Created by Mani,
@@ -81,8 +81,8 @@ public class AgentDeadlockDetectionProtocol extends WFG_DDP {
         NetworkInterface NIC = server.getNIC();
 
         //Calculate the amount of overhead to incur
-        int size = localWFG.getNumberOfWaits()/2;
-        if (size == 0)
+        int size = localWFG.getNumberOfWaits()/simParams.globalDetectors;
+        if(simParams.DRP.equals("AgentDeadlockResolutionProtocol") || size == 0)
             size = 1;
 
         //Send our graph to the detector nodes

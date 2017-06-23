@@ -159,9 +159,7 @@ public class MobileAgent {
         List<Deadlock> deadlocksList = new ArrayList<>();
 
         if(!deadlocks.isEmpty()){
-            Random rnd = new Random();
-
-            List<WFGNode> deadlock = deadlocks.get(rnd.nextInt(deadlocks.size()));
+            List<WFGNode> deadlock = deadlocks.get((int) (simParams.rand.get() * deadlocks.size()));
 
             List<TransInfo> deadlockTransInfo = new ArrayList<>();
             deadlock.forEach(wfgNode -> deadlockTransInfo.add((TransInfo) wfgNode));

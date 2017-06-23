@@ -11,10 +11,10 @@ public class DBConnection {
         Connection conn = null;
 
         try {
-            conn = DriverManager.getConnection("jdbc:mysql://localhost/ddb_results?" + "user=root&password=thesis");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost/ddb_results"  + "?autoReconnect=true&useSSL=false", "root" , "thesis");
 
             PreparedStatement statement = conn.prepareStatement("INSERT INTO results(experimentNumber,pcot,deadlockDetectionProtocol,deadlockResolutionProtocol," +
-                    "topology,arrivalRate,priorityProtocol,numPages,detectionInterval,maxActiveTrans,overHeadIncurred,messageOverHeadIncurred,updateRate) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
+                    "topology,arrivalRate,priorityProtocol,numPages,detectionInterval,maxActiveTrans,overHeadIncurred,messageOverHeadIncurred,updateRate,SEED) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
             statement.setLong  (1, results.getExpNum());
             statement.setDouble(2, results.getPCOT());
             statement.setString(3, results.getDDP());
@@ -28,6 +28,7 @@ public class DBConnection {
             statement.setInt   (11, results.getOverheadIncurred());
             statement.setInt   (12, results.getMessageOverheadIncurred());
             statement.setDouble(13, results.getUpdateRate());
+            statement.setDouble(14, results.getSEED());
 
             statement.execute();
 

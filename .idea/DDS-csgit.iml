@@ -12,5 +12,6 @@
     <orderEntry type="library" name="jgraphx" level="project" />
     <orderEntry type="library" name="mysql-connector-java-5.1.39-bin" level="project" />
     <orderEntry type="library" name="teachnet" level="project" />
+    <orderEntry type="library" name="commons-math3-3.6.1" level="project" />
   </component>
 </module>

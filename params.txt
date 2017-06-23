@@ -1,15 +1,15 @@
 LOGGING:false //you
-SEED:3121,14331,1,43,9876 //can
+SEED: //Leave it blank for random generation
 Topology:HyperCube //add
-NumPages:40,160,280 //comments
-ArrivalRate:300,500,800 //now :>
-DDP:AgentDeadlockDetectionProtocol
-DRP:AgentDeadlockResolutionProtocol//,FirstDeadlockResolution,PriorityDeadlockResolution
+NumPages:80//40,80,120,160,200,240,280 //comments
+ArrivalRate:300,400//300,400,500,600,700,800 //now :>
+DDP:AgentDeadlockDetectionProtocol,ChandyMisraHaasDDP,MAEDD
+DRP:PriorityDeadlockResolution//,WorkloadDeadlockResolution,ExtratimeDeadlockResolution,AgentDeadlockResolutionProtocol,FirstDeadlockResolution,PriorityDeadlockResolution
 PP:EarliestDeadlineFirst
 DetectionInterval:100
 MaxActiveTransactions:30
 AgentsHistoryLength:3
-UpdateRate:0.5
+UpdateRate:0.0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0
 
 
 You can write whatever you want down here too

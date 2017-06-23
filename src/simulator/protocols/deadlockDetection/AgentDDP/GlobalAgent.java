@@ -12,6 +12,8 @@ import simulator.server.Server;
 import simulator.server.transactionManager.TransInfo;
 import ui.Log;
 
+import org.apache.commons.math3.stat.regression.SimpleRegression;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -33,7 +35,7 @@ public class GlobalAgent {
     private List<Graph<WFGNode>> receivedWFGs;
     private Consumer<Event> eventQueue;
 
-    private final List<Integer> agentsHistory;
+    private final List<double[][]> agentsHistory;
     private int agentsHistoryLength;
 
     public GlobalAgent(AgentDeadlockDetectionProtocol addp, Server server) {
@@ -190,60 +192,32 @@ public class GlobalAgent {
         }
     }
 
-    private void checkHistory(int size) {
-        agentsHistory.add(size);
+    private void checkHistory(int DeadlockSize) {
+        double[][] memory = {{simParams.getTime(), DeadlockSize}};
+
+        agentsHistory.add(memory);
 
         if (agentsHistory.size() > agentsHistoryLength) {
             if (Log.isLoggingEnabled())
                 log.log("Number of deadlocks in Agent's history - " + agentsHistory);
 
-            boolean increasing = areDeadlocksIncreasing(agentsHistory);
-            boolean decreasing = areDeadlocksDecreasing(agentsHistory);
+            SimpleRegression deadlockRatio = new SimpleRegression();
+            for (int i = 0; i < agentsHistory.size(); i++) {
+                deadlockRatio.addData(agentsHistory.get(i));
+            }
 
-            if (increasing && !decreasing) {
+            double delta = deadlockRatio.getSlope();
+
+            if (delta > 0) {
                 addp.increaseNumberOfGlobalDetectors();
-            } else if (decreasing && !increasing) {
+                simParams.setDeadlockDetectInterval((int) (simParams.getDeadlockDetectInterval() * 0.9));
+            } else if (delta < 0) {
                 addp.decreaseNumberOfGlobalDetectors();
+                simParams.setDeadlockDetectInterval((int) (simParams.getDeadlockDetectInterval() * 1.1));
             }
 
             agentsHistory.remove(0);
         }
-    }
-
-    private static boolean areDeadlocksIncreasing(List<Integer> agentsHistory) {
-        boolean increasing = true;
-
-        int lastNumDeadlocks = -1;
-        for (int numDeadlocks : agentsHistory) {
-            if (lastNumDeadlocks == -1) {
-                lastNumDeadlocks = numDeadlocks;
-            } else if (lastNumDeadlocks > numDeadlocks) {
-                increasing = false;
-                break;
-            } else {
-                lastNumDeadlocks = numDeadlocks;
-            }
-        }
-
-        return increasing;
-    }
-
-    private static boolean areDeadlocksDecreasing(List<Integer> agentsHistory) {
-        boolean decreasing = true;
-
-        int lastNumDeadlocks = -1;
-        for (int numDeadlocks : agentsHistory) {
-            if (lastNumDeadlocks == -1) {
-                lastNumDeadlocks = numDeadlocks;
-            } else if (lastNumDeadlocks < numDeadlocks) {
-                decreasing = false;
-                break;
-            } else {
-                lastNumDeadlocks = numDeadlocks;
-            }
-        }
-
-        return decreasing;
     }
 
     /* For debugging purposes

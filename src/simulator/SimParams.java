@@ -32,7 +32,7 @@ public class SimParams {
     public static int latency = 5;
     public final int arrivalRateMean;
     public final int maxActiveTrans;
-    private int numTransPerServer = 300;
+    private int numTransPerServer = 500;
     private final double updateRate;
     private final int numPages;
     public String DRP;
@@ -79,6 +79,7 @@ public class SimParams {
     private BiConsumer<Deadlock, Integer> deadlockResolutionListener;
     public final Map<Integer, TransInfo> transInfos = new HashMap<>();
     private PriorityProtocol pp;
+
     private int searchInterval;
     public final int agentsHistoryLength;
 

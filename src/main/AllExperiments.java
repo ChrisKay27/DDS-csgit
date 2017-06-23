@@ -3,6 +3,7 @@ package main;
 import java.util.List ;
 import java.util.Arrays ;
 import java.util.function.Function ;
+import java.util.function.BiFunction ;
 import java.util.function.UnaryOperator ;
 import java.util.function.Consumer ;
 import java.util.stream.Stream ;
@@ -12,9 +13,42 @@ import simulator.enums.Topology;
 
 class AllExperiments
 {
+    private static Consumer<String> theNullViewer = s -> {} ;
+    public static Consumer<String> nullViewer()
+        {
+        return theNullViewer ;
+        }
+    private static Function<AllExperiments,Consumer<String>> theDefaultViewer = null ;
+    public Consumer<String> defaultViewer()
+        {
+        if (theDefaultViewer==null)
+            {
+            /*
+             * Results summarizer
+             */
+            JFrame resultsSummarizer = new JFrame("Results Summarizer");
+            JPanel content = new JPanel();
+            resultsSummarizer.setContentPane(content);
+            theDefaultViewer = allExperiment -> string -> 
+              {
+                  JLabel label = new JLabel(string);
+                  resultsSummarizer.getContentPane().add(label);
+                  resultsSummarizer.setTitle(
+                      "Results Summarizer - Experiment Number: "+
+                      allExperiment.simNumber);
+                  resultsSummarizer.pack();
+                  resultsSummarizer.setVisible(true);
+              } ;
+            }
+        return theDefaultViewer.apply(this) ;
+        }
+    
+    private Consumer<AllExperiments> globalFrameMaker   ;
+    private Consumer<String>         experimentReporter ;
+    
     private final long simNumber ;
     private int simsRanSoFar = 0;
-    private JFrame resultsSummarizer ;
+    
 
 
     private Long [] SEEDs ;
@@ -113,14 +147,6 @@ class AllExperiments
         // This is the simulation number associated with ALL the variations in the parameter file. It is used to compare results of an experiment*
         // *an experiment is a combination of parameters
         this.simNumber = System.currentTimeMillis();
-        /*
-         * Results summarizer
-         */
-        this.resultsSummarizer      = new JFrame("Results Summarizer");
-        {
-            JPanel content = new JPanel();
-            resultsSummarizer.setContentPane(content);
-        }
 
         this.SEEDs                = SEEDs                ;
         this.topologies           = topologies           ;
@@ -133,13 +159,30 @@ class AllExperiments
         this.maxActiveTrans       = maxActiveTrans       ;
         this.agentsHistoryLengths = agentsHistoryLengths ;
         this.updateRates          = updateRates          ;
+        
+        this.experimentReporter   = defaultViewer()      ;
+        this.globalFrameMaker     = AllExperiments::openSimExperimentNumberWindow
+          /**/                                           ;
         }
 
+    public AllExperiments setExperimentReporter(Consumer<String> x)
+        {
+        this.experimentReporter = (x==null) ? (s ->{}) : x ;
+        return this ;
+        }
+
+    public AllExperiments setGlobalFrameMaker(Consumer<AllExperiments> x)
+        {
+        this.globalFrameMaker = (x==null) ? (a -> {}) : x ;
+        return this ;
+        }
 
     public void doAllExperiments()
         {
+        globalFrameMaker.accept(this) ;
+        /*  // was 
         openSimExperimentNumberWindow();
-
+        */
 
         //This is just to tell you how many simulations will be run with the parameters chosen
 
@@ -150,52 +193,51 @@ class AllExperiments
         //These nested loops are to loop through all the different parameter combinations
 
         java.util.stream.Stream.of(new ExperimentBuilder())
-          .flatMap(combineWith(SEEDs,         ExperimentBuilder::setSeed))
-          .flatMap(combineWith(topologies,    ExperimentBuilder::setTopology))
-          .flatMap(combineWith(numPagesList,  ExperimentBuilder::setNumPages))
-          .flatMap(combineWith(arrivalRates,  ExperimentBuilder::setArrivalRate))
-          .flatMap(combineWith(DDPs,          ExperimentBuilder::setDeadlockDetectionProtocol))
-          .flatMap(combineWith(DRPs,          ExperimentBuilder::setDeadlockResolutionProtocol))
-          .flatMap(combineWith(PPs,           ExperimentBuilder::setPriorityProtocol))
-          .flatMap(combineWith(detectIntervals,
-                                              ExperimentBuilder::setDetectionInterval))
-          .flatMap(combineWith(maxActiveTrans,ExperimentBuilder::setMaxActiveTransferRate))
-          .flatMap(combineWith(agentsHistoryLengths,
-                                              ExperimentBuilder::setAgentsHistoryLength))
-          .flatMap(combineWith(updateRates,   ExperimentBuilder::setUpdateRate))
-          .map(eB -> eB.build())
-          .map(e -> e.setViewer(viewer()))
-          .map(e -> e.setSimulationNumber(simNumber))
-          .forEach(e -> e.doAnExperiment()) ;
+          .flatMap(combineWith(SEEDs,            ExperimentBuilder::setSeed))
+          .flatMap(combineWith(topologies,       ExperimentBuilder::setTopology))
+          .flatMap(combineWith(numPagesList,     ExperimentBuilder::setNumPages))
+          .flatMap(combineWith(arrivalRates,     ExperimentBuilder::setArrivalRate))
+          .flatMap(combineWith(DDPs,             ExperimentBuilder::setDeadlockDetectionProtocol))
+          .flatMap(combineWith(DRPs,             ExperimentBuilder::setDeadlockResolutionProtocol))
+          .flatMap(combineWith(PPs,              ExperimentBuilder::setPriorityProtocol))
+          .flatMap(combineWith(detectIntervals,  ExperimentBuilder::setDetectionInterval))
+          .flatMap(combineWith(maxActiveTrans,   ExperimentBuilder::setMaxActiveTransferRate))
+          .flatMap(combineWith(
+                       agentsHistoryLengths,     ExperimentBuilder::setAgentsHistoryLength))
+          .flatMap(combineWith(updateRates,      ExperimentBuilder::setUpdateRate))
+          .map(ExperimentBuilder::build)
+          .forEach( e ->
+                    {
+                    e.setViewer(experimentReporter) ;
+                    e.setSimulationNumber(simNumber) ;
+                    e.doAnExperiment() ;
+                    }) ;
         }
 
+    private static <A,B,C> BiFunction<B,A,C> flip(BiFunction<A,B,C> f)
+        {
+        return (b,a) -> f.apply(a,b) ;
+        }
+    
+    private static <A,B,C> Function<A,Function<B,C>> curry(BiFunction<A,B,C> f)
+        {
+        return a -> b  -> f.apply(a,b) ;
+        }
+    
+    private static <A,C> Function<Function<A,C>,C> at(A x)
+        {
+        return f -> f.apply(x) ;
+        }
+    
     private static <D>
     java.util.function.Function<ExperimentBuilder,java.util.stream.Stream<ExperimentBuilder>>
     combineWith(D [] data,
                 java.util.function.BiFunction<ExperimentBuilder,D,ExperimentBuilder>
                 fred)
         {
-        Function<D,UnaryOperator<ExperimentBuilder>> curried
-          = d -> e -> fred.apply(e,d) ;
-        Function<Stream<UnaryOperator<ExperimentBuilder>>,
-                 Function<ExperimentBuilder,Stream<ExperimentBuilder>>>
-              qf =
-          strFs -> eB -> strFs.map(f -> f.apply(eB)) ;
-        return qf.apply(Arrays.stream(data).map(curried)) ;
+        return  e -> Arrays.stream(data).map(curry(flip(fred))).map(at(e)) ;
         }
 
-    private Consumer<String> viewer()
-        {
-        return (string) ->
-            {
-            JLabel label = new JLabel(string);
-            resultsSummarizer.getContentPane().add(label);
-            resultsSummarizer.setTitle(
-                "Results Summarizer - Experiment Number: "+ simNumber);
-            resultsSummarizer.pack();
-            resultsSummarizer.setVisible(true);
-            } ;
-        }
 
     public int numberOfSimulations()
         {

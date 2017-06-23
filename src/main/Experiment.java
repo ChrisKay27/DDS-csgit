@@ -73,6 +73,9 @@ public class Experiment
         this.maxActiveTransferRate      = maxActiveTransferRate      ;
         this.agentsHistoryLength        = agentsHistoryLength        ;
         this.updateRate                 = updateRate                 ;
+        
+        this.viewer                     = s -> {}                    ;
+        this.simulationNumber           = -1L                        ;
         }
     
     public Experiment setViewer(Consumer<String> viewer)

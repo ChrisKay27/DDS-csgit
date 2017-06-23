@@ -64,6 +64,9 @@ public class Main {
             maxActiveTransStr,
             agentsHistoryLengthStr,
             updateRateStr) ;
+        // experiments.setGlobalFrameMaker(null) ;
+        experiments.setExperimentReporter(experiments.defaultViewer()) ;
+        // experiments.setExperimentReporter(null)) ;
         experiments.doAllExperiments() ;
     }
 

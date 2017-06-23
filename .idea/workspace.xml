@@ -3,10 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="ccedab0e-c551-476f-865b-f80f2a4de36f" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/params.txt" afterPath="$PROJECT_DIR$/params.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/Main.java" afterPath="$PROJECT_DIR$/src/main/Main.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/simulator/Simulation.java" afterPath="$PROJECT_DIR$/src/simulator/Simulation.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/simulator/eventQueue/EventQueue.java" afterPath="$PROJECT_DIR$/src/simulator/eventQueue/EventQueue.java" />
     </list>
     <ignored path="DDS-csgit.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -836,7 +832,8 @@
     <MESSAGE value="Instead of checking to see if a trans has been aborted, then not delivering messages to it (lockAcquired messages) it looks to see if it is active" />
     <MESSAGE value="Ensuring we have the same version" />
     <MESSAGE value="Added a thread pool that executes max of 8 simulations at once." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added a thread pool that executes max of 8 simulations at once." />
+    <MESSAGE value="Simulations time out after 5min" />
+    <option name="LAST_COMMIT_MESSAGE" value="Simulations time out after 5min" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

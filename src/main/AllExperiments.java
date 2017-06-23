@@ -3,7 +3,9 @@ package main;
 import java.util.List ;
 import java.util.Arrays ;
 import java.util.function.Function ;
+import java.util.function.UnaryOperator ;
 import java.util.function.Consumer ;
+import java.util.stream.Stream ;
 
 import javax.swing.*;
 import simulator.enums.Topology;
@@ -147,22 +149,39 @@ class AllExperiments
 
         //These nested loops are to loop through all the different parameter combinations
 
-        ExperimentBuilder expBuilder = new ExperimentBuilder() ;
-        Arrays.stream(SEEDs).map(expBuilder::setSeed)
-          .flatMap(eB -> Arrays.stream(topologies).map(t -> eB.setTopology(t)))
-          .flatMap(eB -> Arrays.stream(numPagesList).map(n -> eB.setNumPages(n)))
-          .flatMap(eB -> Arrays.stream(arrivalRates).map(n -> eB.setArrivalRate(n)))
-          .flatMap(eB -> Arrays.stream(DDPs).map(dp -> eB.setDeadlockDetectionProtocol(dp)))
-          .flatMap(eB -> Arrays.stream(DRPs).map(drp -> eB.setDeadlockResolutionProtocol(drp)))
-          .flatMap(eB -> Arrays.stream(PPs).map(pp -> eB.setPriorityProtocol(pp)))
-          .flatMap(eB -> Arrays.stream(detectIntervals).map(di -> eB.setDetectionInterval(di)))
-          .flatMap(eB -> Arrays.stream(maxActiveTrans).map(ma -> eB.setMaxActiveTransferRate(ma)))
-          .flatMap(eB -> Arrays.stream(agentsHistoryLengths).map(ahl -> eB.setAgentsHistoryLength(ahl)))
-          .flatMap(eB -> Arrays.stream(updateRates).map(r -> eB.setUpdateRate(r)))
+        java.util.stream.Stream.of(new ExperimentBuilder())
+          .flatMap(eB -> Arrays.stream(SEEDs).map(eB::setSeed))
+          .flatMap(eB -> Arrays.stream(topologies).map(eB::setTopology))
+          .flatMap(eB -> Arrays.stream(numPagesList).map(eB::setNumPages))
+          .flatMap(eB -> Arrays.stream(arrivalRates).map(eB::setArrivalRate))
+          .flatMap(eB -> Arrays.stream(DDPs).map(eB::setDeadlockDetectionProtocol))
+          .flatMap(eB -> Arrays.stream(DRPs).map(eB::setDeadlockResolutionProtocol))
+          .flatMap(eB -> Arrays.stream(PPs).map(eB::setPriorityProtocol))
+          .flatMap(eB -> Arrays.stream(detectIntervals).map(eB::setDetectionInterval))
+          .flatMap(eB -> Arrays.stream(maxActiveTrans).map(eB::setMaxActiveTransferRate))
+          .flatMap(eB -> Arrays.stream(agentsHistoryLengths).map(eB::setAgentsHistoryLength))
+          .flatMap(eB -> Arrays.stream(updateRates).map(eB::setUpdateRate))
           .map(eB -> eB.build())
           .map(e -> e.setViewer(viewer()))
           .map(e -> e.setSimulationNumber(simNumber))
           .forEach(e -> e.doAnExperiment()) ;
+        }
+
+    private static <D>
+    java.util.function.UnaryOperator<java.util.stream.Stream<ExperimentBuilder>>
+    combineWith(D [] data,
+                java.util.function.BiFunction<ExperimentBuilder,D,ExperimentBuilder>
+                fred)
+        {
+        Function<D,UnaryOperator<ExperimentBuilder>> curried
+          = d -> e -> fred.apply(e,d) ;
+        java.util.function.BiFunction<Stream<ExperimentBuilder>,
+          Stream<UnaryOperator<ExperimentBuilder>>,
+          Stream<ExperimentBuilder>> qf =
+          (str,strFs) -> str.flatMap(e -> strFs.map(f -> f.apply(e))) ;
+        return (stream ->
+                stream.flatMap(
+                    e-> Arrays.stream(data).map(curried).map(x->x.apply(e)))) ;
         }
 
     private Consumer<String> viewer()

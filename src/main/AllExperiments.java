@@ -185,7 +185,17 @@ class AllExperiments
 
     public void doStage01(ExperimentBuilder expBuilder)
         {
-        Arrays.stream(SEEDs).map(expBuilder::setSeed).forEach(this::doStage02) ;
+        Arrays.stream(SEEDs).map(expBuilder::setSeed)
+          .flatMap(eB -> Arrays.stream(topologies).map(t -> eB.setTopology(t)))
+          .flatMap(eB -> Arrays.stream(numPagesList).map(n -> eB.setNumPages(n)))
+          .flatMap(eB -> Arrays.stream(arrivalRates).map(n -> eB.setArrivalRate(n)))
+          .flatMap(eB -> Arrays.stream(DDPs).map(dp -> eB.setDeadlockDetectionProtocol(dp)))
+          .flatMap(eB -> Arrays.stream(DRPs).map(drp -> eB.setDeadlockResolutionProtocol(drp)))
+          .flatMap(eB -> Arrays.stream(PPs).map(pp -> eB.setPriorityProtocol(pp)))
+          .flatMap(eB -> Arrays.stream(detectIntervals).map(di -> eB.setDetectionInterval(di)))
+          .flatMap(eB -> Arrays.stream(maxActiveTrans).map(ma -> eB.setMaxActiveTransferRate(ma)))
+          .flatMap(eB -> Arrays.stream(agentsHistoryLengths).map(ahl -> eB.setAgentsHistoryLength(ahl)))
+          .forEach(this::doStage11) ;
         /*
         for (long SEED : SEEDs)
             {

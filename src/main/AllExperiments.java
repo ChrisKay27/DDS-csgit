@@ -179,9 +179,7 @@ class AllExperiments
           Stream<UnaryOperator<ExperimentBuilder>>,
           Stream<ExperimentBuilder>> qf =
           (str,strFs) -> str.flatMap(e -> strFs.map(f -> f.apply(e))) ;
-        return (stream ->
-                stream.flatMap(
-                    e-> Arrays.stream(data).map(curried).map(x->x.apply(e)))) ;
+        return (stream -> qf.apply(stream, Arrays.stream(data).map(curried))) ;
         }
 
     private Consumer<String> viewer()

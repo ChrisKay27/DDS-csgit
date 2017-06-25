@@ -27,8 +27,9 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class Main {
-
+    private static int max_number_of_threads = 8;
     private static int simsRanSoFar = 0;
+    private static int concurrent_Execution = 0;
 
     public static void main(String[] args) {
         try {
@@ -104,10 +105,9 @@ public class Main {
 //        }
 
 
-        ExecutorService executorService = Executors.newFixedThreadPool(8);
+        ExecutorService executorService = Executors.newFixedThreadPool(max_number_of_threads);
 
         //These nested loops are to loop through all the different parameter combinations
-
         for (String SEEDStr : SEEDs.split(",")) {
             long SEED = Long.parseLong(SEEDStr);
 
@@ -141,6 +141,7 @@ public class Main {
                                                     if (updateRate > 1 || updateRate < 0)
                                                         throw new WTFException("update rate has to be between 0 and 1, it was " + updateRate);
 
+                                                    concurrent_Execution++;
                                                     Runnable r = () -> {
                                                         Statistics stats = new Statistics();
 
@@ -198,12 +199,16 @@ public class Main {
                                                         if (topology == Topology.HyperCube)
                                                             HyperCube.setup(servers);
 
-
                                                         //Run the simulation
                                                         Object[] results = s.start();
+
                                                         double PCOT = (double) results[0];
                                                         int overheadIncurred = (int) results[1];
                                                         int messageOverheadIncurred = (int) results[2];
+
+                                                        concurrent_Execution--;
+                                                        if(concurrent_Execution < 2)
+                                                            unlockWaiter();
 
                                                         //Output results to the database
                                                         ExperimentResults expResults = new ExperimentResults(simNumber, PCOT, DDP, DRP, topStr, maxActiveTrans,
@@ -252,15 +257,18 @@ public class Main {
 //                                                        resultsSummerizer.pack();
 //                                                        resultsSummerizer.setVisible(true);
 
-                                                        //simsRanSoFar++;
-                                                        //if (simsRanSoFar == numberOfSims) {
-                                                        //System.exit(0);
-                                                        //}
+                                                        simsRanSoFar++;
+                                                        if (simsRanSoFar == numberOfSims) {
+                                                            System.exit(0);
+                                                        }
                                                     };
 
                                                     //Run this simulation in a new thread
                                                     //new Thread(r).start();
-                                                    executorService.submit(r);                                               }
+                                                    executorService.submit(r);
+                                                    if (concurrent_Execution > max_number_of_threads)
+                                                        waitForThread();
+                                                }
                                             }
                                         }
                                     }
@@ -282,5 +290,24 @@ public class Main {
 
         frame.setVisible(true);
         frame.setLocationRelativeTo(null);
+    }
+    public static final Object monitor = new Object();
+    public static boolean monitorState = false;
+    public static void waitForThread() {
+        monitorState = true;
+        while (monitorState) {
+            synchronized (monitor) {
+                try {
+                    monitor.wait(); // wait until notified
+                } catch (Exception e) {}
+            }
+        }
+    }
+
+    public static void unlockWaiter() {
+        synchronized (monitor) {
+            monitorState = false;
+            monitor.notifyAll(); // unlock again
+        }
     }
 }

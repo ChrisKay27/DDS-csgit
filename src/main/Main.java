@@ -258,6 +258,7 @@ public class Main {
 //                                                        resultsSummerizer.setVisible(true);
 
                                                         simsRanSoFar++;
+                                                        System.out.println("Simulation ran so far: "+ simsRanSoFar + " out of " + numberOfSims);
                                                         if (simsRanSoFar == numberOfSims) {
                                                             System.exit(0);
                                                         }

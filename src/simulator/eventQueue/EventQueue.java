@@ -1,15 +1,13 @@
 package simulator.eventQueue;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class EventQueue {
+public class EventQueue implements Comparator<Event> {
+    private PriorityQueue<Event> queue= new PriorityQueue<>(this::compare);
 
-    private List<Event> queue = new LinkedList<>();
+    // private List<Event> queue = new LinkedList<>();
     private int time;
     private volatile boolean stop;
     private final Supplier<Long> sleepTime;
@@ -21,17 +19,19 @@ public class EventQueue {
     }
 
     public void addEvent(Event e) {
-        if (queue.isEmpty())
-            queue.add(e);
-        else {
-            for (int i = 0; i < queue.size(); i++) {
-                if (queue.get(i).getTime() > e.getTime()) {
-                    queue.add(i, e);
-                    return;
-                }
-            }
-            queue.add(e);
-        }
+        queue.add(e);
+
+//        if (queue.isEmpty())
+//            queue.add(e);
+//        else {
+//            for (int i = 0; i < queue.size(); i++) {
+//                if (queue.get(i).getTime() > e.getTime()) {
+//                    queue.add(i, e);
+//                    return;
+//                }
+//            }
+//            queue.add(e);
+//        }
     }
 
     public int getTime() {
@@ -45,7 +45,7 @@ public class EventQueue {
         System.out.println("** Simulation Starting **");
 
         while (!queue.isEmpty() && !stop && notOnlyRecurringEventsRemain()) {
-            Event e = queue.remove(0);
+            Event e = queue.remove();
             if (e.isAborted())
                 continue;
 
@@ -115,5 +115,10 @@ public class EventQueue {
             sleptThisTick = false;
             timeUpdater.accept(time);
         }
+    }
+
+    @Override
+    public int compare(Event e1, Event e2) {
+        return e1.getTime() - e2.getTime();
     }
 }

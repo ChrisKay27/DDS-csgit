@@ -1,6 +1,6 @@
 package simulator.protocols.deadlockDetection;
 
-import exceptions.WTFException;
+import exceptions.SimException;
 import simulator.SimParams;
 import simulator.enums.ServerProcess;
 import simulator.eventQueue.Event;
@@ -115,6 +115,6 @@ public class DeadlockDetectionProtocol {
             case "MAEDD":
                 return new MAEDD(server, server.getSimParams(), server.getDRP()::resolveMultiple, server::incurOverhead, deadlockListener);
         }
-        throw new WTFException("Deadlock Detection Protocol has not been registered! add it here in the WFG_DDP class!");
+        throw new SimException("Deadlock Detection Protocol has not been registered! add it here in the WFG_DDP class!");
     }
 }

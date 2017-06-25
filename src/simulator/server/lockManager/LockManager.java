@@ -1,6 +1,6 @@
 package simulator.server.lockManager;
 
-import exceptions.WTFException;
+import exceptions.SimException;
 import simulator.SimParams;
 import simulator.enums.ServerProcess;
 import simulator.eventQueue.Event;
@@ -54,7 +54,7 @@ public class LockManager {
             }
             List<Lock> locks = heldLocks.get(pageNum);
             if (locks == null) //Safety check
-                throw new WTFException("Invalid Page Number! Waiting lock for page " + pageNum + " on server " + server.getID());
+                throw new SimException("Invalid Page Number! Waiting lock for page " + pageNum + " on server " + server.getID());
 
             //If there are no held locks on this page then we consider adding locks. This prevents starvation by continuously adding shared locks in-front of an exclusive one.
             if (locks.isEmpty()) {
@@ -191,7 +191,7 @@ public class LockManager {
             List<Lock> locks = heldLocks.get(pageNum);
 
             if (locks == null) //Safety check
-                throw new WTFException("Transaction " + transID + " tried to acquire lock on page " + pageNum + " on server " + server.getID());
+                throw new SimException("Transaction " + transID + " tried to acquire lock on page " + pageNum + " on server " + server.getID());
 
             if (locks.isEmpty() || !locks.get(0).isExclusive()) {
                 //Acquire lock locally
@@ -326,7 +326,7 @@ public class LockManager {
         for (Lock lock : heldLocks.get(pageNum)) {
             if (transID == lock.getTransID()) {
                 if (found)
-                    throw new WTFException(serverID + ": Found multiple locks on page " + pageNum + " for trans " + transID + " found: " + releasedLock + " and " + lock);
+                    throw new SimException(serverID + ": Found multiple locks on page " + pageNum + " for trans " + transID + " found: " + releasedLock + " and " + lock);
                 releasedLock = lock;
                 found = true;
             }
@@ -343,7 +343,7 @@ public class LockManager {
             boolean successfullyRemoved = heldLocks.get(pageNum).remove(releasedLock);
 
             if (!successfullyRemoved)
-                throw new WTFException(serverID + ": Lock " + releasedLock + " not successfully removed on page " + pageNum + " for trans " + transID);
+                throw new SimException(serverID + ": Lock " + releasedLock + " not successfully removed on page " + pageNum + " for trans " + transID);
 
             simParams.eventQueue.accept(new Event(simParams.getTime() + 1, serverID, this::checkForObtainableLocks));
         }

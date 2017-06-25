@@ -1,6 +1,6 @@
 package simulator.server.disk;
 
-import exceptions.WTFException;
+import exceptions.SimException;
 import simulator.SimParams;
 import simulator.enums.ServerProcess;
 import simulator.eventQueue.Event;
@@ -63,7 +63,7 @@ public class Disk {
 
     public void addJob(DiskJob dj) {
         if (!pageRange.contains(dj.getPageNum()))
-            throw new WTFException("Disk job page outside of range!");
+            throw new SimException("Disk job page outside of range!");
 
         if (Log.isLoggingEnabled())
             log.log(dj.getTransID(), "Queueing disk job " + dj);

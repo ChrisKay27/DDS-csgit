@@ -1,6 +1,6 @@
 package simulator.server.transactionManager;
 
-import exceptions.WTFException;
+import exceptions.SimException;
 import simulator.protocols.priority.PriorityProtocol;
 
 import java.util.*;
@@ -66,7 +66,7 @@ public class Transaction {
         } else if (readPageNums.contains(pageNum)) {
             lockedReadPages.add(pageNum);
         } else
-            throw new WTFException("Transaction " + ID + ": Acquired a lock for a page I don't have! pageNum: " + pageNum + " on server: " + serverID);
+            throw new SimException("Transaction " + ID + ": Acquired a lock for a page I don't have! pageNum: " + pageNum + " on server: " + serverID);
     }
 
 

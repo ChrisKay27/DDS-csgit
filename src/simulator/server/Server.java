@@ -1,6 +1,6 @@
 package simulator.server;
 
-import exceptions.WTFException;
+import exceptions.SimException;
 import simulator.SimParams;
 import simulator.enums.ServerProcess;
 import simulator.protocols.deadlockDetection.DeadlockDetectionProtocol;
@@ -96,7 +96,7 @@ public class Server {
                 DRP.receiveMessage(msg);
                 break;
             default:
-                throw new WTFException(serverID + ": Did not find correct process for this message! : " + msg);
+                throw new SimException(serverID + ": Did not find correct process for this message! : " + msg);
         }
     }
 

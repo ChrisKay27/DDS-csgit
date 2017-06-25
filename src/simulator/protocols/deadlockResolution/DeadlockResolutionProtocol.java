@@ -1,6 +1,6 @@
 package simulator.protocols.deadlockResolution;
 
-import exceptions.WTFException;
+import exceptions.SimException;
 import simulator.protocols.deadlockDetection.Deadlock;
 import simulator.server.Server;
 import simulator.server.network.Message;
@@ -20,7 +20,7 @@ public interface DeadlockResolutionProtocol {
             case "ExtratimeDeadlockResolution": return new ExtratimeDeadlockResolution(server);
         }
 
-        throw new WTFException("Deadlock Resolution Protocol has not been registered! add it here in the DeadlockResolutionProtocol class!");
+        throw new SimException("Deadlock Resolution Protocol has not been registered! add it here in the DeadlockResolutionProtocol class!");
     }
 
     void receiveMessage(Message msg);

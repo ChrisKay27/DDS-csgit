@@ -1,6 +1,6 @@
 package simulator.protocols.deadlockResolution;
 
-import exceptions.WTFException;
+import exceptions.SimException;
 import javafx.util.Pair;
 import simulator.SimParams;
 import simulator.enums.ServerProcess;
@@ -59,7 +59,7 @@ public class AgentDeadlockResolutionProtocol implements DeadlockResolutionProtoc
                 break;
             }
             default:
-                throw new WTFException("Badly formatted message! : " + message.getContents());
+                throw new SimException("Badly formatted message! : " + message.getContents());
         }
     }
 

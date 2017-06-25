@@ -1,7 +1,7 @@
 package simulator.server.transactionManager;
 
 import com.sun.istack.internal.Nullable;
-import exceptions.WTFException;
+import exceptions.SimException;
 import simulator.SimParams;
 import simulator.enums.ServerProcess;
 import simulator.eventQueue.Event;
@@ -403,7 +403,7 @@ public class TransactionManager {
             }
 
             default:
-                throw new WTFException("<font color=\"red\">Do not understand message! " + msg+"</font>");
+                throw new SimException("<font color=\"red\">Do not understand message! " + msg+"</font>");
         }
     }
 
@@ -652,14 +652,14 @@ public class TransactionManager {
         lm.getWaitingLocks().values().forEach(locksLists -> {
             locksLists.forEach(lock -> {
                 if (lock.getTransID() == t.getID())
-                    throw new WTFException(serverID + ": Transaction " + t.getID() + " just completed but it has waiting locks still! (Page " + lock.getPageNum() + ")");
+                    throw new SimException(serverID + ": Transaction " + t.getID() + " just completed but it has waiting locks still! (Page " + lock.getPageNum() + ")");
             });
         });
 
         lm.getHeldLocks().values().forEach(locksLists -> {
             locksLists.forEach(lock -> {
                 if (lock.getTransID() == t.getID())
-                    throw new WTFException(serverID + ": Transaction " + t.getID() + " just completed but it has held locks still! (Page " + lock.getPageNum() + ")");
+                    throw new SimException(serverID + ": Transaction " + t.getID() + " just completed but it has held locks still! (Page " + lock.getPageNum() + ")");
             });
         });
     }
@@ -818,7 +818,7 @@ public class TransactionManager {
             if (t.getID() == transID)
                 return t;
 
-        throw new WTFException(server.getID() + ":Could not find transaction " + transID);
+        throw new SimException(server.getID() + ":Could not find transaction " + transID);
     }
 
     private Transaction getActiveTransaction(int transID) {
@@ -826,7 +826,7 @@ public class TransactionManager {
             if (t.getID() == transID)
                 return t;
 
-        throw new WTFException(server.getID() + ": Could not find transaction " + transID);
+        throw new SimException(server.getID() + ": Could not find transaction " + transID);
     }
 
     @Nullable

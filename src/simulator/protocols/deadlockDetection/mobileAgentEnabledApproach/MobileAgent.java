@@ -1,6 +1,6 @@
 package simulator.protocols.deadlockDetection.mobileAgentEnabledApproach;
 
-import exceptions.WTFException;
+import exceptions.SimException;
 import simulator.SimParams;
 import simulator.enums.ServerProcess;
 import simulator.eventQueue.Event;
@@ -68,7 +68,7 @@ public class MobileAgent {
             log.log("Mobile Agent Updating graph with waits from server " + server);
 
         if (receivedWFGs.contains(graph))
-            throw new WTFException(serverID + ": Have already received this WFG! " + graph);
+            throw new SimException(serverID + ": Have already received this WFG! " + graph);
 
         receivedWFGs.add(graph);
 

@@ -1,6 +1,6 @@
 package simulator.protocols.deadlockDetection;
 
-import exceptions.WTFException;
+import exceptions.SimException;
 import simulator.SimParams;
 import simulator.enums.ServerProcess;
 import simulator.eventQueue.Event;
@@ -140,7 +140,7 @@ public class WFG_DDP extends DeadlockDetectionProtocol {
                     Transaction t = allTrans.get(waitingLock.getTransID());
                     //Sometimes a transaction that has just finished, so don't throw an error if it just finished
                     if (t.isCompleted() && t.getCompletedTime() < simParams.getTime() - 1000)
-                        throw new WTFException(serverID + ": This waiting lock " + waitingLock + " doesn't belong to an active transaction!");
+                        throw new SimException(serverID + ": This waiting lock " + waitingLock + " doesn't belong to an active transaction!");
                     else {
                         //System.out.println(simParams.getTime() + " - Adding lock of " + t + " that has recently completed at " + t.getCompletedTime());
                     }
@@ -155,7 +155,7 @@ public class WFG_DDP extends DeadlockDetectionProtocol {
                         Transaction t = allTrans.get(heldLock.getTransID());
                         //Sometimes a transaction that has just finished, so don't throw an error if it just finished
                         if (t.isCompleted() && t.getCompletedTime() < simParams.getTime() - 1000)
-                            throw new WTFException(serverID + ": This held lock " + heldLock + " doesn't belong to an active transaction!");
+                            throw new SimException(serverID + ": This held lock " + heldLock + " doesn't belong to an active transaction!");
                         else {
                             //System.out.println(simParams.getTime() + " - Adding lock of " + t + " that has recently completed at " + t.getCompletedTime());
                         }
@@ -211,7 +211,7 @@ public class WFG_DDP extends DeadlockDetectionProtocol {
             log.log("Updating graph with waits from server " + server);
 
         if (receivedWFGs.contains(graph))
-            throw new WTFException(serverID + ": Have already received this WFG! " + graph);
+            throw new SimException(serverID + ": Have already received this WFG! " + graph);
         receivedWFGs.add(graph);
 
         graph.getTasks().forEach(wfgNodeTask -> {

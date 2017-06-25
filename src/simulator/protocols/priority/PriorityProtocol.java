@@ -1,6 +1,6 @@
 package simulator.protocols.priority;
 
-import exceptions.WTFException;
+import exceptions.SimException;
 import simulator.server.lockManager.Lock;
 import simulator.server.transactionManager.TransInfo;
 import simulator.server.transactionManager.Transaction;
@@ -20,6 +20,6 @@ public interface PriorityProtocol {
             case "LeastSlackFirst": return new LeastSlackFirst();
             case "RandomPriority": return new RandomPriority();
         }
-        throw new WTFException("Priority Protocol not registered! add them in the PriorityProtocol class!");
+        throw new SimException("Priority Protocol not registered! add them in the PriorityProtocol class!");
     }
 }

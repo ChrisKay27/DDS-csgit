@@ -1,6 +1,6 @@
 package main;
 
-import exceptions.WTFException;
+import exceptions.SimException;
 import results.DBConnection;
 import results.ExperimentResults;
 import simulator.SimSetupParams;
@@ -139,7 +139,7 @@ public class Main {
                                                     double updateRate = Double.parseDouble(updateRateStr_);
 
                                                     if (updateRate > 1 || updateRate < 0)
-                                                        throw new WTFException("update rate has to be between 0 and 1, it was " + updateRate);
+                                                        throw new SimException("update rate has to be between 0 and 1, it was " + updateRate);
 
                                                     concurrent_Execution++;
                                                     Runnable r = () -> {

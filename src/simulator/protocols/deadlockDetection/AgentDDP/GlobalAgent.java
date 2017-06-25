@@ -1,6 +1,6 @@
 package simulator.protocols.deadlockDetection.AgentDDP;
 
-import exceptions.WTFException;
+import exceptions.SimException;
 import simulator.SimParams;
 import simulator.eventQueue.Event;
 import simulator.protocols.deadlockDetection.Deadlock;
@@ -61,7 +61,7 @@ public class GlobalAgent {
             log.log("Updating graph with waits from server " + server);
 
         if (receivedWFGs.contains(graph))
-            throw new WTFException(serverID + ": Have already received this WFG! " + graph);
+            throw new SimException(serverID + ": Have already received this WFG! " + graph);
 
         receivedWFGs.add(graph);
 

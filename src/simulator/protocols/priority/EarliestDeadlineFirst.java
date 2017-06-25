@@ -1,6 +1,6 @@
 package simulator.protocols.priority;
 
-import exceptions.WTFException;
+import exceptions.SimException;
 import simulator.server.lockManager.Lock;
 import simulator.server.transactionManager.TransInfo;
 import simulator.server.transactionManager.Transaction;
@@ -31,7 +31,7 @@ public class EarliestDeadlineFirst implements PriorityProtocol {
             if (ti.getID() == transID)
                 return (sortedList.indexOf(ti) + 1);
 
-        throw new WTFException("Transaction " + transID + " is not in the list of priority.");
+        throw new SimException("Transaction " + transID + " is not in the list of priority.");
     }
 
     @Override

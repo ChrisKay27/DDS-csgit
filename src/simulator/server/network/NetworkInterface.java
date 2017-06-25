@@ -1,6 +1,6 @@
 package simulator.server.network;
 
-import exceptions.WTFException;
+import exceptions.SimException;
 import simulator.SimParams;
 import simulator.enums.ServerProcess;
 import simulator.eventQueue.Event;
@@ -56,7 +56,7 @@ public class NetworkInterface {
             if (nc.getDest().getID() == destServID)
                 return nc;
         }
-        throw new WTFException(server.getID() + ": No connection to this server! : " + destServID);
+        throw new SimException(server.getID() + ": No connection to this server! : " + destServID);
     }
 
     public void addRoutingTableEntry(int destServID, List<NetworkConnection> networkConnections) {

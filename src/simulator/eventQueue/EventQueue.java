@@ -46,7 +46,7 @@ public class EventQueue {
     public void start() throws TimeoutException {
         System.out.println("** Simulation Starting **");
 
-        simulationTimeoutTime = System.currentTimeMillis() + 5*1000*60;
+        simulationTimeoutTime = System.currentTimeMillis() + 1000*30;
 
         while (!queue.isEmpty() && !stop && notOnlyRecurringEventsRemain()) {
 

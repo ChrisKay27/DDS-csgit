@@ -14,6 +14,7 @@ import simulator.server.network.HyperCube;
 import stats.Statistics;
 import ui.*;
 import javax.swing.*;
+import java.awt.*;
 import java.io.*;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -92,6 +93,7 @@ public class Main {
          */
         JFrame resultsSummerizer = new JFrame("Results Summarizer");
         {
+            resultsSummerizer.setMaximumSize(new Dimension(1000,1000));
             JPanel content = new JPanel();
             resultsSummerizer.setContentPane(content);
         }
@@ -101,7 +103,7 @@ public class Main {
         /*
             Thread pool that allows for 8 simulations to run concurrently
          */
-        ExecutorService executorService = Executors.newFixedThreadPool(2);
+        ExecutorService executorService = Executors.newFixedThreadPool(8);
 
 
 
@@ -256,12 +258,13 @@ public class Main {
                                                             sb.append("<b><font color=\"red\">PCOT: " + PCOT).append("</font><br></b></html>");
                                                         }
                                                         catch(TimeoutException ex){
-                                                            //ex.printStackTrace();
+                                                            ex.printStackTrace();
 
                                                             sb.append(ex.toString());
                                                         }
 
                                                         JLabel label = new JLabel(sb.toString());
+                                                        label.setBorder(BorderFactory.createLineBorder(Color.BLACK));
                                                         resultsSummerizer.getContentPane().add(label);
                                                         resultsSummerizer.setTitle("Results Summarizer - Experiment Number: "+ simNumber);
                                                         resultsSummerizer.pack();

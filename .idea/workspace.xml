@@ -7,46 +7,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ccedab0e-c551-476f-865b-f80f2a4de36f" name="Default" comment="Simulations time out after 30s">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/lib/commons-math3-3.6.1.jar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/DeadlockDetectionProtocols.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/DeadlockDetectionProtocols.uml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/MainComponents_UML.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/UML.uml" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/exceptions/WTFException.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/protocols/deadlockDetection/WFG_DDP.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/server/twoPhaseCommit/TwoPhaseCommitProtocol.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/simulator/server/twoPhaseCommit/TwoPhaseCommitProtocol.java" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/WFG_DDP.java" afterPath="$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/WaitForGraph_DDP.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/main/Main.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/main/Main.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/eventQueue/EventQueue.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/eventQueue/EventQueue.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/protocols/deadlockDetection/AgentDDP/AgentDeadlockDetectionProtocol.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/protocols/deadlockDetection/AgentDDP/AgentDeadlockDetectionProtocol.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/protocols/deadlockDetection/AgentDDP/GlobalAgent.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/protocols/deadlockDetection/AgentDDP/GlobalAgent.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/protocols/deadlockDetection/AgentDDP/LocalAgent.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/protocols/deadlockDetection/AgentDDP/LocalAgent.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/protocols/deadlockDetection/DeadlockDetectionProtocol.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/protocols/deadlockDetection/DeadlockDetectionProtocol.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/protocols/deadlockDetection/TimeoutDeadlockDetection.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/protocols/deadlockDetection/TimeoutDeadlockDetection.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/protocols/deadlockDetection/mobileAgentEnabledApproach/MAEDD.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/protocols/deadlockDetection/mobileAgentEnabledApproach/MAEDD.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/protocols/deadlockDetection/mobileAgentEnabledApproach/MobileAgent.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/protocols/deadlockDetection/mobileAgentEnabledApproach/MobileAgent.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/protocols/deadlockResolution/AgentDeadlockResolutionProtocol.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/protocols/deadlockResolution/AgentDeadlockResolutionProtocol.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/protocols/deadlockResolution/DeadlockResolutionProtocol.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/protocols/deadlockResolution/DeadlockResolutionProtocol.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/protocols/priority/EarliestDeadlineFirst.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/protocols/priority/EarliestDeadlineFirst.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/protocols/priority/FirstComeFirstServe.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/protocols/priority/FirstComeFirstServe.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/protocols/priority/LeastSlackFirst.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/protocols/priority/LeastSlackFirst.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/protocols/priority/PriorityProtocol.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/protocols/priority/PriorityProtocol.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/server/Server.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/server/Server.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/server/disk/Disk.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/server/disk/Disk.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/server/lockManager/LockManager.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/server/lockManager/LockManager.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/server/network/NetworkInterface.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/server/network/NetworkInterface.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/server/transactionManager/TransactionManager.class" afterPath="$PROJECT_DIR$/out/production/DistributedDatabaseSimulator/simulator/server/transactionManager/TransactionManager.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/DDS-csgit.iml" afterPath="$PROJECT_DIR$/.idea/DDS-csgit.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/simulator/eventQueue/EventQueue.java" afterPath="$PROJECT_DIR$/src/simulator/eventQueue/EventQueue.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/AgentDDP/AgentDeadlockDetectionProtocol.java" afterPath="$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/AgentDDP/AgentDeadlockDetectionProtocol.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/AgentDDP/GlobalAgent.java" afterPath="$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/AgentDDP/GlobalAgent.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/AgentDDP/LocalAgent.java" afterPath="$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/AgentDDP/LocalAgent.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/DeadlockDetectionProtocol.java" afterPath="$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/DeadlockDetectionProtocol.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/TimeoutDeadlockDetection.java" afterPath="$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/TimeoutDeadlockDetection.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/mobileAgentEnabledApproach/MAEDD.java" afterPath="$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/mobileAgentEnabledApproach/MAEDD.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/mobileAgentEnabledApproach/MobileAgent.java" afterPath="$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/mobileAgentEnabledApproach/MobileAgent.java" />
     </list>
     <ignored path="DDS-csgit.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -1293,7 +1254,8 @@
     <MESSAGE value="Update" />
     <MESSAGE value="Update&#10;" />
     <MESSAGE value="Most Recent&#10;" />
-    <option name="LAST_COMMIT_MESSAGE" value="Most Recent&#10;" />
+    <MESSAGE value="Simulations time out after 30s" />
+    <option name="LAST_COMMIT_MESSAGE" value="Simulations time out after 30s" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

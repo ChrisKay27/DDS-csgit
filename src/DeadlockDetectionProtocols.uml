@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement />
+  <nodes>
+    <node x="245.0" y="158.0">simulator.protocols.deadlockDetection.mobileAgentEnabledApproach.MAEDD</node>
+    <node x="188.0" y="0.0">simulator.protocols.deadlockDetection.DeadlockDetectionProtocol</node>
+    <node x="354.0" y="158.0">simulator.protocols.deadlockDetection.WaitForGraph_DDP</node>
+    <node x="271.5" y="79.0">simulator.protocols.deadlockDetection.TimeoutDeadlockDetection</node>
+    <node x="0.0" y="158.0">simulator.protocols.deadlockDetection.AgentDDP.AgentDeadlockDetectionProtocol</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="simulator.protocols.deadlockDetection.mobileAgentEnabledApproach.MAEDD" target="simulator.protocols.deadlockDetection.WaitForGraph_DDP">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="simulator.protocols.deadlockDetection.TimeoutDeadlockDetection" target="simulator.protocols.deadlockDetection.DeadlockDetectionProtocol">
+      <point x="0.0" y="-14.5" />
+      <point x="368.0" y="54.0" />
+      <point x="332.75" y="54.0" />
+      <point x="48.25" y="14.5" />
+    </edge>
+    <edge source="simulator.protocols.deadlockDetection.AgentDDP.AgentDeadlockDetectionProtocol" target="simulator.protocols.deadlockDetection.WaitForGraph_DDP">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="simulator.protocols.deadlockDetection.WaitForGraph_DDP" target="simulator.protocols.deadlockDetection.DeadlockDetectionProtocol">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="181.0" y="173.5" />
+  <SelectedNodes>
+    <node>simulator.protocols.deadlockDetection.WaitForGraph_DDP</node>
+  </SelectedNodes>
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>public</VISIBILITY>
+</Diagram>
+

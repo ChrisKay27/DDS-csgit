@@ -1,6 +1,7 @@
 package simulator.eventQueue;
 
 import java.util.*;
+import java.util.concurrent.TimeoutException;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -12,6 +13,8 @@ public class EventQueue implements Comparator<Event> {
     private volatile boolean stop;
     private final Supplier<Long> sleepTime;
     private Consumer<Integer> timeUpdater;
+    private long simulationTimeoutTime;
+    private final int MAX_EXECUTION_dURATION = 30; // seconds
 
     public EventQueue(Supplier<Long> sleepTime, Consumer<Integer> timeUpdater) {
         this.sleepTime = sleepTime;
@@ -41,10 +44,16 @@ public class EventQueue implements Comparator<Event> {
 
     private boolean sleptThisTick = false;
 
-    public void start() {
+    public void start() throws TimeoutException {
         System.out.println("** Simulation Starting **");
 
+        simulationTimeoutTime = System.currentTimeMillis() + 1000 * MAX_EXECUTION_dURATION;
+
         while (!queue.isEmpty() && !stop && notOnlyRecurringEventsRemain()) {
+
+            if( simulationTimeoutTime < System.currentTimeMillis() )
+                throw new TimeoutException("<br>Simulation taking too long!");
+
             Event e = queue.remove();
             if (e.isAborted())
                 continue;

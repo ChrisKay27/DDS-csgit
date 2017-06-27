@@ -116,7 +116,7 @@ public class Agent {
 //                    }
 //                }
                 if (Log.isLoggingEnabled())
-                    log.log(agentID, deadlockID + ": Agents determined that " + agentID + "  should be dropped.");
+                    log.log(agentID, deadlockID + ": Agents determined that " + agentID + " should be dropped.");
 
                 deadlock.setResolutionTime(simParams.getTime());
                 simParams.getDeadlockResolutionListener().accept(deadlock, agentID);

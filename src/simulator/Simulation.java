@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.TimeoutException;
 
 public class Simulation {
 
@@ -90,7 +91,7 @@ public class Simulation {
      *
      * @return an array with different result values
      */
-    public Object[] start() {
+    public Object[] start() throws TimeoutException {
         servers.forEach(Server::start);
 
         //Run through all events

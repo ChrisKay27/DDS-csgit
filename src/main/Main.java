@@ -275,7 +275,7 @@ public class Main {
                                                         simsRanSoFar++;
 
                                                         System.out.println("Simulation ran so far: " + simsRanSoFar + " out of " + numberOfSims);
-                                                        if (simsRanSoFar == numberOfSims) {
+                                                        if (simsRanSoFar == numberOfSims && !Log.isLoggingEnabled()) {
                                                             System.exit(0);
                                                         }
                                                     };

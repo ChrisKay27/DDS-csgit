@@ -1,7 +1,7 @@
 LOGGING:false //you
 SEED: //Leave it blank for random generation
 Topology:HyperCube //add
-NumPages:40,280//40,80,120,160,200,240,280 //comments
+NumPages:80//40,80,120,160,200,240,280 //comments
 ArrivalRate:600//300,350,400,450,500,550,600,650,700,750,800 //now :>
 DDP:AgentDeadlockDetectionProtocol//AgentDeadlockDetectionProtocol,ChandyMisraHaasDDP,MAEDD
 DRP:AgentDeadlockResolutionProtocol//,WorkloadDeadlockResolution,ExtratimeDeadlockResolution,AgentDeadlockResolutionProtocol,FirstDeadlockResolution,PriorityDeadlockResolution

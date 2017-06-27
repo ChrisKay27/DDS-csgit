@@ -14,7 +14,7 @@ public class EventQueue implements Comparator<Event> {
     private final Supplier<Long> sleepTime;
     private Consumer<Integer> timeUpdater;
     private long simulationTimeoutTime;
-    private final int MAX_EXECUTION_dURATION = 30; // seconds
+    private final int MAX_EXECUTION_dURATION = 60; // seconds
 
     public EventQueue(Supplier<Long> sleepTime, Consumer<Integer> timeUpdater) {
         this.sleepTime = sleepTime;

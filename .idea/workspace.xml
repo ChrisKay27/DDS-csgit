@@ -973,7 +973,7 @@
       <workItem from="1497925169336" duration="9413000" />
       <workItem from="1498006832865" duration="58953000" />
       <workItem from="1498284947331" duration="23281000" />
-      <workItem from="1498514237263" duration="4158000" />
+      <workItem from="1498514237263" duration="4196000" />
     </task>
     <task id="LOCAL-00001" summary="test commit">
       <created>1476486077277</created>
@@ -1059,11 +1059,18 @@
       <option name="project" value="LOCAL" />
       <updated>1498530417771</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Most Recent&#10;">
+      <created>1498530520756</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1498530520756</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="515193000" />
+    <option name="totallyTimeSpent" value="515231000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1162,7 +1169,8 @@
     <MESSAGE value="test commit" />
     <MESSAGE value="Update" />
     <MESSAGE value="Update&#10;" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update&#10;" />
+    <MESSAGE value="Most Recent&#10;" />
+    <option name="LAST_COMMIT_MESSAGE" value="Most Recent&#10;" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

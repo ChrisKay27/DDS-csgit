@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="JAVA_MODULE" version="4">
-  <component name="NewModuleRootManager">
+  <component name="NewModuleRootManager" inherit-compiler-output="false">
     <output url="file://$MODULE_DIR$/out/production/DistributedDatabaseSimulator" />
     <output-test url="file://$MODULE_DIR$/out/test/production" />
     <exclude-output />
@@ -14,6 +14,7 @@
     <orderEntry type="library" name="mysql-connector-java-5.1.39-bin" level="project" />
     <orderEntry type="library" name="teachnet" level="project" />
     <orderEntry type="library" name="commons-math3-3.6.1" level="project" />
+    <orderEntry type="library" name="commons-math3-3.6.1 (2)" level="project" />
     <orderEntry type="library" name="commons-math3-3.6.1 (2)" level="project" />
   </component>
 </module>

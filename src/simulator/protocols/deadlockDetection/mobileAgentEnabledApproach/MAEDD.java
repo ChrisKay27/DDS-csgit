@@ -93,7 +93,7 @@ public class MAEDD extends WaitForGraph_DDP {
         NetworkInterface NIC = server.getNIC();
 
         //Calculate the amount of overhead to incur
-        int size = s_List.size();
+        int size = s_List.size() * ((mobileAgentServers.size() + 1) / (simParams.getNumberOfServers() / mobileAgentServers.size()));
         if (size == 0)
             size = 1;
 

@@ -7,7 +7,7 @@ import simulator.protocols.deadlockDetection.Deadlock;
 import simulator.protocols.deadlockDetection.WFG.Graph;
 import simulator.protocols.deadlockDetection.WFG.GraphBuilder;
 import simulator.protocols.deadlockDetection.WFG.WFGNode;
-import simulator.protocols.deadlockDetection.WFG_DDP;
+import simulator.protocols.deadlockDetection.WaitForGraph_DDP;
 import simulator.server.Server;
 import simulator.server.network.Message;
 import simulator.server.network.NetworkInterface;
@@ -19,7 +19,7 @@ import java.util.function.Consumer;
 /**
  * Created by Mani,
  */
-public class AgentDeadlockDetectionProtocol extends WFG_DDP {
+public class AgentDeadlockDetectionProtocol extends WaitForGraph_DDP {
 
     protected final Log log;
 //    protected List<Integer> allServers = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7);

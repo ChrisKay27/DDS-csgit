@@ -6,7 +6,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class EventQueue implements Comparator<Event> {
-    private PriorityQueue<Event> queue= new PriorityQueue<>(this::compare);
+    private PriorityQueue<Event> queue= new PriorityQueue<>(this);
 
     // private List<Event> queue = new LinkedList<>();
     private int time;
@@ -49,7 +49,7 @@ public class EventQueue implements Comparator<Event> {
 
         simulationTimeoutTime = System.currentTimeMillis() + 1000 * MAX_EXECUTION_dURATION;
 
-        while (!queue.isEmpty() && !stop && notOnlyRecurringEventsRemain()) {
+        while (!queue.isEmpty() && !stop && notOnlyRecurringEventsRemain() ) {
 
             if( simulationTimeoutTime < System.currentTimeMillis() )
                 throw new TimeoutException("<br>Simulation taking too long!");

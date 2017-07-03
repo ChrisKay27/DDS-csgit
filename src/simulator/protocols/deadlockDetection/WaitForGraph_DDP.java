@@ -24,7 +24,7 @@ import java.util.function.Consumer;
  * t=0 Simulation starts
  * t=x all WFGs have been received, start searching, then periodically clear WFG and start over
  */
-public class WFG_DDP extends DeadlockDetectionProtocol {
+public class WaitForGraph_DDP extends DeadlockDetectionProtocol {
     private final Log log;
     protected Consumer<Deadlock> deadlockListener;
 
@@ -34,7 +34,7 @@ public class WFG_DDP extends DeadlockDetectionProtocol {
     private final List<Integer> receivedFromServers = new ArrayList<>();
     private BiConsumer<Graph<WFGNode>, Integer> wfGraphConsumer;
 
-    public WFG_DDP(Server server, SimParams simParams, Consumer<List<Deadlock>> resolver, Consumer<Integer> overheadIncurer, Consumer<Deadlock> deadlockListener) {
+    public WaitForGraph_DDP(Server server, SimParams simParams, Consumer<List<Deadlock>> resolver, Consumer<Integer> overheadIncurer, Consumer<Deadlock> deadlockListener) {
         super(server, simParams, resolver, overheadIncurer, deadlockListener);
 
         log = new Log(ServerProcess.DDP, serverID, simParams.timeProvider, simParams.log);

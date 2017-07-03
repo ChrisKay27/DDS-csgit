@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement />
+  <nodes>
+    <node x="811.5278392368818" y="954.6789510436143">simulator.server.disk.Page</node>
+    <node x="349.2727109815343" y="775.7960668643943">simulator.server.network.NetworkInterface</node>
+    <node x="177.8327220176481" y="548.0988651876597">simulator.server.transactionManager.TransactionGenerator</node>
+    <node x="870.3262449114277" y="810.489250495344">simulator.server.processor.Processor</node>
+    <node x="451.4744155575977" y="1002.6974241122286">simulator.server.lockManager.LockManager</node>
+    <node x="641.225762575363" y="338.7641846916076">simulator.protocols.deadlockDetection.DeadlockDetectionProtocol</node>
+    <node x="772.4887228031239" y="516.7793787977954">simulator.Simulation</node>
+    <node x="170.29309238018095" y="829.310729033743">simulator.server.network.NetworkConnection</node>
+    <node x="11.228827360417057" y="524.8044258576409">simulator.server.transactionManager.Transaction</node>
+    <node x="479.4618821796194" y="568.2189945735682">simulator.server.Server</node>
+    <node x="712.4891700176374" y="830.5983944648161">simulator.server.disk.Disk</node>
+    <node x="-73.59570334587124" y="634.5084024819291">simulator.server.transactionManager.CohortTransaction</node>
+    <node x="246.64018730180317" y="409.52508982085396">simulator.protocols.deadlockResolution.DeadlockResolutionProtocol</node>
+    <node x="437.25975756940943" y="1155.78924259056">simulator.server.lockManager.Lock</node>
+    <node x="27.578485181119618" y="774.6907697904396">simulator.server.transactionManager.TransactionManager</node>
+    <node x="80.30520646400112" y="954.430037679538">simulator.server.network.Message</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="simulator.server.Server" target="simulator.server.network.NetworkInterface">
+      <point x="10.013456507456112" y="0.0" />
+      <point x="10.013456507456084" y="0.0" />
+    </edge>
+    <edge source="simulator.server.network.NetworkConnection" target="simulator.server.network.Message">
+      <point x="0.5637387282982047" y="4.464549097749597" />
+      <point x="0.5637387282982047" y="4.464549097749597" />
+    </edge>
+    <edge source="simulator.server.transactionManager.TransactionManager" target="simulator.server.transactionManager.CohortTransaction">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="simulator.server.transactionManager.TransactionManager" target="simulator.server.transactionManager.Transaction">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="simulator.server.transactionManager.TransactionGenerator" target="simulator.server.transactionManager.Transaction">
+      <point x="0.8412144832782928" y="4.42067395236549" />
+      <point x="0.8412144832783" y="4.42067395236549" />
+    </edge>
+    <edge source="simulator.server.disk.Disk" target="simulator.server.disk.Page">
+      <point x="4.738976144639366" y="-1.594398037046858" />
+      <point x="4.738976144639366" y="-1.594398037046858" />
+    </edge>
+    <edge source="simulator.server.network.NetworkInterface" target="simulator.server.network.NetworkConnection">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="simulator.server.lockManager.LockManager" target="simulator.server.network.Message">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="simulator.server.transactionManager.TransactionManager" target="simulator.server.transactionManager.TransactionGenerator">
+      <point x="-9.444230903013192" y="0.0" />
+      <point x="-9.444230903013178" y="0.0" />
+    </edge>
+    <edge source="simulator.server.network.NetworkConnection" target="simulator.server.Server">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="simulator.server.transactionManager.TransactionGenerator" target="simulator.server.Server">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="simulator.server.Server" target="simulator.server.processor.Processor">
+      <point x="-5.108855373355112" y="0.0" />
+      <point x="-5.108855373355141" y="0.0" />
+    </edge>
+    <edge source="simulator.server.lockManager.LockManager" target="simulator.server.Server">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="simulator.server.Server" target="simulator.server.transactionManager.TransactionManager">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="simulator.protocols.deadlockDetection.DeadlockDetectionProtocol" target="simulator.server.Server">
+      <point x="3.4712180629364866" y="3.5987004820551363" />
+      <point x="3.4712180629364298" y="3.5987004820551363" />
+    </edge>
+    <edge source="simulator.server.transactionManager.TransactionManager" target="simulator.server.Server">
+      <point x="0.0" y="7.18449230686668" />
+      <point x="0.0" y="7.184492306866687" />
+    </edge>
+    <edge source="simulator.server.Server" target="simulator.protocols.deadlockResolution.DeadlockResolutionProtocol">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="simulator.Simulation" target="simulator.server.Server">
+      <point x="0.747121374505241" y="4.437545453486361" />
+      <point x="0.7471213745052125" y="4.437545453486365" />
+    </edge>
+    <edge source="simulator.server.Server" target="simulator.protocols.deadlockDetection.DeadlockDetectionProtocol">
+      <point x="-7.202082827044194" y="0.0" />
+      <point x="-7.202082827044251" y="0.0" />
+    </edge>
+    <edge source="simulator.server.network.NetworkInterface" target="simulator.server.Server">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="simulator.server.lockManager.LockManager" target="simulator.server.lockManager.Lock">
+      <point x="-4.907717423702309" y="0.9561954241099215" />
+      <point x="-4.907717423702309" y="0.9561954241099215" />
+    </edge>
+    <edge source="simulator.server.transactionManager.TransactionManager" target="simulator.server.network.Message">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="simulator.server.Server" target="simulator.server.disk.Disk">
+      <point x="4.949487578019699" y="0.7089236313093039" />
+      <point x="4.949487578019699" y="0.7089236313092897" />
+    </edge>
+    <edge source="simulator.server.transactionManager.CohortTransaction" target="simulator.server.transactionManager.Transaction">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="simulator.server.Server" target="simulator.server.lockManager.LockManager">
+      <point x="13.10642275587199" y="0.0" />
+      <point x="13.106422755872018" y="0.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.9977232924693519" x="510.73880989994746" y="780.5394067052836" />
+  <SelectedNodes>
+    <node>simulator.server.disk.Page</node>
+  </SelectedNodes>
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>public</VISIBILITY>
+</Diagram>
+

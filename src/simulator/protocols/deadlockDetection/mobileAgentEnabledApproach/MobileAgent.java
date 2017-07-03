@@ -19,7 +19,7 @@ import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-import static simulator.protocols.deadlockDetection.WFG_DDP.convertToList;
+import static simulator.protocols.deadlockDetection.WaitForGraph_DDP.convertToList;
 
 public class MobileAgent {
 

@@ -8,7 +8,7 @@ import simulator.protocols.deadlockDetection.WFG.Graph;
 import simulator.protocols.deadlockDetection.WFG.GraphBuilder;
 import simulator.protocols.deadlockDetection.WFG.Task;
 import simulator.protocols.deadlockDetection.WFG.WFGNode;
-import simulator.protocols.deadlockDetection.WFG_DDP;
+import simulator.protocols.deadlockDetection.WaitForGraph_DDP;
 import simulator.server.Server;
 import simulator.server.network.Message;
 import simulator.server.network.NetworkInterface;
@@ -17,7 +17,7 @@ import ui.Log;
 import java.util.*;
 import java.util.function.Consumer;
 
-public class MAEDD extends WFG_DDP {
+public class MAEDD extends WaitForGraph_DDP {
 
     protected final Log log;
     //protected List<Integer> allServers = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7);

@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import static simulator.protocols.deadlockDetection.WFG_DDP.convertToList;
+import static simulator.protocols.deadlockDetection.WaitForGraph_DDP.convertToList;
 
 public class LocalAgent {
     private final AgentDeadlockDetectionProtocol addp;

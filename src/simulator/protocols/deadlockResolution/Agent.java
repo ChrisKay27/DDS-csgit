@@ -36,8 +36,12 @@ public class Agent {
 
     private final TransInfo myTrans;
     private final List<TransInfo> transactionsInDeadlock;
-    private final java.util.PriorityQueue<TransInfo2> transInfoAndDropabilities ;
     private long dropability;
+    private TransInfo2 myTransInfo2 ;     // computed in resolve
+    private TransInfo2 bestExternalInfo ; // received so far, unless i am out
+    private boolean processingMessages ;  // i could still be a contender
+    private boolean thisAgentComputed ;   // set in resolve
+    private int knownAgentCount ;         // updated by resolve and receiveDropability
 
     public Agent(int agentID, Deadlock deadlock, List<TransInfo> transactionsInDeadlock, Server server, int deadlockID) {
         this.agentID = agentID;
@@ -49,7 +53,12 @@ public class Agent {
         this.server = server;
         simParams = server.getSimParams();
         TransInfo2.setPriorityGetter(t -> t.getPriority(transactionsInDeadlock, simParams.getPp())) ;
-     log = new Log(ServerProcess.DRP, server.getID(), simParams.timeProvider, simParams.log);
+        myTransInfo2 = null ;
+        bestExternalInfo = null ;
+        processingMessages = true ;
+        thisAgentComputed = false ;
+        knownAgentCount = 0 ;
+        log = new Log(ServerProcess.DRP, server.getID(), simParams.timeProvider, simParams.log);
     }
 
     public void resolve() {
@@ -78,8 +87,12 @@ public class Agent {
 //        System.out.println("; priority = " + priority);
 //        System.out.println("*******************************");
 
-        transInfoAndDropabilities.add(
-            new TransInfo2(find(transactionsInDeadlock, agentID),dropability)) ;
+        myTransInfo2 = new TransInfo2(myTrans,dropability) ;
+        processingMessages    = knownAgentCount==0 ||
+          myTransInfo2.compareTo(bestExternalInfo) < 0 ;
+        thisAgentComputed = true ;
+        ++knownAgentCount ;
+        bestExternalInfo = null ; // no longer used once our value is known.
         transactionsInDeadlock.forEach(ti -> {
             //If the transaction isn't that agent's transaction
             if (ti.transID != agentID) {
@@ -97,28 +110,28 @@ public class Agent {
             log.log(this.agentID, deadlockID + ": Agent: receive Dropability (dropability = [" + dropability + "], transID = [" + transID + "])");
 
         TransInfo ti = find(transactionsInDeadlock, transID);
-
-        transInfoAndDropabilities.add(new TransInfo2(ti,dropability)) ;
-        if (transInfoAndDropabilities.size()+1<transactionsInDeadlock.size())
+        TransInfo2 ti2 = new TransInfo2(ti, dropability) ;
+        if (thisAgentComputed)
             {
-            return ;
+            processingMessages = processingMessages
+              && myTransInfo2.compareTo(ti2) < 0 ;
             }
         else
             {
-            TransInfo2 smallest = transInfoAndDropabilities.element() ;
-            if (smallest.getID()==agentID)
-                {
-                if (Log.isLoggingEnabled())
-                    log.log(agentID, deadlockID + ": Agents determined that " + agentID + " should be dropped.");
-
-                deadlock.setResolutionTime(simParams.getTime());
-                simParams.getDeadlockResolutionListener().accept(deadlock, agentID);
-                server.getTM().abort(agentID);
-                return;
-                }
-            // else analysis of why not this transaction ...
+            bestExternalInfo = (knownAgentCount==0) ? ti2
+              : TransInfo2.min(ti2,bestExternalInfo);
             }
+        ++knownAgentCount ;
 
+        if (processingMessages && knownAgentCount==transactionsInDeadlock.size())
+            {
+            if (Log.isLoggingEnabled())
+                log.log(agentID, deadlockID + ": Agents determined that " + agentID + " should be dropped.");
+
+            deadlock.setResolutionTime(simParams.getTime());
+            simParams.getDeadlockResolutionListener().accept(deadlock, agentID);
+            server.getTM().abort(agentID);
+            }
     }
 
 
@@ -180,5 +193,10 @@ class TransInfo2 implements Comparable<TransInfo2>
     public int compareTo(TransInfo2 that)
         {
         return comparator.compare(this,that) ;
+        }
+
+    public static min(TransInfo2 x1, TransInfo2 x2)
+        {
+        return x1.compareTo(x2) <= 0 ? x1 : x2 ;
         }
 }

@@ -99,10 +99,8 @@ public class Experiment
         if (updateRate > 1 || updateRate < 0)
             throw new WTFException("update rate has to be between 0 and 1, it was " + updateRate);
 
-        Runnable r = () -> runAnExperiment() ;
-
         //Run this simulation in a new thread
-        new Thread(r).start();
+        new Thread(this::runAnExperiment).start();
         }
     
     /**
@@ -111,12 +109,11 @@ public class Experiment
      */
     public void runAnExperiment()
         {
+        if (updateRate > 1 || updateRate < 0)
+            throw new WTFException("update rate has to be between 0 and 1, it was " + updateRate);
+
         Statistics stats = new Statistics();
-
-        //Setup params object
-        SimSetupParams params = makeSimSetupParams(stats);
-
-        Simulation s = new Simulation(params);
+        Simulation s = new Simulation(makeSimSetupParams(stats));
 
         //Setup topology.. should be in the simulation constructor..
         List<Server> servers = s.getServers();
@@ -235,10 +232,13 @@ public class Experiment
         sb.append("<html>--------------").append("<br>");
         sb.append("<b>Parameters:</b><br>");
         sb.append("SEED:").append(seed).append("<br>NumPages:").append(numPages)
-          .append("<br>Max active trans:").append(maxActiveTransferRate).append("<br>servers:")
-          .append(8).append("<br>arrival rate:").append(arrivalRate).append("<br>")
-          .append("<br><font color=\"red\">"+deadlockDetectionProtocol+"</font>").append("<br><br>").append("<font color=\"blue\">"+deadlockResolutionProtocol+"</font><br>")
-          .append("<br>").append(priorityProtocol).append("<br>Detection interval:").append(detectionInterval)
+          .append("<br>Max active trans:").append(maxActiveTransferRate)
+          .append("<br>servers:").append(8)
+          .append("<br>arrival rate:").append(arrivalRate).append("<br>")
+          .append("<br><font color=\"red\">"+deadlockDetectionProtocol+"</font>")
+          .append("<br><br>").append("<font color=\"blue\">"+deadlockResolutionProtocol+"</font><br>")
+          .append("<br>").append(priorityProtocol)
+          .append("<br>Detection interval:").append(detectionInterval)
           .append("<br>Update Rate: ").append(updateRate).append("<br>");
 
         sb.append("Total Transactions: " + servers.size() * s.getSimParams().getNumTransPerServer()).append("<br><br>");

@@ -10,9 +10,23 @@ import java.util.stream.Stream ;
 
 import javax.swing.*;
 import simulator.enums.Topology;
+import utilities.Function11 ;
 
 class AllExperiments
 {
+    private static final
+    Function11<Long, Topology, Integer, Integer,
+        String, String, String, Integer,
+        Integer, Integer, Double, Experiment> experimentConstructor =
+      Experiment::new ;
+    private static final
+    Function<Long, Function<Topology, Function<Integer, Function<Integer,
+        Function<String, Function<String, Function<String, Function<Integer,
+        Function<Integer, Function<Integer,
+        Function<Double, Experiment>>>>>>>>>>>
+    curriedConstructor =
+      experimentConstructor.curry() ;
+    
     private static Consumer<String> theNullViewer = s -> {} ;
     public static Consumer<String> nullViewer()
         {
@@ -192,20 +206,18 @@ class AllExperiments
 
         //These nested loops are to loop through all the different parameter combinations
 
-        java.util.stream.Stream.of(new ExperimentBuilder())
-          .flatMap(combineWith(SEEDs,            ExperimentBuilder::setSeed))
-          .flatMap(combineWith(topologies,       ExperimentBuilder::setTopology))
-          .flatMap(combineWith(numPagesList,     ExperimentBuilder::setNumPages))
-          .flatMap(combineWith(arrivalRates,     ExperimentBuilder::setArrivalRate))
-          .flatMap(combineWith(DDPs,             ExperimentBuilder::setDeadlockDetectionProtocol))
-          .flatMap(combineWith(DRPs,             ExperimentBuilder::setDeadlockResolutionProtocol))
-          .flatMap(combineWith(PPs,              ExperimentBuilder::setPriorityProtocol))
-          .flatMap(combineWith(detectIntervals,  ExperimentBuilder::setDetectionInterval))
-          .flatMap(combineWith(maxActiveTrans,   ExperimentBuilder::setMaxActiveTransferRate))
-          .flatMap(combineWith(
-                       agentsHistoryLengths,     ExperimentBuilder::setAgentsHistoryLength))
-          .flatMap(combineWith(updateRates,      ExperimentBuilder::setUpdateRate))
-          .map(ExperimentBuilder::build)
+        java.util.stream.Stream.of(curriedConstructor)
+          .flatMap( applying( SEEDs                ))
+          .flatMap( applying( topologies           ))
+          .flatMap( applying( numPagesList         ))
+          .flatMap( applying( arrivalRates         ))
+          .flatMap( applying( DDPs                 ))
+          .flatMap( applying( DRPs                 ))
+          .flatMap( applying( PPs                  ))
+          .flatMap( applying( detectIntervals      ))
+          .flatMap( applying( maxActiveTrans       ))
+          .flatMap( applying( agentsHistoryLengths ))
+          .flatMap( applying( updateRates          ))
           .forEach( e ->
                     {
                     e.setViewer(experimentReporter) ;
@@ -213,31 +225,6 @@ class AllExperiments
                     e.doAnExperiment() ;
                     }) ;
         }
-
-    private static <A,B,C> BiFunction<B,A,C> flip(BiFunction<A,B,C> f)
-        {
-        return (b,a) -> f.apply(a,b) ;
-        }
-    
-    private static <A,B,C> Function<A,Function<B,C>> curry(BiFunction<A,B,C> f)
-        {
-        return a -> b  -> f.apply(a,b) ;
-        }
-    
-    private static <A,C> Function<Function<A,C>,C> at(A x)
-        {
-        return f -> f.apply(x) ;
-        }
-    
-    private static <D>
-    java.util.function.Function<ExperimentBuilder,java.util.stream.Stream<ExperimentBuilder>>
-    combineWith(D [] data,
-                java.util.function.BiFunction<ExperimentBuilder,D,ExperimentBuilder>
-                fred)
-        {
-        return  e -> Arrays.stream(data).map(curry(flip(fred))).map(at(e)) ;
-        }
-
 
     public int numberOfSimulations()
         {
@@ -258,6 +245,21 @@ class AllExperiments
         frame.setVisible(true);
         frame.setLocationRelativeTo(null);
     }
+
+
+    
+    private static <D,E>
+    Function<Function<D,E>,Stream<E>> applying(Stream<D> stream)
+        {
+        return  f -> stream.map(f) ;
+        }
+
+    private static <D,E>
+    Function<Function<D,E>,Stream<E>>
+    applying(D [] array)
+        {
+        return  applying(java.util.Arrays.stream(array)) ;
+        }
 
     private static <E,F> E [] map(F [] in, Function<F,E> converter)
         {

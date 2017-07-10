@@ -16,7 +16,7 @@ import java.util.*;
 import java.util.function.Consumer;
 
 public class ChandyMisraHaasDDP extends DeadlockDetectionProtocol {
-    private static final double percStart = .1;
+    private static final double percStart = 1;
     private final Log log;
 
     public ChandyMisraHaasDDP(Server server, SimParams simParams, Consumer<List<Deadlock>> resolver, Consumer<Integer> overheadIncurer, Consumer<Deadlock> deadlockListener) {

@@ -672,7 +672,6 @@ public class TransactionManager {
         Map<Integer, List<Integer>> serversToPages = new HashMap<>();
         //List<Integer> servers
 
-
         //First look at the read pages
         t.getAllReadPageNums().forEach(pageNum -> {
             List<Integer> servsWithPage = simParams.getServersWithPage(pageNum);
@@ -837,7 +836,6 @@ public class TransactionManager {
 
         return null;
     }
-
 
     private Transaction getCompletedTransaction(int transID) {
         for (Transaction t : completedTransactions)

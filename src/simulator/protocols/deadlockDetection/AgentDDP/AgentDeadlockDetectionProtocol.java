@@ -82,7 +82,9 @@ public class AgentDeadlockDetectionProtocol extends WaitForGraph_DDP {
 
         //Calculate the amount of overhead to incur
         int size = localWFG.getNumberOfWaits()/simParams.globalDetectors;
-        if(simParams.DRP.equals("AgentDeadlockResolutionProtocol") || size == 0)
+        if(simParams.DRP.equals("AgentDeadlockResolutionProtocol"))
+            size *= simParams.numberOfServers/10;
+        if(size == 0)
             size = 1;
 
         //Send our graph to the detector nodes

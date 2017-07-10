@@ -54,7 +54,7 @@ public class Main {
         String SEEDs = "";
         String topologyStr = "";
         String numPagesStr = "";
-        String arrivalRateStr = "";
+        String arrivalIntervalStr = "";
         String DDPs = "";
         String DRPs = "";
         String PPs = "";
@@ -70,7 +70,7 @@ public class Main {
             SEEDs = br.readLine().split("//")[0].split(":")[1].trim();
             topologyStr = br.readLine().split("//")[0].split(":")[1].trim();
             numPagesStr = br.readLine().split("//")[0].split(":")[1].trim();
-            arrivalRateStr = br.readLine().split("//")[0].split(":")[1].trim();
+            arrivalIntervalStr = br.readLine().split("//")[0].split(":")[1].trim();
             DDPs = br.readLine().split("//")[0].split(":")[1].trim();
             DRPs = br.readLine().split("//")[0].split(":")[1].trim();
             PPs = br.readLine().split("//")[0].split(":")[1].trim();
@@ -89,7 +89,7 @@ public class Main {
         //This is just to tell you how many simulations will be run with the parameters chosen
 
         int numberOfSims = SEEDs.split(",").length * topologyStr.split(",").length * numPagesStr.split(",").length
-                * arrivalRateStr.split(",").length * DDPs.split(",").length * DRPs.split(",").length * PPs.split(",").length
+                * arrivalIntervalStr.split(",").length * DDPs.split(",").length * DRPs.split(",").length * PPs.split(",").length
                 * DetectIntervals.split(",").length * maxActiveTransStr.split(",").length * updateRateStr.split(",").length;
 
         System.out.println("Running " + numberOfSims + " simulations. This Test Number is " + simNumber);
@@ -120,8 +120,8 @@ public class Main {
                 for (String nPagesStr : numPagesStr.split(",")) {
                     int numPages = Integer.parseInt(nPagesStr);
 
-                    for (String arrRateStr : arrivalRateStr.split(",")) {
-                        int arrivalRate = Integer.parseInt(arrRateStr);
+                    for (String arrIntervalStr : arrivalIntervalStr.split(",")) {
+                        int arrivalInterval = Integer.parseInt(arrIntervalStr);
 
                         for (String DDP : DDPs.split(",")) {
 
@@ -160,7 +160,7 @@ public class Main {
 
                                                         if (Log.isLoggingEnabled()) {
                                                             GUI gui = new GUI();
-                                                            gui.setTitle(SEED + ":" + numPages + ":" + maxActiveTrans + ":" + 8 + ":" + arrivalRate + ":" + DDP + ":" + DRP + ":" + PP + ":" + detectInterval + ":" + updateRate);
+                                                            gui.setTitle(SEED + ":" + numPages + ":" + maxActiveTrans + ":" + 8 + ":" + arrivalInterval + ":" + DDP + ":" + DRP + ":" + PP + ":" + detectInterval + ":" + updateRate);
                                                             Output output = new Output();
                                                             GraphVisualizer graphVisualizer = new GraphVisualizer();
                                                             DeadlockPanel dPanel = new DeadlockPanel();
@@ -189,7 +189,7 @@ public class Main {
                                                         }
 
                                                         //Setup params object
-                                                        SimSetupParams params = new SimSetupParams(SEED, numPages, maxActiveTrans, 8, arrivalRate, updateRate, detectInterval, DDP, DRP, PP, log, stats, getSleepTime, updateTime);
+                                                        SimSetupParams params = new SimSetupParams(SEED, numPages, maxActiveTrans, 8, arrivalInterval, updateRate, detectInterval, DDP, DRP, PP, log, stats, getSleepTime, updateTime);
                                                         params.setWfGraphConsumer(wfGraphConsumer);
                                                         params.setDeadlockListener(deadlockConsumer);
                                                         params.setDeadlockResolutionListener(deadlockResListener);
@@ -210,7 +210,7 @@ public class Main {
                                                             sb.append("<b>Parameters:</b><br>");
                                                             sb.append("SEED:").append(SEED).append("<br>NumPages:").append(numPages)
                                                                     .append("<br>Max active trans:").append(maxActiveTrans).append("<br>servers:")
-                                                                    .append(8).append("<br>arrival rate:").append(arrivalRate).append("<br>")
+                                                                    .append(8).append("<br>arrival rate:").append(arrivalInterval).append("<br>")
                                                                     .append("<br><font color=\"red\">" + DDP + "</font>").append("<br><br>").append("<font color=\"blue\">" + DRP + "</font><br>")
                                                                     .append("<br>").append(PP).append("<br>Detection interval:").append(detectInterval)
                                                                     .append("<br>Update Rate: ").append(updateRate).append("<br>");
@@ -234,7 +234,7 @@ public class Main {
 
                                                             //Output results to the database
                                                             ExperimentResults expResults = new ExperimentResults(simNumber, PCOT, DDP, DRP, topStr, maxActiveTrans,
-                                                                    arrivalRate, PP, numPages, detectInterval, overheadIncurred, messageOverheadIncurred, updateRate, SEED);
+                                                                    arrivalInterval, PP, numPages, detectInterval, overheadIncurred, messageOverheadIncurred, updateRate, SEED);
                                                             DBConnection.insertResults(expResults);
 
                                                             concurrent_Execution--;

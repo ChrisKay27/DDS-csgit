@@ -33,7 +33,7 @@ public class Simulation {
 
         //Create simParam object to give to each server, which is given to every component in the simulation
         simParams = new SimParams(transGeneratorRand::nextDouble, transGeneratorRand::nextDouble, eventQueue::addEvent, rand::nextDouble, eventQueue::getTime, this::getNextTransID,
-                this::getRandPageNum, simSetupParams.getMaxActiveTrans(), simSetupParams.getArrivalRate(), simSetupParams.getLog(),
+                this::getRandPageNum, simSetupParams.getMaxActiveTrans(), simSetupParams.getArrivalInterval(), simSetupParams.getLog(),
                 simSetupParams.getStats(), eventQueue::incurOverhead, simSetupParams.getAgentsHistoryLength(), simSetupParams.getUpdateRate(), numPages);
 
         simParams.DDP = simSetupParams.getDDP();

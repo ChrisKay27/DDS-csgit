@@ -21,7 +21,7 @@ public class SimSetupParams {
     private final String DRP;
     private final Consumer<String> log;
     private final Statistics stats;
-    private final int arrivalRate;
+    private final int arrivalInterval;
     private BiConsumer<Graph<WFGNode>, Integer> wfGraphConsumer;
     public final Supplier<Long> sleepTime;
     public final Consumer<Integer> timeUpdater;
@@ -32,12 +32,12 @@ public class SimSetupParams {
     private int agentsHistoryLength;
     private double updateRate;
 
-    public SimSetupParams(long SEED, int numPages, int maxActiveTrans, int numServers, int arrivalRate, double updateRate, int detectInterval, String DDP, String DRP, String PP, Consumer<String> log, Statistics stats, Supplier<Long> sleepTime, Consumer<Integer> timeUpdater) {
+    public SimSetupParams(long SEED, int numPages, int maxActiveTrans, int numServers, int arrivalInterval, double updateRate, int detectInterval, String DDP, String DRP, String PP, Consumer<String> log, Statistics stats, Supplier<Long> sleepTime, Consumer<Integer> timeUpdater) {
         this.SEED = SEED;
         this.numPages = numPages;
         this.maxActiveTrans = maxActiveTrans;
         this.numServers = numServers;
-        this.arrivalRate = arrivalRate;
+        this.arrivalInterval = arrivalInterval;
         this.updateRate = updateRate;
         this.detectInterval = detectInterval;
         this.DDP = DDP;
@@ -81,8 +81,8 @@ public class SimSetupParams {
         return stats;
     }
 
-    public int getArrivalRate() {
-        return arrivalRate;
+    public int getArrivalInterval() {
+        return arrivalInterval;
     }
 
     public BiConsumer<Graph<WFGNode>, Integer> getWfGraphConsumer() {

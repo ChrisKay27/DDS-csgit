@@ -30,9 +30,9 @@ public class SimParams {
     public static final int processTime = 15;
     public static int Bandwidth = 1000;
     public static int latency = 5;
-    public final int arrivalRateMean;
+    public final int arrivalIntervalMean;
     public final int maxActiveTrans;
-    private int numTransPerServer = 300;
+    private int numTransPerServer = 500;
     private final double updateRate;
     private final int numPages;
     public String DRP;
@@ -79,6 +79,7 @@ public class SimParams {
     private BiConsumer<Deadlock, Integer> deadlockResolutionListener;
     public final Map<Integer, TransInfo> transInfos = new HashMap<>();
     private PriorityProtocol pp;
+
     private int searchInterval;
     public final int agentsHistoryLength;
 
@@ -92,7 +93,7 @@ public class SimParams {
      * @param IDProvider          Used by the Transaction Generator to ensure no transactions have the same ID
      * @param pageNumProvider     Gets a random page to give to a transaction during transaction generation
      * @param maxActiveTrans
-     * @param arrivalRate
+     * @param arrivalInterval
      * @param log
      * @param stats
      * @param incurOverhead
@@ -100,7 +101,7 @@ public class SimParams {
      * @param numPages
      */
     public SimParams(Supplier<Double> transGeneratorRand, Supplier<Double> transManagerRand, Consumer<Event> eventQueue, Supplier<Double> rand, Supplier<Integer> timeProvider, Supplier<Integer> IDProvider,
-                     Supplier<Integer> pageNumProvider, int maxActiveTrans, int arrivalRate, Consumer<String> log, Statistics stats,
+                     Supplier<Integer> pageNumProvider, int maxActiveTrans, int arrivalInterval, Consumer<String> log, Statistics stats,
                      BiConsumer<Integer, Integer> incurOverhead, int agentsHistoryLength, double updateRate, int numPages) {
         this.transGeneratorRand = transGeneratorRand;
         this.transManagerRand = transManagerRand;
@@ -114,7 +115,7 @@ public class SimParams {
         this.stats = stats;
         overheadIncurer = incurOverhead;
 
-        arrivalRateMean = arrivalRate;
+        arrivalIntervalMean = arrivalInterval;
         this.agentsHistoryLength = agentsHistoryLength;
         this.updateRate = updateRate;
         this.numPages = numPages;

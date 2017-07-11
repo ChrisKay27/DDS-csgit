@@ -30,10 +30,17 @@ public class TransactionGenerator {
         if (remainingTransactions-- == 0)
             return;
 
-        int nextTransArriveTime = timeProvider.get() + getPoisson(simParams.arrivalRateMean, transGeneratorRand);
+        int nextTransArriveTime = timeProvider.get() + getExponential(simParams.arrivalIntervalMean, transGeneratorRand);
 
-        int numReadPages = (int) ((8 * transGeneratorRand.get() + 2) * (1 - simParams.getUpdateRate()));
-        int numWritePages = (int) ((8 * transGeneratorRand.get() + 2) * simParams.getUpdateRate());
+        int totalPages = (int) (8 * transGeneratorRand.get()) + 2;
+
+        int numWritePages = 0;
+
+        for (int i =0; i < totalPages; i++)
+            if(transGeneratorRand.get() < simParams.getUpdateRate())
+                numWritePages++;
+
+        int numReadPages = totalPages - numWritePages;
 
         // Write pages have to be read AND written to disk. So they have 2*disk read write time
         // Read pages have to be only read from disk then processed.
@@ -100,16 +107,34 @@ public class TransactionGenerator {
         serverID = server.getID();
     }
 
-    public static int getPoisson(double lambda, Supplier<Double> rand) {
-        double L = Math.exp(-lambda);
-        double p = 1.0;
-        int k = 0;
+//    public static int getPoisson(double lambda, Supplier<Double> rand) {
+//        double L = Math.exp(-lambda);
+//        double p = 1.0;
+//        int k = 0;
+//
+//        do {
+//            k++;
+//            p *= rand.get();
+//        } while (p > L);
+//
+//        return k - 1;
+//    }
 
-        do {
-            k++;
-            p *= rand.get();
-        } while (p > L);
+    public static int getExponential(double meanArrivalInterval, Supplier<Double> rand)    {
+        final double lambda /* mean arrival rate */ = 1.0 / meanArrivalInterval;
+        final double q = Math.exp(-lambda);
+         /* q is the chance of getting 0 events in  a given interval */
+         /* the number we want is the smallest k such that
+          * power(q,k+1) < rand.get(), or (with p = rand.get())
+          * (k+1) * log(q) < log(p) or (given q<1.0, log(q) < 0.0 )
+          * k+1 > log(p) / loq(q) or
+          * k = floor ( log(p) / log(q) ).
+          *
+          * But log(q) = -lambda, so 1 / log(q) = -r = - meanArrivalInterval
+          * or k = - r * log (p)
+          */
 
-        return k - 1;
+        return (int) (meanArrivalInterval * Math.log(rand.get()));
     }
+
 }

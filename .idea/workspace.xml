@@ -58,18 +58,18 @@
       <file leaf-file-name="params.txt" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/params.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="22">
-              <caret line="1" column="5" lean-forward="false" selection-start-line="1" selection-start-column="5" selection-end-line="1" selection-end-column="5" />
+            <state relative-caret-position="88">
+              <caret line="4" column="16" lean-forward="false" selection-start-line="4" selection-start-column="16" selection-end-line="4" selection-end-column="16" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ChandyMisraHaasDDP.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ChandyMisraHaasDDP.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/ChandyMisraHaas/ChandyMisraHaasDDP.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="924">
-              <caret line="55" column="16" lean-forward="false" selection-start-line="55" selection-start-column="16" selection-end-line="55" selection-end-column="16" />
+            <state relative-caret-position="-286">
+              <caret line="18" column="0" lean-forward="true" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -78,18 +78,18 @@
       <file leaf-file-name="TransactionGenerator.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/simulator/server/transactionManager/TransactionGenerator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="286">
-              <caret line="38" column="43" lean-forward="true" selection-start-line="38" selection-start-column="43" selection-end-line="38" selection-end-column="43" />
+            <state relative-caret-position="462">
+              <caret line="46" column="31" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="139" selection-end-column="1" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Main.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/Main.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="484">
-              <caret line="47" column="10" lean-forward="false" selection-start-line="47" selection-start-column="10" selection-end-line="47" selection-end-column="10" />
+              <caret line="47" column="10" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="332" selection-end-column="1" />
               <folding />
             </state>
           </provider>
@@ -229,9 +229,9 @@
         <option value="$PROJECT_DIR$/src/simulator/SimSetupParams.java" />
         <option value="$PROJECT_DIR$/src/main/Main.java" />
         <option value="$PROJECT_DIR$/src/simulator/SimParams.java" />
-        <option value="$PROJECT_DIR$/params.txt" />
         <option value="$PROJECT_DIR$/src/simulator/server/transactionManager/TransactionGenerator.java" />
         <option value="$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/ChandyMisraHaas/ChandyMisraHaasDDP.java" />
+        <option value="$PROJECT_DIR$/params.txt" />
       </list>
     </option>
   </component>
@@ -1090,7 +1090,7 @@
       <workItem from="1498668227897" duration="31057000" />
       <workItem from="1499055787398" duration="23904000" />
       <workItem from="1499285736891" duration="14873000" />
-      <workItem from="1499707520112" duration="8472000" />
+      <workItem from="1499707520112" duration="15131000" />
     </task>
     <task id="LOCAL-00001" summary="test commit">
       <created>1476486077277</created>
@@ -1201,7 +1201,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="602117000" />
+    <option name="totallyTimeSpent" value="608776000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1730,22 +1730,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/params.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="22">
-          <caret line="1" column="5" lean-forward="false" selection-start-line="1" selection-start-column="5" selection-end-line="1" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="484">
-          <caret line="47" column="10" lean-forward="false" selection-start-line="47" selection-start-column="10" selection-end-line="47" selection-end-column="10" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/simulator/SimParams.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="345">
@@ -1757,14 +1741,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/simulator/server/transactionManager/TransactionGenerator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="286">
-          <caret line="38" column="43" lean-forward="true" selection-start-line="38" selection-start-column="43" selection-end-line="38" selection-end-column="43" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/mobileAgentEnabledApproach/MAEDD.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-331">
@@ -1773,10 +1749,34 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/simulator/server/transactionManager/TransactionGenerator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="462">
+          <caret line="46" column="31" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="139" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/simulator/protocols/deadlockDetection/ChandyMisraHaas/ChandyMisraHaasDDP.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="924">
-          <caret line="55" column="16" lean-forward="false" selection-start-line="55" selection-start-column="16" selection-end-line="55" selection-end-column="16" />
+        <state relative-caret-position="-286">
+          <caret line="18" column="0" lean-forward="true" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/params.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="88">
+          <caret line="4" column="16" lean-forward="false" selection-start-line="4" selection-start-column="16" selection-end-line="4" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="484">
+          <caret line="47" column="10" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="332" selection-end-column="1" />
           <folding />
         </state>
       </provider>

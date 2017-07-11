@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.TimeoutException;
 
 public class Simulation {
 
@@ -32,7 +33,7 @@ public class Simulation {
 
         //Create simParam object to give to each server, which is given to every component in the simulation
         simParams = new SimParams(transGeneratorRand::nextDouble, transGeneratorRand::nextDouble, eventQueue::addEvent, rand::nextDouble, eventQueue::getTime, this::getNextTransID,
-                this::getRandPageNum, simSetupParams.getMaxActiveTrans(), simSetupParams.getArrivalRate(), simSetupParams.getLog(),
+                this::getRandPageNum, simSetupParams.getMaxActiveTrans(), simSetupParams.getArrivalInterval(), simSetupParams.getLog(),
                 simSetupParams.getStats(), eventQueue::incurOverhead, simSetupParams.getAgentsHistoryLength(), simSetupParams.getUpdateRate(), numPages);
 
         simParams.DDP = simSetupParams.getDDP();
@@ -90,7 +91,7 @@ public class Simulation {
      *
      * @return an array with different result values
      */
-    public Object[] start() {
+    public Object[] start() throws TimeoutException {
         servers.forEach(Server::start);
 
         //Run through all events

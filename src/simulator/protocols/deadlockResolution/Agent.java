@@ -19,10 +19,6 @@ import java.util.stream.Collectors;
  * Created by Mani
  */
 public class Agent {
-    // MANI: Change!
-    private static final long CRITICAL_COEFF = 1;
-    private static final long URGENT_COEFF = 1;
-
     private final Log log;
     private final Server server;
     private final SimParams simParams;
@@ -68,7 +64,7 @@ public class Agent {
         if(cri == 0)
             cri = 1;
 
-        dropability = (URGENT_COEFF * urg) / (CRITICAL_COEFF * cri);
+        dropability = urg / cri;
 
         if(urg < 0)
             dropability = 0;

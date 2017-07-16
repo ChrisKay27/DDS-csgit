@@ -190,8 +190,8 @@ public class MobileAgent {
     }
 
     private void followCycle(WFGNode lookingFor, List<Task<WFGNode>> edges, List<WFGNode> path) {
-        if (edges.isEmpty())
-            return;
+//        if (edges.isEmpty())
+//            return;
 
         for (Task<WFGNode> t : edges) {
             WFGNode edge = t.getId();

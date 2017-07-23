@@ -77,6 +77,10 @@ public class SimParams {
     private int overIncurred;
     private Consumer<Deadlock> deadlockListener;
     private BiConsumer<Deadlock, Integer> deadlockResolutionListener;
+    // 2017-06-25.  dgc.  Why are we using simParams as an information
+    //  carrying tool?  The name suggests that it is final, but it appears
+    //  to be part of a mechanism to transfer information between the
+    //  TransactionManager and the deadlock detection agents.
     public final Map<Integer, TransInfo> transInfos = new HashMap<>();
     private PriorityProtocol pp;
 

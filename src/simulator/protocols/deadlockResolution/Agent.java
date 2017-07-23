@@ -10,7 +10,8 @@ import simulator.server.transactionManager.Transaction;
 import ui.Log;
 
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Comparator ;
+import java.util.function.Function ;
 
 /**
  * Create agents to handle deadlock situation. Each agent calculate dropability number based on priority, extra time, and workload.
@@ -29,8 +30,12 @@ public class Agent {
 
     private final TransInfo myTrans;
     private final List<TransInfo> transactionsInDeadlock;
-    private final Map<TransInfo, Integer> agentsToDropabilities = new HashMap<>();
     private long dropability;
+    private TransInfo2 myTransInfo2 ;     // computed in resolve
+    private TransInfo2 bestExternalInfo ; // received so far, unless i am out
+    private boolean processingMessages ;  // i could still be a contender
+    private boolean thisAgentComputed ;   // set in resolve
+    private int knownAgentCount ;         // updated by resolve and receiveDropability
 
     public Agent(int agentID, Deadlock deadlock, List<TransInfo> transactionsInDeadlock, Server server, int deadlockID) {
         this.agentID = agentID;
@@ -41,6 +46,12 @@ public class Agent {
         this.transactionsInDeadlock = transactionsInDeadlock;
         this.server = server;
         simParams = server.getSimParams();
+        TransInfo2.setPriorityGetter(t -> t.getPriority(transactionsInDeadlock, simParams.getPp())) ;
+        myTransInfo2 = null ;
+        bestExternalInfo = null ;
+        processingMessages = true ;
+        thisAgentComputed = false ;
+        knownAgentCount = 0 ;
         log = new Log(ServerProcess.DRP, server.getID(), simParams.timeProvider, simParams.log);
     }
 
@@ -78,6 +89,12 @@ public class Agent {
 //        System.out.println("; priority = " + priority);
 //        System.out.println("*******************************");
 
+        myTransInfo2 = new TransInfo2(myTrans,dropability) ;
+        processingMessages    = knownAgentCount==0 ||
+          myTransInfo2.compareTo(bestExternalInfo) < 0 ;
+        thisAgentComputed = true ;
+        ++knownAgentCount ;
+        bestExternalInfo = null ; // no longer used once our value is known.
         transactionsInDeadlock.forEach(ti -> {
             //If the transaction isn't that agent's transaction
             if (ti.transID != agentID) {
@@ -89,152 +106,37 @@ public class Agent {
         });
     }
 
+
     public void receiveDropability(int dropability, int transID) {
         if (Log.isLoggingEnabled())
             log.log(this.agentID, deadlockID + ": Agent: receive Dropability (dropability = [" + dropability + "], transID = [" + transID + "])");
 
         TransInfo ti = find(transactionsInDeadlock, transID);
-
-        agentsToDropabilities.put(ti, dropability);
-
-        //If we have received all the dropabilities from the other transactions
-        if (agentsToDropabilities.values().size() == transactionsInDeadlock.size() - 1) {
-            long maxDropability = Collections.max(agentsToDropabilities.values());
-
-            // If current agent has the highest dropability then drop its transaction
-            if (maxDropability < this.dropability) {
-
-                // If there is not enough time to restart, abort the transaction and do not restart it
-//                if (simParams.getTime() + myTrans.executionTime > myTrans.deadline) {
-//                    if (server.getTM().isOnThisServer(agentID)) {
-//                        System.out.println("####### HELP AGENT (message) " + myTrans.getID() + "##########");
-////                        if(Log.isLoggingEnabled()) log.log(agentID, "Agents determined that " + agentID + ",  should be dropped.");
-//                    }
-//                }
-                if (Log.isLoggingEnabled())
-                    log.log(agentID, deadlockID + ": Agents determined that " + agentID + " should be dropped.");
-
-                deadlock.setResolutionTime(simParams.getTime());
-                simParams.getDeadlockResolutionListener().accept(deadlock, agentID);
-                server.getTM().abort(agentID);
-
-                return;
-            } else if (maxDropability == this.dropability) {
-                // If more than one agent have the same highest dropability
-                if (count(agentsToDropabilities.values(), this.dropability) > 1) {
-                    List<TransInfo> dropables = agentsToDropabilities.keySet().stream().filter(
-                            agent -> agentsToDropabilities.get(agent) == this.dropability).collect(Collectors.toList());
-
-                    // If current agent has the passed deadline then drop its transaction
-                    if (maxDropability == Integer.MAX_VALUE){
-                        deadlock.setResolutionTime(simParams.getTime());
-                        simParams.getDeadlockResolutionListener().accept(deadlock, agentID);
-                        server.getTM().abort(agentID);
-
-                        return;
-                    }
-
-                    List<Integer> priorities = new ArrayList<>();
-                    for (TransInfo dropable : dropables)
-                        priorities.add(dropable.getPriority(transactionsInDeadlock, simParams.getPp()));
-
-                    long lowestPriority = Collections.min(priorities);
-
-                    // If more than one agent have the same highest dropability & lowest priority
-                    if (count(priorities, lowestPriority) > 1) {
-                        List<TransInfo> lowestPriorities = new ArrayList<>();
-                        dropables.forEach(d -> {
-                            if (d.getPriority(transactionsInDeadlock, simParams.getPp()) == lowestPriority)
-                                lowestPriorities.add(d);
-                        });
-
-                        List<Integer> workloads = new ArrayList<>();
-                        for (TransInfo dropable : lowestPriorities)
-                            workloads.add(dropable.workload);
-
-                        long lowestWorkload = Collections.min(workloads);
-
-                        // If more than one agent have the same highest dropability & lowest priority & lowest workload
-                        if (count(workloads, lowestWorkload) > 1) {
-                            List<TransInfo> lowestWorkloads = new ArrayList<>();
-                            lowestPriorities.forEach(d -> {
-                                if (d.workload == lowestWorkload) lowestWorkloads.add(d);
-                            });
-
-                            TransInfo youngest = null;
-                            for (TransInfo dropable : lowestWorkloads) {
-                                if (youngest == null)
-                                    youngest = dropable;
-                                else if (dropable.transID > youngest.transID)
-                                    youngest = dropable;
-                            }
-
-                            if (youngest.serverID == server.getID()) {
-                                if (Log.isLoggingEnabled())
-                                    log.log(agentID, deadlockID + ": Agents determined that " + youngest.transID + " should be dropped.");
-
-                                deadlock.setResolutionTime(simParams.getTime());
-                                simParams.getDeadlockResolutionListener().accept(deadlock, agentID);
-                                server.getTM().abort(youngest.transID);
-                            } else {
-                                if (Log.isLoggingEnabled())
-                                    log.log(agentID, deadlockID + ": Agents determined that " + youngest.transID + " should be dropped, but it not on this server!");
-                            }
-                            return;
-                        }
-                        // Else if the current agent has the highest dropability & lowest priority & lowest workload then drop its transaction
-                        else {
-                            dropables.forEach(dropable -> {
-                                if (dropable.workload == lowestWorkload) {
-                                    if (dropable.serverID == server.getID()) {
-                                        if (Log.isLoggingEnabled())
-                                            log.log(agentID, deadlockID + ": Agents determined that " + dropable.transID + "Should be dropped.");
-
-                                        deadlock.setResolutionTime(simParams.getTime());
-                                        simParams.getDeadlockResolutionListener().accept(deadlock, agentID);
-                                        server.getTM().abort(dropable.transID);
-                                    } else {
-                                        if (Log.isLoggingEnabled())
-                                            log.log(agentID, deadlockID + ": Agents determined that " + dropable.transID + "Should be dropped, but its not on this server!");
-                                    }
-                                }
-                            });
-                            return;
-                        }
-                    }
-                    // Else if the current agent has the highest dropability & lowest priority then drop its transaction
-                    else {
-                        dropables.forEach(dropable -> {
-                            if (dropable.getPriority(transactionsInDeadlock, simParams.getPp()) == lowestPriority) {
-                                if (dropable.serverID == server.getID()) {
-                                    if (Log.isLoggingEnabled())
-                                        log.log(agentID, deadlockID + ": Agents determined that " + dropable.transID + "Should be dropped.");
-
-                                    deadlock.setResolutionTime(simParams.getTime());
-                                    simParams.getDeadlockResolutionListener().accept(deadlock, agentID);
-                                    server.getTM().abort(dropable.transID);
-                                } else {
-                                    if (Log.isLoggingEnabled())
-                                        log.log(agentID, deadlockID + ": Agents determined that " + dropable.transID + "Should be dropped, but its not on this server.");
-                                }
-                            }
-                        });
-                        return;
-                    }
-                }
-                // Else if the current agent has the highest dropability then drop its transaction
-                else {
-                    if (Log.isLoggingEnabled())
-                        log.log(agentID, deadlockID + ": Agents determined that " + agentID + ", Should be dropped.");
-
-                    deadlock.setResolutionTime(simParams.getTime());
-                    simParams.getDeadlockResolutionListener().accept(deadlock, agentID);
-                    server.getTM().abort(agentID);
-                    return;
-                }
+        TransInfo2 ti2 = new TransInfo2(ti, dropability) ;
+        if (thisAgentComputed)
+            {
+            processingMessages = processingMessages
+              && myTransInfo2.compareTo(ti2) < 0 ;
             }
-        }
+        else
+            {
+            bestExternalInfo = (knownAgentCount==0) ? ti2
+              : TransInfo2.min(ti2,bestExternalInfo);
+            }
+        ++knownAgentCount ;
+
+        if (processingMessages && knownAgentCount==transactionsInDeadlock.size())
+            {
+            if (Log.isLoggingEnabled())
+                log.log(agentID, deadlockID + ": Agents determined that " + agentID + " should be dropped.");
+
+            deadlock.setResolutionTime(simParams.getTime());
+            simParams.getDeadlockResolutionListener().accept(deadlock, agentID);
+            server.getTM().abort(agentID);
+            }
     }
+
+
 
     private TransInfo find(List<TransInfo> transactionsInDeadlock, int transID) {
         for (TransInfo ti : transactionsInDeadlock)
@@ -242,14 +144,6 @@ public class Agent {
                 return ti;
 
         throw new NullPointerException("Server " + server.getID() + ": " + deadlockID + ": Could not find transaction t " + transID);
-    }
-
-    private int count(Collection<Integer> dropabilites, long value) {
-        int count = 0;
-        for (Integer drops : dropabilites)
-            if (drops == value)
-                count++;
-        return count;
     }
 
     public long getAgentID() {
@@ -263,4 +157,48 @@ public class Agent {
     public Server getServer() {
         return server;
     }
+}
+
+class TransInfo2 implements Comparable<TransInfo2>
+{
+    private static Comparator<TransInfo2> comparator =
+          Comparator.comparingLong(TransInfo2::getDropability)
+          .reversed()
+          .thenComparing(Comparator.comparingInt(TransInfo2::getPriority))
+          .thenComparing(Comparator.comparingInt(TransInfo2::getWorkload))
+          .thenComparing(Comparator.comparingInt(TransInfo2::getID).reversed())
+        ;
+
+    private static Function<TransInfo,Integer> priorityGetter = null ;
+    public static void setPriorityGetter(
+        Function<TransInfo,Integer> priorityGetter)
+        {
+        TransInfo2.priorityGetter = priorityGetter ;
+        }
+
+    private TransInfo info1 ;
+    private long dropability ;
+
+    public TransInfo2(TransInfo info, long dropability)
+        {
+        this.info1 = info ;
+        this.dropability = dropability ;
+        }
+
+    public int  getID()                        { return info1.getID() ; }
+    public int  getDeadline()                  { return info1.getDeadline() ; }
+    public int  getSlackTime()                 { return info1.getSlackTime(); }
+    public int  getWorkload()                  { return info1.getworkload() ; }
+    public long getDropability()               { return dropability ; }
+    public int  getPriority()                  { return priorityGetter.apply(info1) ; }
+
+    public int compareTo(TransInfo2 that)
+        {
+        return comparator.compare(this,that) ;
+        }
+
+    public static TransInfo2 min(TransInfo2 x1, TransInfo2 x2)
+        {
+        return x1.compareTo(x2) <= 0 ? x1 : x2 ;
+        }
 }

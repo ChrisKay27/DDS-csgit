@@ -108,6 +108,7 @@ public class MAEDD extends WaitForGraph_DDP {
             message.setSize(size);
             message.setReoccuring(true);
             NIC.sendMessage(message);
+            setMobileAgentServers(i, globalDetector);
         }
 
         if (Log.isLoggingEnabled())
@@ -199,4 +200,7 @@ public class MAEDD extends WaitForGraph_DDP {
         return mobileAgentServers;
     }
 
+    public void setMobileAgentServers(int mobileAgent, Integer mobileAgentServer) {
+        mobileAgentServers.set( mobileAgent, mobileAgentServer );
+    }
 }

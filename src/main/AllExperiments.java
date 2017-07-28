@@ -1,7 +1,6 @@
 package main;
 
 import simulator.enums.Topology;
-import ui.Log;
 import utilities.Function11;
 
 import javax.swing.*;
@@ -220,8 +219,8 @@ class AllExperiments
                     e.doAnExperiment() ;
                     simsRanSoFar++;
                     }) ;
-         if (simsRanSoFar == numberOfSimulations() && !Log.isLoggingEnabled())
-             System.exit(0);
+         //if (simsRanSoFar == numberOfSimulations() && !Log.isLoggingEnabled())
+             //System.exit(0);
         }
 
     public int numberOfSimulations()

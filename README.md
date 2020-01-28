@@ -1,9 +1,9 @@
 # DistributedDatabaseSimulator
 
 To start, you must use a local MySQL database. There is the JDBC driver for that included in this project.<br/>
-Run the CreateDatabase.sql script to set up the DB.<br/>
+Run the CreateDatabase.sql script to set up the DB. (Using MySql Workbench)<br/>
 <br/>
-To set up a simulation change the parameters in the file: params.txt<br/>
+To set up a simulation, change the parameters in the file: params.txt<br/>
 <br/>
 It MUST be in this format:<br/>
 <br/>
